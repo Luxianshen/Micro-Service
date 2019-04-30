@@ -26,11 +26,11 @@
 			<artifactId>spring-boot-starter-webflux</artifactId>
 		</dependency>-->
 		<!--nacos相关-->
-		<!--<dependency>
+		<dependency>
 			<groupId>com.alibaba.nacos</groupId>
 			<artifactId>nacos-client</artifactId>
 			<version>0.6.2</version>
-		</dependency>-->
+		</dependency>
         <dependency>
             <groupId>com.github.lujs</groupId>
             <artifactId>common</artifactId>

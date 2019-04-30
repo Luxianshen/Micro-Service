@@ -6,6 +6,7 @@ import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.cloud.gateway.route.Route;
 import org.springframework.cloud.gateway.support.ServerWebExchangeUtils;
+import org.springframework.core.Ordered;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
@@ -23,10 +24,11 @@ import java.util.Map;
  */
 
 @Component
-public class AuthFilter implements GlobalFilter {
+public class AuthFilter implements GlobalFilter, Ordered {
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
+
         //获取对应的url
         Route gatewayUrl = exchange.getRequiredAttribute(ServerWebExchangeUtils.GATEWAY_ROUTE_ATTR);
         URI uri = gatewayUrl.getUri();
@@ -38,11 +40,19 @@ public class AuthFilter implements GlobalFilter {
         ServerHttpRequest.Builder mutate = request.mutate();
         //检验权限 todo
         if(true){
-
+            //携带用户信息
+            mutate.header("x-user-id", userMap.get("id"));
+            mutate.header("x-user-name", userMap.get("user"));
+            mutate.header("x-user-serviceName", uri.getHost());
         }else{
             throw new PermissionException("user not exist, please check");
         }
         ServerHttpRequest buildReuqest = mutate.build();
         return chain.filter(exchange.mutate().request(buildReuqest).build());
+    }
+
+    @Override
+    public int getOrder() {
+        return -100;
     }
 }

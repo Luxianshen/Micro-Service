@@ -19,8 +19,4 @@ public class GatewayServiceApplication {
 		SpringApplication.run(GatewayServiceApplication.class, args);
 	}
 
-	/*@Bean
-	public ServerCodecConfigurer serverCodecConfigurer() {
-		return ServerCodecConfigurer.create();
-	}*/
 }
