@@ -1,6 +1,6 @@
 package com.github.lujs.user.api.model;
 
-import com.github.lujs.common.BaseEntity;
+import com.github.lujs.persistence.BaseEntity;
 
 import java.util.List;
 

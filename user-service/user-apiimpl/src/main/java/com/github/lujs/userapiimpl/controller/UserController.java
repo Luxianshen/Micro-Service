@@ -2,8 +2,10 @@ package com.github.lujs.userapiimpl.controller;
 
 import com.github.lujs.user.api.model.User;
 import com.github.lujs.userapiimpl.service.UserService;
+import com.github.lujs.web.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -14,14 +16,24 @@ import org.springframework.web.bind.annotation.RestController;
  **/
 
 @RestController
-public class UserController {
+public class UserController extends BaseController {
 
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     @GetMapping("/user/test")
     public String test() {
-        User user = userService.get();
+        User user = userService.getTest();
+        System.out.println("----------------success access provider service----------------");
+        return "success access provider service!";
+    }
+
+    @GetMapping("/user/get/{id}")
+    public String get(@PathVariable String id) {
+        User user = new User();
+        user.setId(id);
+        user = userService.get(user);
+        System.out.println(user.toString());
         System.out.println("----------------success access provider service----------------");
         return "success access provider service!";
     }

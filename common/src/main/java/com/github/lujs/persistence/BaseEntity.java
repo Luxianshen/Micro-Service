@@ -1,6 +1,6 @@
-package com.github.lujs.common;
+package com.github.lujs.persistence;
 
-
+import com.github.lujs.common.IdGen;
 import com.github.lujs.constant.CommonConstant;
 import org.apache.commons.lang3.StringUtils;
 
@@ -9,11 +9,12 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * @Describe: Entity基类
+ * @Description: Entity基类
  * @Author: lujs
- * @Date: 2019/4/29 10:46
- * @Version: 1.0.0
- **/
+ * @Data: 2019/5/3 15:17
+ * @version: 1.0.0
+ */
+
 public class BaseEntity<T> implements Serializable {
 
     private static final long serialVersionUID = 1L;
