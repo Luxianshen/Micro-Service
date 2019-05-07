@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 /**
  * @Describe: 用户控制层
  * @Author: lujs
@@ -32,10 +34,13 @@ public class UserController extends BaseController {
     public String get(@PathVariable String id) {
         User user = new User();
         user.setId(id);
+        System.out.println(System.currentTimeMillis());
         user = userService.get(user);
+        System.out.println(System.currentTimeMillis());
         System.out.println(user.toString());
         System.out.println("----------------success access provider service----------------");
         return "success access provider service!";
     }
+
 }
 

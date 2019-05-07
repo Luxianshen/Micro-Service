@@ -1,6 +1,7 @@
 package com.github.lujs.gatewayservice.controller;
 
 import com.github.lujs.utils.JwtUtil;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,8 +19,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class TokenController {
 
     @GetMapping("/getToken/{userName}")
+    @CacheEvict(key = "userName",value = "token")
     public String get(@PathVariable("userName") String userName){
-
-        return JwtUtil.generateToken(userName);
+        String token = JwtUtil.generateToken(userName);
+        return token;
     }
 }
