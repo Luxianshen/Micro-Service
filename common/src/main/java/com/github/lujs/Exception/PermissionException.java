@@ -3,7 +3,7 @@ package com.github.lujs.Exception;
 /**
  * @Description:
  * @Author: lujs
- * @Data: 2019/4/2823:48
+ * @Data: 2019/4/28 23:48
  * @version: 1.0.0
  */
 public class PermissionException extends RuntimeException{

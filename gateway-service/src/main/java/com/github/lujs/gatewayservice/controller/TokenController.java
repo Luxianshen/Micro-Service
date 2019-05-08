@@ -19,9 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class TokenController {
 
     @GetMapping("/getToken/{userName}")
-    @CacheEvict(key = "userName",value = "token")
+    @CacheEvict(key = "#userName",value = "token")
     public String get(@PathVariable("userName") String userName){
-        String token = JwtUtil.generateToken(userName);
-        return token;
+        return JwtUtil.generateToken(userName);
     }
 }

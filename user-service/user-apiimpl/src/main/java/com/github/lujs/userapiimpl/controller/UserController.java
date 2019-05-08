@@ -1,5 +1,6 @@
 package com.github.lujs.userapiimpl.controller;
 
+import com.github.lujs.model.ResponseBean;
 import com.github.lujs.user.api.model.User;
 import com.github.lujs.userapiimpl.service.UserService;
 import com.github.lujs.web.BaseController;
@@ -31,15 +32,10 @@ public class UserController extends BaseController {
     }
 
     @GetMapping("/user/get/{id}")
-    public String get(@PathVariable String id) {
-        User user = new User();
-        user.setId(id);
-        System.out.println(System.currentTimeMillis());
+    public ResponseBean<User> get(@PathVariable String id) {
+        User user = new User(id);
         user = userService.get(user);
-        System.out.println(System.currentTimeMillis());
-        System.out.println(user.toString());
-        System.out.println("----------------success access provider service----------------");
-        return "success access provider service!";
+        return new ResponseBean<>(user);
     }
 
 }
