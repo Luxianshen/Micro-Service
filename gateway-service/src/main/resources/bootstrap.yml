@@ -12,7 +12,10 @@ spring:
         locator:
           enabled: true
           lower-case-service-id: true
-
+#redis
+  redis:
+    host: 139.199.89.237
+    port: 6380
 #开启端点 2.0版本默认不开启监控端口
 management:
   endpoints:
