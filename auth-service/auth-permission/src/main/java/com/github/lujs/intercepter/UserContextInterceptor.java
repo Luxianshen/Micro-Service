@@ -1,7 +1,7 @@
 package com.github.lujs.intercepter;
 
-import com.github.lujs.Exception.PermissionException;
 import com.github.lujs.user.api.model.User;
+import com.github.lujs.userapiimpl.utils.UserUtils;
 import com.github.lujs.util.UserPermissionUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,29 +24,29 @@ public class UserContextInterceptor extends HandlerInterceptorAdapter {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse respone, Object arg2) throws Exception {
 
-        //todo 查找用户
+        //查找用户
         User user = getUser(request);
         //判断权限
-        if(!UserPermissionUtil.validatePermission(user,request)){
+        if(null == user || !UserPermissionUtil.validatePermission(user,request)){
             //没有权限，直接输出json流 后期可改造为页面 todo
             respone.setHeader("Content-Type", "application/json");
-            String noPermissionMsg = JSON.toJSONString("no permisson access service, please check");
+            String noPermissionMsg = JSON.toJSONString("no permisson access service, please check!");
             respone.getWriter().write(noPermissionMsg);
             respone.getWriter().flush();
             respone.getWriter().close();
-            throw new PermissionException("no permisson access service, please check");
+            log.info("no permisson access service, please check!");
         }
-        //缓存权限 todo
         return true;
     }
 
+    /**
+     * 获取用户
+     * @param request
+     * @return 用户信息
+     */
     private User getUser(HttpServletRequest request){
-        String id = request.getHeader("x-user-id");
         String name = request.getHeader("x-user-name");
-        User user = new User();
-        user.setId(id);
-        user.setName(name);
-        return user;
+        return UserUtils.getUser(name);
     }
 
 }

@@ -2,6 +2,7 @@ package com.github.lujs.gatewayservice.filter;
 
 import com.github.lujs.Exception.PermissionException;
 import com.github.lujs.utils.JwtUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.cloud.gateway.route.Route;
@@ -36,11 +37,11 @@ public class AuthFilter implements GlobalFilter, Ordered {
         HttpHeaders header = request.getHeaders();
         String token = header.getFirst(JwtUtil.HEADER_AUTH);
         Map<String,String> userMap = JwtUtil.validateToken(token);
-        //todo 获取
+
         ServerHttpRequest.Builder mutate = request.mutate();
-        //检验权限 todo
-        if(true){
-            //携带用户信息
+        //检验是否本系统用户
+        if(StringUtils.isNotEmpty(userMap.get("user"))){
+            //携带用户信息 访问信息
             mutate.header("x-user-id", userMap.get("id"));
             mutate.header("x-user-name", userMap.get("user"));
             mutate.header("x-user-serviceName", uri.getHost());

@@ -108,7 +108,7 @@
         SELECT
         <include refid="userColumns"/>
         FROM sys_user a
-        WHERE a.id = #{id}
+        WHERE a.username = #{username}
     </select>
 
     <select id="findList" resultMap="userResultMap">
