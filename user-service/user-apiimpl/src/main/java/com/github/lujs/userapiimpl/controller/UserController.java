@@ -1,5 +1,6 @@
 package com.github.lujs.userapiimpl.controller;
 
+import com.github.lujs.annotation.Permission;
 import com.github.lujs.model.ResponseBean;
 import com.github.lujs.user.api.model.User;
 import com.github.lujs.userapiimpl.service.UserService;
@@ -25,6 +26,7 @@ public class UserController extends BaseController {
     private UserService userService;
 
     @GetMapping("/user/test")
+    @Permission("test")
     public String test() {
         User user = userService.getTest();
         System.out.println("----------------success access provider service----------------");

@@ -1,5 +1,6 @@
 package com.github.lujs.util;
 
+import com.github.lujs.annotation.Permission;
 import com.github.lujs.auth.api.model.Menu.Menu;
 import com.github.lujs.auth.api.model.RoleMenu.RoleMenu;
 import com.github.lujs.auth.api.model.UserRole.UserRole;
@@ -31,28 +32,24 @@ public class UserPermissionUtil {
 
     /**
      * 验证权限方法
+     * @Param user 用户
+     * @Param tagCode 当前访问的权限标识
      * @return boolean
      */
-    public static boolean validatePermission(User user, HttpServletRequest request){
+    public static boolean validatePermission(User user, String tagCode) {
 
-        //获取访问url
-        String url = request.getHeader("x-user-serviceName");
-        //根据url 获取菜单标识
-        Menu menu = menuService.get(new Menu("1"));
+        //todo 考虑白名单
         //用户不存在
-        if(StringUtils.isEmpty(user.getName())|| null ==menu){
+        if (StringUtils.isEmpty(user.getName())) {
             return false;
-        }else{
-            //当前访问权限标识
-            String tagCode = menu.getPermission();
+        } else {
             //获取用户的权限
             Set<String> permissionList = getUserAuth(user.getName());
             //循环遍历匹配
             for (String permission : permissionList) {
-                 if(tagCode.equals(permission)){
-                     System.out.println("默认允许通过！");
-                     return true;
-                 }
+                if (tagCode.equals(permission)) {
+                    return true;
+                }
             }
             return false;
         }
@@ -60,9 +57,10 @@ public class UserPermissionUtil {
 
     /**
      * 获取用户权限
+     * @Param userName 用户名
      * @return 用户权限集合
      */
-    public static Set<String> getUserAuth(String userName){
+    public static Set<String> getUserAuth(String userName) {
         //权限集合
         Set<String> permissionList = new HashSet<>();
         //获取用户角色
@@ -70,17 +68,16 @@ public class UserPermissionUtil {
         userRole.setUserId(userName);
         List<UserRole> userRoleList = userRoleService.findList(userRole);
         //获取角色菜单
-        for (UserRole uR:userRoleList) {
+        for (UserRole uR : userRoleList) {
             RoleMenu roleMenu = new RoleMenu();
             roleMenu.setRoleId(uR.getRoleId());
             List<RoleMenu> roleMenuList = roleMenuService.findList(roleMenu);
-            for (RoleMenu rm: roleMenuList){
-               Menu menu = menuService.get(new Menu(rm.getMenuId()));
+            for (RoleMenu rm : roleMenuList) {
+                Menu menu = menuService.get(new Menu(rm.getMenuId()));
                 permissionList.add(menu.getPermission());
             }
         }
         //放进缓存 todo
-
         return permissionList;
     }
 }
