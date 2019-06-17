@@ -8,7 +8,7 @@ spring:
 #数据库
   datasource:
     name: test
-    url: jdbc:mysql://139.199.89.237:3306/test
+    url: jdbc:mysql://139.199.89.237:3306/test_db
     username: root
     password: root
     # 使用druid数据源

@@ -14,7 +14,7 @@
     <modules>
         <module>auth-permission</module>
         <module>auth-api</module>
-        <module>auth-apiimpl</module>
+        <!--<module>auth-apiimpl</module>-->
     </modules>
 
 

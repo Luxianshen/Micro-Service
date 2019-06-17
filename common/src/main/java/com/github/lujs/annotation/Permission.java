@@ -3,10 +3,12 @@ package com.github.lujs.annotation;
 import java.lang.annotation.*;
 
 /**
- * @author: lujs
- * @date: 2019-01-30 17:06
- * @desc:
+ * @Description: 权限切面
+ * @Author: lujs
+ * @Data: 2019/6/15 9:47
+ * @version: 1.0.0
  */
+
 @Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented

@@ -1,21 +1,10 @@
 package com.github.lujs.util;
 
-import com.github.lujs.annotation.Permission;
-import com.github.lujs.auth.api.model.Menu.Menu;
-import com.github.lujs.auth.api.model.RoleMenu.RoleMenu;
-import com.github.lujs.auth.api.model.UserRole.UserRole;
-import com.github.lujs.auth.apiimpl.service.MenuService;
-import com.github.lujs.auth.apiimpl.service.RoleMenuService;
-import com.github.lujs.auth.apiimpl.service.UserRoleService;
+
 import com.github.lujs.user.api.model.User;
-import com.github.lujs.userapiimpl.service.UserService;
-import com.github.lujs.userapiimpl.utils.UserUtils;
-import com.github.lujs.utils.SpringContextHolder;
 import org.apache.commons.lang3.StringUtils;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -26,9 +15,9 @@ import java.util.Set;
  **/
 public class UserPermissionUtil {
 
-    private static UserRoleService userRoleService = SpringContextHolder.getBean(UserRoleService.class);
-    private static RoleMenuService roleMenuService = SpringContextHolder.getBean(RoleMenuService.class);
-    private static MenuService menuService = SpringContextHolder.getBean(MenuService.class);
+    //private static UserRoleService userRoleService = SpringContextHolder.getBean(UserRoleService.class);
+    //private static RoleMenuService roleMenuService = SpringContextHolder.getBean(RoleMenuService.class);
+    //private static MenuService menuService = SpringContextHolder.getBean(MenuService.class);
 
     /**
      * 验证权限方法
@@ -40,9 +29,7 @@ public class UserPermissionUtil {
 
         //todo 考虑白名单
         //用户不存在
-        if (StringUtils.isEmpty(user.getName())) {
-            return false;
-        } else {
+        if(StringUtils.isNotEmpty(user.getName())){
             //获取用户的权限
             Set<String> permissionList = getUserAuth(user.getName());
             //循环遍历匹配
@@ -51,8 +38,8 @@ public class UserPermissionUtil {
                     return true;
                 }
             }
-            return false;
         }
+        return false;
     }
 
     /**
@@ -63,8 +50,9 @@ public class UserPermissionUtil {
     public static Set<String> getUserAuth(String userName) {
         //权限集合
         Set<String> permissionList = new HashSet<>();
+        permissionList.add("test");
         //获取用户角色
-        UserRole userRole = new UserRole();
+        /*UserRole userRole = new UserRole();
         userRole.setUserId(userName);
         List<UserRole> userRoleList = userRoleService.findList(userRole);
         //获取角色菜单
@@ -76,7 +64,7 @@ public class UserPermissionUtil {
                 Menu menu = menuService.get(new Menu(rm.getMenuId()));
                 permissionList.add(menu.getPermission());
             }
-        }
+        }*/
         //放进缓存 todo
         return permissionList;
     }

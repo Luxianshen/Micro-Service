@@ -2,7 +2,6 @@ package com.github.lujs.intercepter;
 
 import com.github.lujs.annotation.Permission;
 import com.github.lujs.user.api.model.User;
-import com.github.lujs.userapiimpl.utils.UserUtils;
 import com.github.lujs.util.UserPermissionUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,11 +37,11 @@ public class UserContextInterceptor extends HandlerInterceptorAdapter {
         if(null == user || !UserPermissionUtil.validatePermission(user,permission.value())){
             //没有权限，直接输出json流 后期可改造为页面 todo
             response.setHeader("Content-Type", "application/json");
-            String noPermissionMsg = JSON.toJSONString("no permisson access service, please check!");
+            String noPermissionMsg = JSON.toJSONString("no permission access service, please check!");
             response.getWriter().write(noPermissionMsg);
             response.getWriter().flush();
             response.getWriter().close();
-            log.info("no permisson access service, please check!");
+            log.info("no permission access service, please check!");
         }
         return true;
     }
@@ -54,7 +53,8 @@ public class UserContextInterceptor extends HandlerInterceptorAdapter {
      */
     private User getUser(HttpServletRequest request){
         String name = request.getHeader("x-user-name");
-        return UserUtils.getUser(name);
+        return new User("1","aa");
+        //return UserUtils.getUser(name);
     }
 
 }

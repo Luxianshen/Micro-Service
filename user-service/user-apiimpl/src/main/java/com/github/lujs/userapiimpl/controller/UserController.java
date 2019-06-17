@@ -34,6 +34,7 @@ public class UserController extends BaseController {
     }
 
     @GetMapping("/user/get/{id}")
+    @Permission("test")
     public ResponseBean<User> get(@PathVariable String id) {
         User user = new User(id);
         user = userService.get(user);
