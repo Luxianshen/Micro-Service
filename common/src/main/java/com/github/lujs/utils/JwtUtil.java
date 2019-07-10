@@ -73,6 +73,8 @@ public class JwtUtil {
         String finalJwt = TOKEN_PREFIX+" "+jwt;
         //放进缓存
         redisTemplate.opsForValue().set("Token:"+userName,finalJwt,3000L);
+        //把用户权限放进缓存
+
         return finalJwt;
     }
 }

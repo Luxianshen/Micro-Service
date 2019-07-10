@@ -1,17 +1,13 @@
 package com.github.lujs.userapiimpl.service;
 
-import com.alibaba.fastjson.JSON;
 import com.github.lujs.service.CrudService;
 import com.github.lujs.user.api.model.User;
 import com.github.lujs.userapiimpl.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 /**
  * @Description: 用户服务

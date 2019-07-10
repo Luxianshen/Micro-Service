@@ -15,10 +15,6 @@ import java.util.Set;
  **/
 public class UserPermissionUtil {
 
-    //private static UserRoleService userRoleService = SpringContextHolder.getBean(UserRoleService.class);
-    //private static RoleMenuService roleMenuService = SpringContextHolder.getBean(RoleMenuService.class);
-    //private static MenuService menuService = SpringContextHolder.getBean(MenuService.class);
-
     /**
      * 验证权限方法
      * @Param user 用户
@@ -51,20 +47,7 @@ public class UserPermissionUtil {
         //权限集合
         Set<String> permissionList = new HashSet<>();
         permissionList.add("test");
-        //获取用户角色
-        /*UserRole userRole = new UserRole();
-        userRole.setUserId(userName);
-        List<UserRole> userRoleList = userRoleService.findList(userRole);
-        //获取角色菜单
-        for (UserRole uR : userRoleList) {
-            RoleMenu roleMenu = new RoleMenu();
-            roleMenu.setRoleId(uR.getRoleId());
-            List<RoleMenu> roleMenuList = roleMenuService.findList(roleMenu);
-            for (RoleMenu rm : roleMenuList) {
-                Menu menu = menuService.get(new Menu(rm.getMenuId()));
-                permissionList.add(menu.getPermission());
-            }
-        }*/
+
         //放进缓存 todo
         return permissionList;
     }

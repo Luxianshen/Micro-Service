@@ -11,7 +11,7 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 /**
- * @Describe:
+ * @Describe: 拦截器配置
  * @Author: lujs
  * @Date: 2019/4/29 13:58
  * @Version: 1.0.0

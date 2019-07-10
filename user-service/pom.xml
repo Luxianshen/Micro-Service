@@ -16,6 +16,8 @@
 	<modules>
 		<module>user-api</module>
 		<module>user-apiimpl</module>
+		<module>auth-api</module>
+		<module>auth-apiimpl</module>
 	</modules>
 
 	<build>
