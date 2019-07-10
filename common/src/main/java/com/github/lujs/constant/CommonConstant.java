@@ -12,7 +12,12 @@ public class CommonConstant {
     /**
      * 默认系统编号
      */
-    public static final String SYS_CODE = "EXAM";
+    public static final String SYS_CODE = "Platform";
+
+    /**
+     * 用户token前缀
+     */
+    public static final String TOKEN_CODE = SYS_CODE + "-U-Token";
 
     /**
      * JSON 资源

@@ -16,8 +16,8 @@
     <modules>
         <module>common</module>
         <module>gateway-service</module>
-        <module>auth-service</module>
-        <module>user-service</module>
+        <module>system-service</module>
+        <module>auth-plugin</module>
     </modules>
 
     <properties>

@@ -52,29 +52,5 @@ public class JwtUtil {
         }
     }
 
-    /**
-     * 根据用户name生成token
-     * @param userName 用户名
-     * @return
-     */
-    public static String generateToken(String userName) {
 
-        HashMap<String,Object> map = new HashMap<String,Object>();
-        map.put("id", new Random().nextInt());
-        map.put("userName",userName);
-        //从缓存获取
-        String token = (String) redisTemplate.opsForValue().get("Token:"+userName);
-        if(StringUtils.isNotEmpty(token)){
-            redisTemplate.delete("Token:"+userName);
-        }
-        //生成jwt token
-        String jwt = Jwts.builder().setSubject("user info").setClaims(map)
-                .signWith(SignatureAlgorithm.HS512,SECRET).compact();
-        String finalJwt = TOKEN_PREFIX+" "+jwt;
-        //放进缓存
-        redisTemplate.opsForValue().set("Token:"+userName,finalJwt,3000L);
-        //把用户权限放进缓存
-
-        return finalJwt;
-    }
 }

@@ -1,10 +1,9 @@
 package com.github.lujs.annotation;
 
 /**
- * @Description: 权限切面 属性
- * @Author: lujs
- * @Data: 2019/6/15 9:47
- * @version: 1.0.0
+ * @author: lujs
+ * @date: 2019-01-30 17:12
+ * @desc:
  */
 public enum Action {
 
