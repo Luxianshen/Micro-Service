@@ -1,6 +1,6 @@
 package com.github.lujs.auth.apiimpl.service;
 
-import java.util.Set;
+import java.util.List;
 
 /**
  * @Description: 角色菜单关系服务
@@ -15,5 +15,5 @@ public interface RoleMenuService {
      * @param username
      * @return
      */
-    Set<String> getUserPermissionList(String username);
+    List<String> getUserPermissionList(String username);
 }

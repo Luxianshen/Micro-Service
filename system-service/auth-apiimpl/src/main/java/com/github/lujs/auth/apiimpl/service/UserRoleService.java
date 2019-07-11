@@ -1,6 +1,6 @@
 package com.github.lujs.auth.apiimpl.service;
 
-import java.util.Set;
+import java.util.List;
 
 /**
  * @Description: 用户角色关系服务
@@ -15,5 +15,5 @@ public interface UserRoleService {
      * @param username
      * @return
      */
-    Set<String> getUserRoleList(String username);
+    List<String> getUserRoleList(String username);
 }

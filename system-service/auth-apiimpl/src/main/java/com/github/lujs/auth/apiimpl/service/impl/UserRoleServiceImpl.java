@@ -6,8 +6,8 @@ import com.github.lujs.auth.apiimpl.service.UserRoleService;
 import com.github.lujs.service.CrudService;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @Description: 用户角色权限类
@@ -18,7 +18,7 @@ import java.util.Set;
 public class UserRoleServiceImpl  extends CrudService<UserRoleMapper, UserRole> implements UserRoleService {
 
     @Override
-    public Set<String> getUserRoleList(String username) {
-        return new HashSet<>(); //todo
+    public List<String> getUserRoleList(String username) {
+        return new ArrayList<>(); //todo
     }
 }

@@ -1,11 +1,12 @@
 package com.github.lujs.token.apiimpl.controller;
 
 import com.github.lujs.Exception.BaseException;
+import com.github.lujs.annotation.Action;
+import com.github.lujs.annotation.Permission;
 import com.github.lujs.constant.GlobalStatusCode;
 import com.github.lujs.model.BaseResponse;
 import com.github.lujs.token.api.model.LoginInfo;
 import com.github.lujs.token.apiimpl.service.TokenService;
-import com.github.lujs.utils.JwtUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -35,7 +36,8 @@ public class TokenController {
      * 系统登陆方法
      */
     @PostMapping("/login")
-    public BaseResponse login(@Valid @RequestBody LoginInfo loginInfo){
+    @Permission(action = Action.Skip)
+    public BaseResponse login(@RequestBody LoginInfo loginInfo){
         BaseResponse baseResponse = new BaseResponse();
         //密码加密传输 todo
         if(StringUtils.isAllEmpty(loginInfo.getUserName(),loginInfo.getPassWord())){

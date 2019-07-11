@@ -25,7 +25,7 @@ public class ValidCodeServiceImpl implements ValidCodeService {
 
     private static final String BASE64_IMAGE_PREFIX_PNG = "data:image/png;base64,";
 
-    @Value("${application.validCode.timeout}")
+    @Value("${validCode.timeout}")
     private Long timeout;
 
     @Autowired

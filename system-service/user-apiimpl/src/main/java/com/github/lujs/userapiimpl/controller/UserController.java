@@ -1,6 +1,7 @@
 package com.github.lujs.userapiimpl.controller;
 
 import com.github.lujs.annotation.Permission;
+import com.github.lujs.model.BaseResponse;
 import com.github.lujs.user.api.model.User;
 import com.github.lujs.userapiimpl.service.UserService;
 import com.github.lujs.web.BaseController;
@@ -25,17 +26,25 @@ public class UserController extends BaseController {
     @GetMapping("/user/test")
     @Permission("test")
     public String test() {
-        User user = userService.getTest();
+        User user = userService.getUserInfoByName("1");
+        System.out.println("----------------success access provider service----------------");
+        return "success access provider service!";
+    }
+
+    @GetMapping("/hi/test")
+    @Permission("hi")
+    public String hi() {
+        User user = userService.getUserInfoByName("1");
         System.out.println("----------------success access provider service----------------");
         return "success access provider service!";
     }
 
     @GetMapping("/user/get/{id}")
     @Permission("test")
-    public ResponseBean<User> get(@PathVariable String id) {
+    public BaseResponse get(@PathVariable String id) {
         User user = new User(id);
         user = userService.get(user);
-        return new ResponseBean<>(user);
+        return new BaseResponse(user);
     }
 
 }

@@ -6,6 +6,7 @@ import com.github.lujs.constant.CommonConstant;
 import com.github.lujs.user.api.model.User;
 import com.github.lujs.user.api.model.UserInfo;
 import com.github.lujs.util.UserPermissionUtil;
+import com.github.lujs.utils.RedisUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,9 +33,6 @@ import java.lang.reflect.Method;
 public class UserContextInterceptor extends HandlerInterceptorAdapter {
 
     private static final Logger log = LoggerFactory.getLogger(UserContextInterceptor.class);
-
-    @Resource
-    private RedisTemplate redisTemplate;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -74,10 +72,13 @@ public class UserContextInterceptor extends HandlerInterceptorAdapter {
      * @return 用户信息
      */
     private UserInfo getUserInfo(HttpServletRequest request) {
+        String id = request.getHeader("x-user-id");
         String name = request.getHeader("x-user-name");
         if (StringUtils.isNotEmpty(name)) {
-            String tokenKey = CommonConstant.TOKEN_CODE + name;
-            return (UserInfo)redisTemplate.opsForValue().get(tokenKey);
+            String tokenKey = CommonConstant.TOKEN_CODE +id+ name;
+            System.out.println(RedisUtil.get(tokenKey));
+            UserInfo userInfo =  RedisUtil.parseJson(tokenKey,UserInfo.class);
+            return userInfo;
         }
         return null;
     }

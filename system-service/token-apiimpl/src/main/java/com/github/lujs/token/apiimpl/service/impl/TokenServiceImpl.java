@@ -2,7 +2,6 @@ package com.github.lujs.token.apiimpl.service.impl;
 
 import com.github.lujs.Exception.BaseException;
 import com.github.lujs.auth.apiimpl.service.RoleMenuService;
-import com.github.lujs.auth.apiimpl.service.RoleService;
 import com.github.lujs.auth.apiimpl.service.UserRoleService;
 import com.github.lujs.constant.CommonConstant;
 import com.github.lujs.constant.GlobalStatusCode;
@@ -13,9 +12,11 @@ import com.github.lujs.token.apiimpl.service.ValidCodeService;
 import com.github.lujs.user.api.model.User;
 import com.github.lujs.user.api.model.UserInfo;
 import com.github.lujs.userapiimpl.service.UserService;
+import com.github.lujs.utils.RedisUtil;
 import com.github.lujs.utils.ToolSecurityPbkdf2;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -35,8 +36,6 @@ import java.util.Random;
 public class TokenServiceImpl implements TokenService {
 
     @Autowired
-    private RedisTemplate redisTemplate;
-    @Autowired
     private ValidCodeService validCodeService;
     @Autowired
     private UserService userService;
@@ -45,7 +44,7 @@ public class TokenServiceImpl implements TokenService {
     @Autowired
     private RoleMenuService roleMenuService;
 
-    @Value("${application.validCode}")
+    @Value("${validCode.flag}")
     private Boolean validCodeRequired;
 
     public static final String SECRET = "qazwsx123444$#%#()*&& asdaswwi1235 ?;!@#kmmmpom in***xx**&";
@@ -65,21 +64,22 @@ public class TokenServiceImpl implements TokenService {
         if (LoginType.NORMAL.code().equals(loginInfo.getLoginType())) {
             user = normalLogin(loginInfo);
         } else if (LoginType.PHONE_NO.code().equals(loginInfo.getLoginType())) {
-            user = phoneNoLogin(loginInfo);
+            user = phoneNoLogin(loginInfo);  //todo
         }
         if(user != null){
             //获取用户的角色列表 和 权限列表
 
             UserInfo userInfo = new UserInfo();
             //获取用户角色列表
-
+            BeanUtils.copyProperties(user, userInfo);
             userInfo.setRoleList(userRoleService.getUserRoleList(user.getUsername()));
             userInfo.setPermissionList(roleMenuService.getUserPermissionList(user.getUsername()));
             //生成token
             String random = String.valueOf(new Random().nextInt(6));
             String token = generateToken(random,user.getUsername());
             //放置在redis key 前缀+token随机数+用户名
-            redisTemplate.opsForValue().set(CommonConstant.TOKEN_CODE+random+user.getUsername(),userInfo,5000L);
+            RedisUtil.set(CommonConstant.TOKEN_CODE+user.getUsername(),token,5000L);
+            RedisUtil.set(CommonConstant.TOKEN_CODE+random+user.getUsername(),userInfo,5000L);
 
             return token;
         }
@@ -128,7 +128,7 @@ public class TokenServiceImpl implements TokenService {
     public String generateToken(String random,String userName) {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put("id", random);
-        map.put("userName", userName);
+        map.put("user", userName);
 
         //生成jwt token
         String jwt = Jwts.builder().setSubject("user info").setClaims(map)

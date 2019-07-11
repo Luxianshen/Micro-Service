@@ -12,6 +12,11 @@ spring:
         locator:
           enabled: true
           lower-case-service-id: true
+      routes:
+        - id: host_route
+          uri: http://localhost:8077/user/test
+          predicates:
+            - Path=/hi/** # 请求地址携带hi的,则转发
 #redis
   redis:
     host: 139.199.89.237

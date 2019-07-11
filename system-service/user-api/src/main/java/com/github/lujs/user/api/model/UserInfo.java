@@ -2,7 +2,7 @@ package com.github.lujs.user.api.model;
 
 import lombok.Data;
 
-import java.io.Serializable;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -11,10 +11,30 @@ import java.util.Set;
  * @Date 2019/7/10 11:20
  */
 @Data
-public class UserInfo extends User implements Serializable {
+public class UserInfo{
+
+    private String name;
+
+    private String username;
+
+    private String phone;
+
+    private String avatar;
+
+    private String avatarId;
+
+    private String email;
+
+    private String sex;
+
+    private String born;
+
+    private String remark;
+
+    private String status;
 
     //用户角色列表
-    private Set<String> roleList;
+    private List<String> roleList;
     //用户权限列表
-    private Set<String> permissionList;
+    private List<String> permissionList;
 }

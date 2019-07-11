@@ -6,7 +6,9 @@ import com.github.lujs.auth.apiimpl.service.RoleMenuService;
 import com.github.lujs.service.CrudService;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -18,7 +20,9 @@ import java.util.Set;
 public class RoleMenuServiceImpl extends CrudService<RoleMenuMapper, RoleMenu> implements RoleMenuService {
 
     @Override
-    public Set<String> getUserPermissionList(String username) {
-        return new HashSet<>(); //todo
+    public List<String> getUserPermissionList(String username) {
+        List<String> test = new ArrayList<>();
+        test.add("hi");
+        return test; //todo
     }
 }
