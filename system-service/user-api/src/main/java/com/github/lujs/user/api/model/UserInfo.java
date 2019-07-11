@@ -3,7 +3,7 @@ package com.github.lujs.user.api.model;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Set;
 
 /**
  * @Description: 用户信息实体
@@ -14,7 +14,7 @@ import java.util.List;
 public class UserInfo extends User implements Serializable {
 
     //用户角色列表
-    private List<String> roleList;
+    private Set<String> roleList;
     //用户权限列表
-    private List<String> permissionList;
+    private Set<String> permissionList;
 }

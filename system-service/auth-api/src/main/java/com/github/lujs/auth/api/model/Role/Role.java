@@ -1,6 +1,7 @@
 package com.github.lujs.auth.api.model.Role;
 
 import com.github.lujs.persistence.BaseEntity;
+import lombok.Data;
 
 /**
  * @Description: 角色实体
@@ -8,6 +9,7 @@ import com.github.lujs.persistence.BaseEntity;
  * @Data: 2019/5/18 9:46
  * @version: 1.0.0
  */
+@Data
 public class Role extends BaseEntity<Role> {
 
     private String roleName;
@@ -24,44 +26,5 @@ public class Role extends BaseEntity<Role> {
      */
     private String isDefault;
 
-    public String getRoleName() {
-        return roleName;
-    }
-
-    public void setRoleName(String roleName) {
-        this.roleName = roleName;
-    }
-
-    public String getRoleCode() {
-        return roleCode;
-    }
-
-    public void setRoleCode(String roleCode) {
-        this.roleCode = roleCode;
-    }
-
-    public String getRoleDesc() {
-        return roleDesc;
-    }
-
-    public void setRoleDesc(String roleDesc) {
-        this.roleDesc = roleDesc;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public String getIsDefault() {
-        return isDefault;
-    }
-
-    public void setIsDefault(String isDefault) {
-        this.isDefault = isDefault;
-    }
 }
 

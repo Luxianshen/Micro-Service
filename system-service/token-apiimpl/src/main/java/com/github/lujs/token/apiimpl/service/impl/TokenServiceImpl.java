@@ -1,6 +1,9 @@
 package com.github.lujs.token.apiimpl.service.impl;
 
 import com.github.lujs.Exception.BaseException;
+import com.github.lujs.auth.apiimpl.service.RoleMenuService;
+import com.github.lujs.auth.apiimpl.service.RoleService;
+import com.github.lujs.auth.apiimpl.service.UserRoleService;
 import com.github.lujs.constant.CommonConstant;
 import com.github.lujs.constant.GlobalStatusCode;
 import com.github.lujs.token.api.model.LoginInfo;
@@ -9,21 +12,18 @@ import com.github.lujs.token.apiimpl.service.TokenService;
 import com.github.lujs.token.apiimpl.service.ValidCodeService;
 import com.github.lujs.user.api.model.User;
 import com.github.lujs.user.api.model.UserInfo;
+import com.github.lujs.userapiimpl.service.UserService;
 import com.github.lujs.utils.ToolSecurityPbkdf2;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 /**
@@ -39,7 +39,11 @@ public class TokenServiceImpl implements TokenService {
     @Autowired
     private ValidCodeService validCodeService;
     @Autowired
-    private RestTemplate restTemplate;
+    private UserService userService;
+    @Autowired
+    private UserRoleService userRoleService;
+    @Autowired
+    private RoleMenuService roleMenuService;
 
     @Value("${application.validCode}")
     private Boolean validCodeRequired;
@@ -65,11 +69,12 @@ public class TokenServiceImpl implements TokenService {
         }
         if(user != null){
             //获取用户的角色列表 和 权限列表
-            ResponseEntity<Map> responseEntity = restTemplate.getForEntity("http://localhost/get/{id}", Map.class, loginInfo.getUserName());
-            Map<String,Object> userRoleAndPermission = responseEntity.getBody();
+
             UserInfo userInfo = new UserInfo();
-            userInfo.setRoleList((List<String>)userRoleAndPermission.get("roleList"));
-            userInfo.setPermissionList((List<String>)userRoleAndPermission.get("permissionList"));
+            //获取用户角色列表
+
+            userInfo.setRoleList(userRoleService.getUserRoleList(user.getUsername()));
+            userInfo.setPermissionList(roleMenuService.getUserPermissionList(user.getUsername()));
             //生成token
             String random = String.valueOf(new Random().nextInt(6));
             String token = generateToken(random,user.getUsername());
@@ -88,9 +93,8 @@ public class TokenServiceImpl implements TokenService {
      * @return 用户信息
      */
     private User normalLogin(LoginInfo loginInfo) {
-        //获取用户信息 todo 地址修改
-        ResponseEntity<User> responseEntity = restTemplate.getForEntity("http://localhost/get/{id}", User.class, loginInfo.getUserName());
-        User user = responseEntity.getBody();
+        //获取用户信息
+        User user = userService.getUserInfoByName(loginInfo.getUserName());
         if(user != null && user.getStatus().equals(CommonConstant.STATUS_NORMAL)){
             //匹配密码
             boolean success = false;
