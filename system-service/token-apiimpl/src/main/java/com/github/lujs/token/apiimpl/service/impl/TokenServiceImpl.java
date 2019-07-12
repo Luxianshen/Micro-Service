@@ -13,9 +13,11 @@ import com.github.lujs.user.api.model.User;
 import com.github.lujs.user.api.model.UserInfo;
 import com.github.lujs.userapiimpl.service.UserService;
 import com.github.lujs.utils.RedisUtil;
+import com.github.lujs.utils.SysUtils;
 import com.github.lujs.utils.ToolSecurityPbkdf2;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,6 +35,7 @@ import java.util.Random;
  * @Date 2019/7/10 13:50
  */
 @Service
+@Slf4j
 public class TokenServiceImpl implements TokenService {
 
     @Autowired
@@ -54,7 +57,7 @@ public class TokenServiceImpl implements TokenService {
     public String login(LoginInfo loginInfo) {
         //开启了验证码
         if (validCodeRequired) {
-            Boolean result = validCodeService.checkValidCode(loginInfo.getValidCode());
+            Boolean result = validCodeService.checkValidCode(loginInfo.getRandomStr(),loginInfo.getValidCode());
             if (!result) {
                 throw new BaseException(GlobalStatusCode.INVALID_PARAMETER); //todo
             }
@@ -97,9 +100,18 @@ public class TokenServiceImpl implements TokenService {
         User user = userService.getUserInfoByName(loginInfo.getUserName());
         if(user != null && user.getStatus().equals(CommonConstant.STATUS_NORMAL)){
             //匹配密码
+            String credential = "";
+            try {
+                // 开始解密
+                credential = SysUtils.decryptAES(loginInfo.getPassWord(), "1234567887654321");
+                credential = credential.trim();
+                log.debug("credential decrypt success:{}", credential);
+            } catch (Exception e) {
+                log.error("credential decrypt fail:{}", credential);
+            }
             boolean success = false;
             try {
-                success = ToolSecurityPbkdf2.authenticate(loginInfo.getPassWord(), user.getPassword(), user.getSalt());
+                success = ToolSecurityPbkdf2.authenticate(credential, user.getPassword(), user.getSalt());
             } catch (NoSuchAlgorithmException e) {
                 e.printStackTrace();
             } catch (InvalidKeySpecException e) {

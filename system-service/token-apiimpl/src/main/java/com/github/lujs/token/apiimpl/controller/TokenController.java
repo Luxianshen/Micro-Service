@@ -11,7 +11,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @Describe: jwt token生成控制层
@@ -37,7 +38,8 @@ public class TokenController {
      */
     @PostMapping("/login")
     @Permission(action = Action.Skip)
-    public BaseResponse login(@RequestBody LoginInfo loginInfo){
+    @ResponseBody
+    public Object login(LoginInfo loginInfo){
         BaseResponse baseResponse = new BaseResponse();
         //密码加密传输 todo
         if(StringUtils.isAllEmpty(loginInfo.getUserName(),loginInfo.getPassWord())){
@@ -45,8 +47,14 @@ public class TokenController {
             throw new BaseException(GlobalStatusCode.INVALID_PARAMETER);
         }
         String token = tokenService.login(loginInfo);
-        baseResponse.setData(token);
-        return baseResponse;
+        Map<String,Object> re = new HashMap<>();
+        re.put("access_token",token);
+        re.put("expires_in",5000);
+        re.put("refresh_token",token);
+        re.put("scope","read");
+        re.put("token_type","bearer");
+        baseResponse.setData(re);
+        return re;
     }
 
 }

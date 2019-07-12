@@ -8,14 +8,14 @@ package com.github.lujs.token.apiimpl.service;
 public interface ValidCodeService {
 
     /**
-     * 创建 验证码
-     * @return 创建结果
-     */
-    public Boolean createValidCode(Integer width, Integer height);
-
-    /**
      * 验证 验证码
      * @return 创建结果
      */
-    public Boolean checkValidCode(String validCode);
+    public Boolean checkValidCode(String random,String validCode);
+
+    /**
+     * 保存 验证码
+     * @return 创建结果
+     */
+    void saveImageCode(String random, String text);
 }

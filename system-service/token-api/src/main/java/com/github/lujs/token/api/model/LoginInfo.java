@@ -20,4 +20,6 @@ public class LoginInfo {
     private String msgValidCode;
     //登陆类型
     private Integer loginType;
+    //随机码
+    private String randomStr;
 }

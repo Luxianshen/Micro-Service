@@ -1,26 +1,22 @@
 package com.github.lujs.intercepter;
 
+import com.alibaba.fastjson.JSON;
 import com.github.lujs.annotation.Action;
 import com.github.lujs.annotation.Permission;
 import com.github.lujs.constant.CommonConstant;
-import com.github.lujs.user.api.model.User;
 import com.github.lujs.user.api.model.UserInfo;
 import com.github.lujs.util.UserPermissionUtil;
 import com.github.lujs.utils.RedisUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import com.alibaba.fastjson.JSON;
-
 import java.lang.reflect.Method;
 
 /**
@@ -30,9 +26,8 @@ import java.lang.reflect.Method;
  * @Version: 1.0.0
  **/
 @Component
+@Slf4j
 public class UserContextInterceptor extends HandlerInterceptorAdapter {
-
-    private static final Logger log = LoggerFactory.getLogger(UserContextInterceptor.class);
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -75,8 +70,8 @@ public class UserContextInterceptor extends HandlerInterceptorAdapter {
         String id = request.getHeader("x-user-id");
         String name = request.getHeader("x-user-name");
         if (StringUtils.isNotEmpty(name)) {
-            String tokenKey = CommonConstant.TOKEN_CODE +id+ name;
-            return  (UserInfo)RedisUtil.get(tokenKey);
+            String tokenKey = CommonConstant.TOKEN_CODE + id + name;
+            return (UserInfo) RedisUtil.get(tokenKey);
         }
         return null;
     }
