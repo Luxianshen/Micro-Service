@@ -42,7 +42,7 @@ public class JwtUtil {
             //判断token是否合法
             if(StringUtils.isEmpty(userName)){
                 throw new PermissionException("user is error, please check!");
-            }else if(StringUtils.isEmpty(redisToken) || !redisToken.equals("\""+token+"\"")){
+            }else if(StringUtils.isEmpty(redisToken) || !redisToken.equals(token)){
                 //验证是否过期和有效性
                 throw new PermissionException("token is overdue, please check!");
             }

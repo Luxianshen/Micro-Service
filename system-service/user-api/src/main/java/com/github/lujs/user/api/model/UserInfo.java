@@ -2,6 +2,7 @@ package com.github.lujs.user.api.model;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 
@@ -11,7 +12,7 @@ import java.util.Set;
  * @Date 2019/7/10 11:20
  */
 @Data
-public class UserInfo{
+public class UserInfo implements Serializable {
 
     private String name;
 

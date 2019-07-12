@@ -22,7 +22,7 @@ public class FastJson2JsonRedisSerializer<T> implements RedisSerializer<T> {
 
     static {
         //解决fastJson autoType is not support错误
-        ParserConfig.getGlobalInstance().addAccept("cn.joysim");
+        ParserConfig.getGlobalInstance().addAccept("com.github.lujs");
     }
 
     public FastJson2JsonRedisSerializer(Class<T> clazz) {

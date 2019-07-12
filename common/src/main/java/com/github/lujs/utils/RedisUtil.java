@@ -12,7 +12,6 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.support.atomic.RedisAtomicLong;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -34,7 +33,7 @@ public class RedisUtil {
     private static RedisTemplate<String,Object> redisTemplate;
 
     @Autowired
-    public void setRedisTemplate(StringRedisTemplate redisTemplate) {
+    public void setRedisTemplate(RedisTemplate redisTemplate) {
         if (null == redisTemplate) {
             log.info("Redis初始化配置失败，请检查配置项");
         } else {
