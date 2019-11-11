@@ -10,7 +10,7 @@ import java.util.Properties;
 /**
  * 验证码配置
  *
- * @author tangyi
+ * @author Lujs
  * @date 2018-09-14-20:34
  */
 @Configuration

@@ -1,9 +1,8 @@
 package com.github.lujs.userapiimpl.mapper;
 
-import com.github.lujs.persistence.CrudMapper;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.github.lujs.user.api.model.User;
 import org.apache.ibatis.annotations.Mapper;
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * @Description: 用户mapper接口
@@ -13,6 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 
 @Mapper
-public interface UserMapper extends CrudMapper<User> {
+public interface UserMapper extends BaseMapper<User> {
 
 }

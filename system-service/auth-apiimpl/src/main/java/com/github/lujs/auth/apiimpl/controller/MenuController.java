@@ -1,5 +1,6 @@
 package com.github.lujs.auth.apiimpl.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.lujs.annotation.Action;
 import com.github.lujs.annotation.Permission;
 import com.github.lujs.web.BaseController;

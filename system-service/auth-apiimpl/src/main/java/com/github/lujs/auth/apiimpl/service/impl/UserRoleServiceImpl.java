@@ -1,5 +1,6 @@
 package com.github.lujs.auth.apiimpl.service.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.lujs.auth.api.model.UserRole.UserRole;
 import com.github.lujs.auth.apiimpl.mapper.UserRoleMapper;
 import com.github.lujs.auth.apiimpl.service.UserRoleService;
@@ -15,7 +16,7 @@ import java.util.List;
  * @Date 2019/7/11 11:37
  */
 @Service
-public class UserRoleServiceImpl  extends CrudService<UserRoleMapper, UserRole> implements UserRoleService {
+public class UserRoleServiceImpl  extends ServiceImpl<UserRoleMapper, UserRole> implements UserRoleService {
 
     @Override
     public List<String> getUserRoleList(String username) {

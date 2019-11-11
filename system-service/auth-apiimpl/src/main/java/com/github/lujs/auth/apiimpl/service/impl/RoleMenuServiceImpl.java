@@ -1,5 +1,6 @@
 package com.github.lujs.auth.apiimpl.service.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.lujs.auth.api.model.RoleMenu.RoleMenu;
 import com.github.lujs.auth.apiimpl.mapper.RoleMenuMapper;
 import com.github.lujs.auth.apiimpl.service.RoleMenuService;
@@ -17,7 +18,7 @@ import java.util.Set;
  * @Date 2019/7/11 11:35
  */
 @Service
-public class RoleMenuServiceImpl extends CrudService<RoleMenuMapper, RoleMenu> implements RoleMenuService {
+public class RoleMenuServiceImpl extends ServiceImpl<RoleMenuMapper, RoleMenu> implements RoleMenuService {
 
     @Override
     public List<String> getUserPermissionList(String username) {

@@ -1,5 +1,6 @@
 package com.github.lujs.userapiimpl.service.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.lujs.service.CrudService;
 import com.github.lujs.user.api.model.User;
 import com.github.lujs.userapiimpl.mapper.UserMapper;
@@ -18,7 +19,12 @@ import java.security.spec.InvalidKeySpecException;
  */
 @Service
 @Slf4j
-public class UserServiceImpl extends CrudService<UserMapper,User> implements UserService{
+public class UserServiceImpl extends ServiceImpl<UserMapper,User> implements UserService{
+
+    @Override
+    public User get(User user) {
+        return null;
+    }
 
     /**
      * 获取用户信息方法

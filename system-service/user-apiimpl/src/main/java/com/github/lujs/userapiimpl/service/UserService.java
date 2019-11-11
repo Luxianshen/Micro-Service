@@ -1,5 +1,6 @@
 package com.github.lujs.userapiimpl.service;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.github.lujs.user.api.model.User;
 
 /**
@@ -9,7 +10,7 @@ import com.github.lujs.user.api.model.User;
  * @version: 1.0.0
  */
 
-public interface UserService  {
+public interface UserService  extends IService<User> {
 
     public User get(User user);
 

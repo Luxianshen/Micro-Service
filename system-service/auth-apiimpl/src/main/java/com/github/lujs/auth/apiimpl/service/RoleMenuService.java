@@ -1,5 +1,8 @@
 package com.github.lujs.auth.apiimpl.service;
 
+import com.baomidou.mybatisplus.extension.service.IService;
+import com.github.lujs.auth.api.model.RoleMenu.RoleMenu;
+
 import java.util.List;
 
 /**
@@ -8,7 +11,7 @@ import java.util.List;
  * @Data: 2019/5/18 18:24
  * @version: 1.0.0
  */
-public interface RoleMenuService {
+public interface RoleMenuService extends IService<RoleMenu> {
 
     /**
      * 根据用户名称获取用户权限列表

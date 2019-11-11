@@ -1,7 +1,7 @@
 package com.github.lujs.auth.apiimpl.mapper;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.github.lujs.auth.api.model.RoleMenu.RoleMenu;
-import com.github.lujs.persistence.CrudMapper;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -11,6 +11,6 @@ import org.apache.ibatis.annotations.Mapper;
  * @version: 1.0.0
  */
 @Mapper
-public interface RoleMenuMapper extends CrudMapper<RoleMenu> {
+public interface RoleMenuMapper extends BaseMapper<RoleMenu> {
 
 }

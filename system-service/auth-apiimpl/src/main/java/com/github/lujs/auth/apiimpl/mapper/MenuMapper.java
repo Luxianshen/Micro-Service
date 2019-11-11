@@ -1,5 +1,6 @@
 package com.github.lujs.auth.apiimpl.mapper;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.github.lujs.auth.api.model.Menu.Menu;
 import com.github.lujs.persistence.CrudMapper;
 import org.apache.ibatis.annotations.Mapper;
@@ -13,7 +14,7 @@ import java.util.List;
  * @version: 1.0.0
  */
 @Mapper
-public interface MenuMapper extends CrudMapper<Menu> {
+public interface MenuMapper extends BaseMapper<Menu> {
 
     List<Menu> findByRole(String role);
 }

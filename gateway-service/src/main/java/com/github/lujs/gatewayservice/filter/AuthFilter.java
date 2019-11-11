@@ -48,8 +48,8 @@ public class AuthFilter implements GlobalFilter, Ordered {
         }else{
             throw new PermissionException("user not exist, please check");
         }
-        ServerHttpRequest buildReuqest = mutate.build();
-        return chain.filter(exchange.mutate().request(buildReuqest).build());
+        ServerHttpRequest buildRequest = mutate.build();
+        return chain.filter(exchange.mutate().request(buildRequest).build());
     }
 
     @Override
