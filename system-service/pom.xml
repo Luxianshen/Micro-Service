@@ -16,11 +16,11 @@
 
     <modules>
         <module>auth-api</module>
-        <module>auth-apiimpl</module>
+        <module>auth-api-impl</module>
         <module>token-api</module>
-        <module>token-apiimpl</module>
+        <module>token-api-impl</module>
         <module>user-api</module>
-        <module>user-apiimpl</module>
+        <module>user-api-impl</module>
     </modules>
 
 </project>
