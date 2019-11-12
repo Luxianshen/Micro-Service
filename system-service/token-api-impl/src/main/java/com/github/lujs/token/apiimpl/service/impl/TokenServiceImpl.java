@@ -20,7 +20,6 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -57,9 +56,9 @@ public class TokenServiceImpl implements TokenService {
     public String login(LoginInfo loginInfo) {
         //开启了验证码
         if (validCodeRequired) {
-            Boolean result = validCodeService.checkValidCode(loginInfo.getRandomStr(),loginInfo.getValidCode());
+            Boolean result = validCodeService.checkValidCode(loginInfo.getRandomStr(), loginInfo.getValidCode());
             if (!result) {
-                throw new BaseException(GlobalStatusCode.INVALID_PARAMETER); //todo
+                throw new BaseException(GlobalStatusCode.INVALID_PARAMETER);
             }
         }
         User user = null;
@@ -67,22 +66,22 @@ public class TokenServiceImpl implements TokenService {
         if (LoginType.NORMAL.code().equals(loginInfo.getLoginType())) {
             user = normalLogin(loginInfo);
         } else if (LoginType.PHONE_NO.code().equals(loginInfo.getLoginType())) {
-            user = phoneNoLogin(loginInfo);  //todo
+            //todo
+            user = phoneNoLogin(loginInfo);
         }
-        if(user != null){
+        if (user != null) {
             //获取用户的角色列表 和 权限列表
-
             UserInfo userInfo = new UserInfo();
             //获取用户角色列表
             BeanUtils.copyProperties(user, userInfo);
-            userInfo.setRoleList(userRoleService.getUserRoleList(user.getUsername()));
-            userInfo.setPermissionList(roleMenuService.getUserPermissionList(user.getUsername()));
+            userInfo.setRoleList(userRoleService.getUserRoleList(user.getId()));
+            userInfo.setPermissionList(roleMenuService.getUserPermissionList(userInfo.getRoleList()));
             //生成token
             String random = String.valueOf(new Random().nextInt(6));
-            String token = generateToken(random,user.getUsername());
+            String token = generateToken(random, user.getUsername());
             //放置在redis key 前缀+token随机数+用户名
-            RedisUtil.set(CommonConstant.TOKEN_CODE+user.getUsername(),token,5000L);
-            RedisUtil.set(CommonConstant.TOKEN_CODE+random+user.getUsername(),userInfo,5000L);
+            RedisUtil.set(CommonConstant.TOKEN_CODE + user.getUsername(), token, 5000L);
+            RedisUtil.set(CommonConstant.TOKEN_CODE + random + user.getUsername(), userInfo, 5000L);
 
             return token;
         }
@@ -98,7 +97,7 @@ public class TokenServiceImpl implements TokenService {
     private User normalLogin(LoginInfo loginInfo) {
         //获取用户信息
         User user = userService.getUserInfoByName(loginInfo.getUserName());
-        if(user != null && user.getStatus().equals(CommonConstant.STATUS_NORMAL)){
+        if (user != null && user.getStatus().equals(CommonConstant.STATUS_NORMAL)) {
             //匹配密码
             String credential = "";
             try {
@@ -120,7 +119,8 @@ public class TokenServiceImpl implements TokenService {
             if (success) {
                 return user;
             } else {
-                throw new BaseException(GlobalStatusCode.OBJECT_IS_NOT_EXIST); //todo
+                //todo
+                throw new BaseException(GlobalStatusCode.OBJECT_IS_NOT_EXIST);
             }
         }
         return null;
@@ -137,7 +137,14 @@ public class TokenServiceImpl implements TokenService {
         return null;
     }
 
-    public String generateToken(String random,String userName) {
+    /**
+     * 生成token
+     *
+     * @param random   随机数
+     * @param userName 用户名
+     * @return token
+     */
+    private String generateToken(String random, String userName) {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put("id", random);
         map.put("user", userName);

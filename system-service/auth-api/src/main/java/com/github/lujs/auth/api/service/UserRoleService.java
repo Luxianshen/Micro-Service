@@ -14,9 +14,9 @@ import java.util.List;
 public interface UserRoleService extends IService<UserRole> {
 
     /**
-     * 根据用户名寻找用户角色
-     * @param username
-     * @return
+     * 根据Id寻找用户角色
+     * @param userId 用户ID
+     * @return 用户角色
      */
-    List<String> getUserRoleList(String username);
+    List<String> getUserRoleList(String userId);
 }

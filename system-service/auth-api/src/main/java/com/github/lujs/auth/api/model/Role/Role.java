@@ -1,5 +1,6 @@
 package com.github.lujs.auth.api.model.Role;
 
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.github.lujs.persistence.BaseEntity;
 import lombok.Data;
 
@@ -10,6 +11,7 @@ import lombok.Data;
  * @version: 1.0.0
  */
 @Data
+@TableName("sys_role")
 public class Role extends BaseEntity<Role> {
 
     private String roleName;

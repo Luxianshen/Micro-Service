@@ -15,8 +15,8 @@ public interface RoleMenuService extends IService<RoleMenu> {
 
     /**
      * 根据用户名称获取用户权限列表
-     * @param username
-     * @return
+     * @param roleList 权限列表
+     * @return 用户权限
      */
-    List<String> getUserPermissionList(String username);
+    List<String> getUserPermissionList(List<String> roleList);
 }
