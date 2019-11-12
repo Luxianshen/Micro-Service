@@ -5,7 +5,7 @@ import com.github.lujs.model.enums.ValueEnum;
 
 /**
  * 全局异常
- * @author binchao
+ * @author Lujs
  */
 public class BaseException extends RuntimeException {
 

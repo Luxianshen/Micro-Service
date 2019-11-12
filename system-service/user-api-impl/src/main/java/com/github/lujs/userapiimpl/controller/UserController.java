@@ -4,7 +4,9 @@ import com.github.lujs.annotation.Action;
 import com.github.lujs.annotation.Permission;
 import com.github.lujs.model.BaseResponse;
 import com.github.lujs.user.api.model.User;
+import com.github.lujs.user.api.service.UserService;
 import com.github.lujs.web.BaseController;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,10 +19,10 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/v1/user")
+@AllArgsConstructor
 public class UserController extends BaseController {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
     @GetMapping("/user/test")
     @Permission("test")

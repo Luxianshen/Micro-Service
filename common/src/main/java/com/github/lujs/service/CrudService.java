@@ -1,7 +1,6 @@
 package com.github.lujs.service;
 
 import com.github.lujs.persistence.BaseEntity;
-import com.github.lujs.persistence.CrudMapper;
 import com.github.lujs.utils.ReflectionUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;

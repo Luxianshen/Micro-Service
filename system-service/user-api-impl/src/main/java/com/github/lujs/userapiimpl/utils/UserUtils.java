@@ -1,6 +1,7 @@
 package com.github.lujs.userapiimpl.utils;
 
 import com.github.lujs.user.api.model.User;
+import com.github.lujs.user.api.service.UserService;
 import com.github.lujs.utils.SpringContextHolder;
 import org.apache.commons.lang3.StringUtils;
 

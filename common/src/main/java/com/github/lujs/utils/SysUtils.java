@@ -8,7 +8,7 @@ import org.bouncycastle.util.encoders.Base64;
 
 /**
  * @Description: 系统工具类
- * @Author: lujs
+ * @Author: Lujs
  * @Data: 2019/5/18 8:34
  * @version: 1.0.0
  */

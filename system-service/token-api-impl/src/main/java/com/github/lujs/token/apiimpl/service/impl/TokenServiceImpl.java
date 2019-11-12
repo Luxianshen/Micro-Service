@@ -17,6 +17,7 @@ import com.github.lujs.utils.SysUtils;
 import com.github.lujs.utils.ToolSecurityPbkdf2;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,22 +36,22 @@ import java.util.Random;
  */
 @Service
 @Slf4j
+@AllArgsConstructor
 public class TokenServiceImpl implements TokenService {
 
-    @Autowired
-    private ValidCodeService validCodeService;
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private UserRoleService userRoleService;
-    @Autowired
-    private RoleMenuService roleMenuService;
+    private final ValidCodeService validCodeService;
+
+    private final UserService userService;
+
+    private final UserRoleService userRoleService;
+
+    private final RoleMenuService roleMenuService;
 
     @Value("${validCode.flag}")
     private Boolean validCodeRequired;
 
-    public static final String SECRET = "qazwsx123444$#%#()*&& asdaswwi1235 ?;!@#kmmmpom in***xx**&";
-    public static final String TOKEN_PREFIX = "Bearer";
+    private static final String SECRET = "qazwsx123444$#%#()*&& asdaswwi1235 ?;!@#kmmmpom in***xx**&";
+    private static final String TOKEN_PREFIX = "Bearer";
 
     @Override
     public String login(LoginInfo loginInfo) {

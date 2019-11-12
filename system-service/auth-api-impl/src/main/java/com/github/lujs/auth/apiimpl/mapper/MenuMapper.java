@@ -2,7 +2,6 @@ package com.github.lujs.auth.apiimpl.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.github.lujs.auth.api.model.Menu.Menu;
-import com.github.lujs.persistence.CrudMapper;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
