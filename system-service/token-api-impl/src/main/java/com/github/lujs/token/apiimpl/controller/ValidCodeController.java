@@ -2,10 +2,14 @@ package com.github.lujs.token.apiimpl.controller;
 
 import com.github.lujs.annotation.Action;
 import com.github.lujs.annotation.Permission;
+import com.github.lujs.token.api.service.ValidCodeService;
+import com.google.code.kaptcha.Producer;
 import lombok.AllArgsConstructor;
 import org.apache.commons.io.IOUtils;
-import org.springframework.web.bind.annotation.*;
-import com.google.code.kaptcha.Producer;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;

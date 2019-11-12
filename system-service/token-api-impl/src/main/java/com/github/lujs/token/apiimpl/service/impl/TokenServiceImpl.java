@@ -20,6 +20,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -35,16 +36,16 @@ import java.util.Random;
  */
 @Service
 @Slf4j
-@AllArgsConstructor
 public class TokenServiceImpl implements TokenService {
 
-    private final ValidCodeService validCodeService;
-
-    private final UserService userService;
-
-    private final UserRoleService userRoleService;
-
-    private final RoleMenuService roleMenuService;
+    @Autowired
+    private ValidCodeService validCodeService;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private UserRoleService userRoleService;
+    @Autowired
+    private RoleMenuService roleMenuService;
 
     @Value("${validCode.flag}")
     private Boolean validCodeRequired;

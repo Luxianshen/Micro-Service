@@ -25,7 +25,6 @@ public class UserRoleServiceImpl  extends ServiceImpl<UserRoleMapper, UserRole> 
 
     private UserRoleService userRoleService;
 
-
     /**
      * 返回用户的角色
      * @param userId 用户ID
