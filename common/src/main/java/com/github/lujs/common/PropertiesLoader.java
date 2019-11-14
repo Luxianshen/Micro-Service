@@ -5,7 +5,7 @@ import java.io.InputStream;
 import java.util.NoSuchElementException;
 import java.util.Properties;
 
-import com.github.lujs.utils.IOUtils;
+import cn.hutool.core.io.IoUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.DefaultResourceLoader;
@@ -143,7 +143,7 @@ public class PropertiesLoader {
             } catch (IOException ex) {
                 logger.info("Could not load properties from path:" + location + ", " + ex.getMessage());
             } finally {
-                IOUtils.closeQuietly(is);
+                IoUtil.close(is);
             }
         }
         return props;

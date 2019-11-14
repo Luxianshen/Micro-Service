@@ -19,11 +19,9 @@ import java.util.List;
  * @Author lujs
  * @Date 2019/7/11 11:37
  */
-@AllArgsConstructor
 @Service
 public class UserRoleServiceImpl  extends ServiceImpl<UserRoleMapper, UserRole> implements UserRoleService {
 
-    private UserRoleService userRoleService;
 
     /**
      * 返回用户的角色
@@ -33,12 +31,12 @@ public class UserRoleServiceImpl  extends ServiceImpl<UserRoleMapper, UserRole> 
     @Override
     public List<String> getUserRoleList(String userId) {
         List<String> roleList = new ArrayList<>();
-        QueryWrapper<UserRole> queryWrapper = new QueryWrapper<>();
+        /*QueryWrapper<UserRole> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("user_id",userId);
         List<UserRole> userRoleList = userRoleService.list(queryWrapper);
         if(ObjectUtils.isNotEmpty(userRoleList)){
-            userRoleList.forEach(x->roleList.add(x.getRoleId()));
-        }
+            //userRoleList.forEach(x->roleList.add(x.getRoleId()));
+        }*/
         return roleList;
     }
 }

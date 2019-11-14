@@ -7,7 +7,7 @@
         <artifactId>system-service</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
-    <artifactId>auth-apiimpl</artifactId>
+    <artifactId>auth-api-impl</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <name>auth-apiimpl</name>
     <description>Demo project for Spring Boot</description>

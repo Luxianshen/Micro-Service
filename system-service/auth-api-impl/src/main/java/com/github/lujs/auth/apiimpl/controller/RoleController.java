@@ -1,10 +1,7 @@
 package com.github.lujs.auth.apiimpl.controller;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.lujs.annotation.Action;
 import com.github.lujs.annotation.Permission;
-import com.github.lujs.auth.api.model.Role.Role;
 import com.github.lujs.auth.api.service.RoleService;
 import com.github.lujs.model.BaseResponse;
 import com.github.lujs.web.BaseController;
@@ -34,9 +31,10 @@ public class RoleController extends BaseController {
     @RequestMapping("/page")
     public BaseResponse page(){
 
-        QueryWrapper<Role> queryWrapper = new QueryWrapper<>();
+        /*QueryWrapper<Role> queryWrapper = new QueryWrapper<>();
         Page<Role> rolePage = new Page<>();
-        return new BaseResponse(targetService.page(rolePage,queryWrapper));
+        targetService.page(rolePage,queryWrapper)*/
+        return new BaseResponse();
     }
 
     /**

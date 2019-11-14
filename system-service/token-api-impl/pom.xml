@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>token-apiimpl</artifactId>
+    <artifactId>token-api-impl</artifactId>
     <dependencies>
         <dependency>
             <groupId>com.github.lujs</groupId>
@@ -73,6 +73,5 @@
             <artifactId>spring-cloud-starter-openfeign</artifactId>
         </dependency>
     </dependencies>
-
 
 </project>
