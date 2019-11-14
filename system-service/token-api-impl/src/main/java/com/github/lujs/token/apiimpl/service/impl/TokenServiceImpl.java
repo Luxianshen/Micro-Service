@@ -1,17 +1,16 @@
 package com.github.lujs.token.apiimpl.service.impl;
 
 import com.github.lujs.Exception.BaseException;
-import com.github.lujs.auth.api.service.RoleMenuService;
-import com.github.lujs.auth.api.service.UserRoleService;
+import com.github.lujs.auth.api.feign.AuthServiceClient;
 import com.github.lujs.constant.CommonConstant;
 import com.github.lujs.constant.GlobalStatusCode;
 import com.github.lujs.token.api.model.LoginInfo;
 import com.github.lujs.token.api.model.enums.LoginType;
 import com.github.lujs.token.api.service.TokenService;
 import com.github.lujs.token.api.service.ValidCodeService;
+import com.github.lujs.user.api.feign.UserServiceClient;
 import com.github.lujs.user.api.model.User;
 import com.github.lujs.user.api.model.UserInfo;
-import com.github.lujs.user.api.service.UserService;
 import com.github.lujs.utils.RedisUtil;
 import com.github.lujs.utils.SysUtils;
 import com.github.lujs.utils.ToolSecurityPbkdf2;
@@ -39,13 +38,11 @@ import java.util.Random;
 public class TokenServiceImpl implements TokenService {
 
     @Autowired
-    private ValidCodeService validCodeService;
+    private  ValidCodeService validCodeService;
     @Autowired
-    private UserService userService;
+    private  UserServiceClient userServiceClient;
     @Autowired
-    private UserRoleService userRoleService;
-    @Autowired
-    private RoleMenuService roleMenuService;
+    private  AuthServiceClient authServiceClient;
 
     @Value("${validCode.flag}")
     private Boolean validCodeRequired;
@@ -75,8 +72,8 @@ public class TokenServiceImpl implements TokenService {
             UserInfo userInfo = new UserInfo();
             //获取用户角色列表
             BeanUtils.copyProperties(user, userInfo);
-            userInfo.setRoleList(userRoleService.getUserRoleList(user.getId()));
-            userInfo.setPermissionList(roleMenuService.getUserPermissionList(userInfo.getRoleList()));
+            userInfo.setRoleList(authServiceClient.getUserRoleList(user.getId()));
+            userInfo.setPermissionList(authServiceClient.getUserPermissionList(userInfo.getRoleList()));
             //生成token
             String random = String.valueOf(new Random().nextInt(6));
             String token = generateToken(random, user.getUsername());
@@ -97,7 +94,7 @@ public class TokenServiceImpl implements TokenService {
      */
     private User normalLogin(LoginInfo loginInfo) {
         //获取用户信息
-        User user = userService.getUserInfoByName(loginInfo.getUserName());
+        User user = userServiceClient.getUserInfoByName(loginInfo.getUserName());
         if (user != null && user.getStatus().equals(CommonConstant.STATUS_NORMAL)) {
             //匹配密码
             String credential = "";

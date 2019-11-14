@@ -8,10 +8,10 @@ import org.springframework.context.annotation.ComponentScan;
 @SpringBootApplication
 @EnableDiscoveryClient
 @ComponentScan("com.github.lujs.*")
-public class UserApiimplApplication {
+public class UserApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(UserApiimplApplication.class, args);
+		SpringApplication.run(UserApplication.class, args);
 	}
 
 }

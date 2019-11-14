@@ -7,9 +7,9 @@ import com.github.lujs.constant.GlobalStatusCode;
 import com.github.lujs.model.BaseResponse;
 import com.github.lujs.token.api.model.LoginInfo;
 import com.github.lujs.token.api.service.TokenService;
+import com.github.lujs.user.api.feign.UserServiceClient;
 import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -27,6 +27,8 @@ import java.util.Map;
 public class TokenController {
 
     private final TokenService targetService;
+
+    private final UserServiceClient userServiceClient;
 
     @GetMapping("/getToken/{userName}")
     public String get(@PathVariable("userName") String userName){

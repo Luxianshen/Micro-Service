@@ -1,11 +1,17 @@
 #端口
 server:
-  port: 8077
+   port: 8077
+
 #服务名
 spring:
   application:
     name: user-service
-#数据库
+  #nacos
+  cloud:
+    nacos:
+      discovery:
+          server-addr: 127.0.0.1:8848
+  #数据库
   datasource:
     name: test
     url: jdbc:mysql://139.199.89.237:3306/test_db
@@ -27,15 +33,10 @@ spring:
     testOnReturn: false
     poolPreparedStatements: true
     maxOpenPreparedStatements: 20
-#redis
+  #redis
   redis:
     host: 139.199.89.237
     port: 6380
-#nacos
-  cloud:
-    nacos:
-      discovery:
-        server-addr: 127.0.0.1:8848
 
 # mybatis-plus
 mybatis-plus:

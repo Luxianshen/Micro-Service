@@ -1,0 +1,22 @@
+package com.github.lujs.user.api.feign;
+
+import com.github.lujs.user.api.feign.hystrix.UserServiceHystrix;
+import com.github.lujs.user.api.model.User;
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.GetMapping;
+
+/**
+ * @Description: 用户服务
+ * @Author lujs
+ * @Date 2019/11/13 15:17
+ */
+@FeignClient(name = "user-service",fallback = UserServiceHystrix.class)
+public interface UserServiceClient {
+
+    /**
+     * 根据用户名获取用户信息
+     */
+    @GetMapping("/v1/user/getUserInfoByName")
+    User getUserInfoByName(String userName);
+
+}

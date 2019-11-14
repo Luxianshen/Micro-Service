@@ -2,6 +2,8 @@ package com.github.lujs.auth.apiimpl.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.github.lujs.annotation.Action;
+import com.github.lujs.annotation.Permission;
 import com.github.lujs.auth.api.model.Role.Role;
 import com.github.lujs.auth.api.service.RoleService;
 import com.github.lujs.model.BaseResponse;
@@ -9,6 +11,9 @@ import com.github.lujs.web.BaseController;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @Description: 角色控制层
@@ -32,6 +37,16 @@ public class RoleController extends BaseController {
         QueryWrapper<Role> queryWrapper = new QueryWrapper<>();
         Page<Role> rolePage = new Page<>();
         return new BaseResponse(targetService.page(rolePage,queryWrapper));
+    }
+
+    /**
+     * 获取用户角色
+     */
+    @RequestMapping("getUserRoleList")
+    @Permission(action = Action.Skip)
+    public List<String> getUserRoleList(String userId){
+
+        return new ArrayList<>();
     }
 
 
