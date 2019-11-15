@@ -3,6 +3,8 @@ package com.github.lujs.auth.api.feign;
 import com.github.lujs.auth.api.feign.hystrix.AuthServiceHystrix;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -18,11 +20,11 @@ public interface AuthServiceClient {
      * 获取用户角色列表
      */
     @GetMapping("/v1/role/getUserRoleList")
-    List<String> getUserRoleList(String userId);
+    List<String> getUserRoleList(@RequestParam("userId") String userId);
 
     /**
      * 获取用户权限列表
      */
-    @GetMapping("/v1/menu/getUserPermissionList")
+    @PostMapping("/v1/menu/getUserPermissionList")
     List<String> getUserPermissionList(List<String> roles);
 }

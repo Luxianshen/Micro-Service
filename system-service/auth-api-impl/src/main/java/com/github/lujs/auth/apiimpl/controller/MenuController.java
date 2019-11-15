@@ -3,6 +3,8 @@ package com.github.lujs.auth.apiimpl.controller;
 import com.github.lujs.annotation.Action;
 import com.github.lujs.annotation.Permission;
 import com.github.lujs.web.BaseController;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,17 +18,22 @@ import java.util.List;
  * @version: 1.0.0
  */
 @RestController
-@RequestMapping("/v1/menu")
+@RequestMapping("/v1/auth/menu")
 public class MenuController extends BaseController {
 
 
     /**
      * 获取用户权限
      */
-    @RequestMapping("getUserPermissionList")
+    @PostMapping("getUserPermissionList")
     @Permission(action = Action.Skip)
-    public List<String> getUserPermissionList(List<String> roles){
-        return new ArrayList<>();
+    public List<String> getUserPermissionList(@RequestBody List<String> roles){
+
+        logger.info(roles.toString());
+        List<String> permissionList = new ArrayList<>();
+        permissionList.add("hi");
+        permissionList.add("hello");
+        return permissionList;
     }
 
 

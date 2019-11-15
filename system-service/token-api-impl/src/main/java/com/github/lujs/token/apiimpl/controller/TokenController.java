@@ -28,7 +28,6 @@ public class TokenController {
 
     private final TokenService targetService;
 
-    private final UserServiceClient userServiceClient;
 
     @GetMapping("/getToken/{userName}")
     public String get(@PathVariable("userName") String userName){

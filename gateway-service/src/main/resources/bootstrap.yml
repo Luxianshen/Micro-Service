@@ -13,10 +13,18 @@ spring:
           enabled: true
           lower-case-service-id: true
       routes:
-        - id: host_route
-          uri: http://localhost:8077/user/test
+        - id: user_route
+          uri: http://localhost:8077/v1/user/
           predicates:
-            - Path=/hi/** # 请求地址携带hi的,则转发
+            - Path=/v1/user/** # 请求地址携带hi的,则转发
+        - id: token_route
+          uri: http://localhost:8076/token/
+          predicates:
+            - Path=/token/**
+        - id: auth_route
+          uri: http://localhost:8075/v1/auth/
+          predicates:
+            - Path=/v1/auth/**
 #redis
   redis:
     host: 139.199.89.237

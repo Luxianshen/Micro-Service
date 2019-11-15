@@ -6,7 +6,9 @@ import com.github.lujs.auth.api.service.RoleService;
 import com.github.lujs.model.BaseResponse;
 import com.github.lujs.web.BaseController;
 import lombok.AllArgsConstructor;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
@@ -19,7 +21,7 @@ import java.util.List;
  * @version: 1.0.0
  */
 @AllArgsConstructor
-@RequestMapping("/v1/role")
+@RequestMapping("/v1/auth/role")
 @RestController
 public class RoleController extends BaseController {
 
@@ -40,11 +42,12 @@ public class RoleController extends BaseController {
     /**
      * 获取用户角色
      */
-    @RequestMapping("getUserRoleList")
+    @GetMapping("getUserRoleList")
     @Permission(action = Action.Skip)
-    public List<String> getUserRoleList(String userId){
-
-        return new ArrayList<>();
+    public List<String> getUserRoleList(@RequestParam("userId") String userId){
+        List<String> roles = new ArrayList<>();
+        roles.add("test");
+        return roles;
     }
 
 

@@ -3,12 +3,10 @@ package com.github.lujs.userapiimpl.controller;
 import com.github.lujs.annotation.Action;
 import com.github.lujs.annotation.Permission;
 import com.github.lujs.model.BaseResponse;
-import com.github.lujs.user.api.feign.UserServiceClient;
 import com.github.lujs.user.api.model.User;
 import com.github.lujs.user.api.service.UserService;
 import com.github.lujs.web.BaseController;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -28,7 +26,7 @@ public class UserController extends BaseController {
 
     @GetMapping("/getUserInfoByName")
     @Permission(action = Action.Skip)
-    public User getUserInfoByName(String userName) {
+    public User getUserInfoByName(@RequestParam("userName") String userName) {
         return userService.getUserInfoByName(userName);
     }
 

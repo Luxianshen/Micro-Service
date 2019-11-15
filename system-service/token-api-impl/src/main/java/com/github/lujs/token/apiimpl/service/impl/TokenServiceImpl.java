@@ -81,7 +81,7 @@ public class TokenServiceImpl implements TokenService {
             RedisUtil.set(CommonConstant.TOKEN_CODE + user.getUsername(), token, 5000L);
             RedisUtil.set(CommonConstant.TOKEN_CODE + random + user.getUsername(), userInfo, 5000L);
 
-            return token;
+            return token.replace("Bearer ","");
         }
         return null;
     }
