@@ -7,11 +7,17 @@ import com.github.lujs.constant.GlobalStatusCode;
 import com.github.lujs.model.BaseResponse;
 import com.github.lujs.token.api.model.LoginInfo;
 import com.github.lujs.token.api.service.TokenService;
-import com.github.lujs.user.api.feign.UserServiceClient;
+import com.github.lujs.token.api.service.ValidCodeService;
+import com.google.code.kaptcha.Producer;
 import lombok.AllArgsConstructor;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.imageio.ImageIO;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,6 +34,9 @@ public class TokenController {
 
     private final TokenService targetService;
 
+    private final Producer producer;
+
+    private final ValidCodeService validCodeService;
 
     @GetMapping("/getToken/{userName}")
     public String get(@PathVariable("userName") String userName){
@@ -56,6 +65,25 @@ public class TokenController {
         re.put("token_type","bearer");
         baseResponse.setData(re);
         return re;
+    }
+
+    /**
+     * 创建验证码
+     * @return 返回验证码
+     */
+    @GetMapping("/code/{random}")
+    @Permission(action = Action.Skip)
+    public void produceCode(@PathVariable String random, HttpServletResponse response) throws Exception {
+        response.setHeader("Cache-Control", "no-store, no-cache");
+        response.setContentType("image/jpeg");
+        // 生成文字验证码
+        String text = producer.createText();
+        // 生成图片验证码
+        BufferedImage image = producer.createImage(text);
+        validCodeService.saveImageCode(random, text);
+        ServletOutputStream out = response.getOutputStream();
+        ImageIO.write(image, "JPEG", out);
+        IOUtils.closeQuietly(out);
     }
 
 }

@@ -1,6 +1,5 @@
 package com.github.lujs.userapiimpl.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.lujs.user.api.model.User;
 import com.github.lujs.user.api.service.UserService;
@@ -22,7 +21,7 @@ import java.security.spec.InvalidKeySpecException;
 @AllArgsConstructor
 @Service
 @Slf4j
-public class UserServiceImpl extends ServiceImpl<UserMapper,User> implements UserService {
+public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
 
     private final UserMapper userMapper;
 
@@ -34,29 +33,32 @@ public class UserServiceImpl extends ServiceImpl<UserMapper,User> implements Use
 
     /**
      * 获取用户信息方法
+     *
      * @param agentId 用户名
      * @return 用户对象
      */
     @Override
-    public User checkUserLoginInfo(String agentId,String agentAuth) {
+    public User checkUserLoginInfo(String agentId, String agentAuth) {
         User user = userMapper.getUserByAgentId(agentId);
-        //匹配密码
-        String credential = "";
-        try {
-            // 开始解密
-            credential = SysUtils.decryptAES(agentAuth, "1234567887654321");
-            credential = credential.trim();
-            log.debug("credential decrypt success:{}", credential);
-        } catch (Exception e) {
-            log.error("credential decrypt fail:{}", credential);
-        }
-        try {
-            ToolSecurityPbkdf2.authenticate(credential, user.getAgentAuth(), user.getSalt());
-            return user;
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (InvalidKeySpecException e) {
-            e.printStackTrace();
+        if (user != null) {
+            //匹配密码
+            String credential = "";
+            try {
+                // 开始解密
+                credential = SysUtils.decryptAES(agentAuth, "1234567887654321");
+                credential = credential.trim();
+                log.debug("credential decrypt success:{}", credential);
+            } catch (Exception e) {
+                log.error("credential decrypt fail:{}", credential);
+            }
+            try {
+                ToolSecurityPbkdf2.authenticate(credential, user.getAgentAuth(), user.getSalt());
+                return user;
+            } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+            } catch (InvalidKeySpecException e) {
+                e.printStackTrace();
+            }
         }
         return null;
     }

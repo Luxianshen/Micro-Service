@@ -12,19 +12,14 @@ import com.github.lujs.user.api.feign.UserServiceClient;
 import com.github.lujs.user.api.model.User;
 import com.github.lujs.user.api.model.UserInfo;
 import com.github.lujs.utils.RedisUtil;
-import com.github.lujs.utils.SysUtils;
-import com.github.lujs.utils.ToolSecurityPbkdf2;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
 import java.util.HashMap;
 import java.util.Random;
 
