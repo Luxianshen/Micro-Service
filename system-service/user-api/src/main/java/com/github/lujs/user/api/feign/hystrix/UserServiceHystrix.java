@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 public class UserServiceHystrix implements UserServiceClient {
 
     @Override
-    public User getUserInfoByName(String userName) {
+    public User checkUserLoginInfo(String agentId,String agentAuth) {
         return null;
     }
 }

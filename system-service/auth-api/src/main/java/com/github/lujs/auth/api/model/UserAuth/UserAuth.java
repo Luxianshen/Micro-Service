@@ -8,6 +8,6 @@ import com.github.lujs.persistence.BaseEntity;
  * @Data: 2019/5/18 11:38
  * @version: 1.0.0
  */
-public class UserAuth extends BaseEntity<UserAuth> {
+public class UserAuth extends BaseEntity {
 
 }

@@ -1,155 +1,69 @@
 package com.github.lujs.persistence;
 
-import com.github.lujs.common.IdGen;
-import com.github.lujs.constant.CommonConstant;
-import org.apache.commons.lang3.StringUtils;
-
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * @Description: Entity基类
- * @Author: lujs
- * @Data: 2019/5/3 15:17
- * @version: 1.0.0
+ * @Description:
+ * @Author lujs
+ * @Date 2019/11/18 16:43
  */
+public class BaseEntity implements Serializable {
 
-public class BaseEntity<T> implements Serializable {
+    @TableId
+    @JsonSerialize(
+            using = ToStringSerializer.class
+    )
+    private Long id;
+    private Date createTime;
+    private Date updateTime;
+    private Integer deleted;
 
-    private static final long serialVersionUID = 1L;
-
-    protected String id;
-
-    protected String creator;    // 创建者
-
-    protected String createDate;    // 创建日期
-
-    protected String modifier;    // 更新者
-
-    protected String modifyDate;    // 更新日期
-
-    protected Integer delFlag = CommonConstant.DEL_FLAG_NORMAL;  // 删除标记 0:正常，1-删除
-
-    protected String applicationCode;   // 系统编号
-
-    protected boolean isNewRecord;  // 是否为新记录
-
-    protected String[] ids; // ID数组
-
-    protected String idString;  // ID字符串，多个用逗号隔开
+    public void init() {
+        this.createTime = new Date();
+        this.deleted = 0;
+    }
 
     public BaseEntity() {
-
     }
 
-    public BaseEntity(String id) {
-        this();
+    public Long getId() {
+        return this.id;
+    }
+
+    public Date getCreateTime() {
+        return this.createTime;
+    }
+
+    public Date getUpdateTime() {
+        return this.updateTime;
+    }
+
+    public Integer getDeleted() {
+        return this.deleted;
+    }
+
+    public void setId(Long id) {
         this.id = id;
     }
 
-    /**
-     * 是否为新记录
-     *
-     * @return boolean
-     */
-    public boolean isNewRecord() {
-        return this.isNewRecord || StringUtils.isBlank(this.getId());
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
-    /**
-     * 设置基本属性
-     *
-     * @param userCode        用户编码
-     * @param applicationCode 系统编号
-     */
-    public void setCommonValue(String userCode, String applicationCode) {
-        if (this.isNewRecord()) {
-            this.setId(IdGen.uuid());
-            this.setNewRecord(true);
-            this.creator = userCode;
-            this.createDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
-        }
-        this.modifier = userCode;
-        this.modifyDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
-        this.delFlag = 0;
-        this.applicationCode = applicationCode;
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
     }
 
-    public String getId() {
-        return id;
+    public void setDeleted(Integer deleted) {
+        this.deleted = deleted;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getCreator() {
-        return creator;
-    }
-
-    public void setCreator(String creator) {
-        this.creator = creator;
-    }
-
-    public String getCreateDate() {
-        return createDate;
-    }
-
-    public void setCreateDate(String createDate) {
-        this.createDate = createDate;
-    }
-
-    public String getModifier() {
-        return modifier;
-    }
-
-    public void setModifier(String modifier) {
-        this.modifier = modifier;
-    }
-
-    public String getModifyDate() {
-        return modifyDate;
-    }
-
-    public void setModifyDate(String modifyDate) {
-        this.modifyDate = modifyDate;
-    }
-
-    public Integer getDelFlag() {
-        return delFlag;
-    }
-
-    public void setDelFlag(Integer delFlag) {
-        this.delFlag = delFlag;
-    }
-
-    public String getApplicationCode() {
-        return applicationCode;
-    }
-
-    public void setApplicationCode(String applicationCode) {
-        this.applicationCode = applicationCode;
-    }
-
-    public void setNewRecord(boolean newRecord) {
-        isNewRecord = newRecord;
-    }
-
-    public String[] getIds() {
-        return ids;
-    }
-
-    public void setIds(String[] ids) {
-        this.ids = ids;
-    }
-
-    public String getIdString() {
-        return idString;
-    }
-
-    public void setIdString(String idString) {
-        this.idString = idString;
+    @Override
+    public String toString() {
+        return "BaseEntity(id=" + this.getId() + ", createTime=" + this.getCreateTime() + ", updateTime=" + this.getUpdateTime() + ", deleted=" + this.getDeleted() + ")";
     }
 }
-

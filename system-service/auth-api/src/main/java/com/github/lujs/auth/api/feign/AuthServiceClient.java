@@ -19,12 +19,12 @@ public interface AuthServiceClient {
     /**
      * 获取用户角色列表
      */
-    @GetMapping("/v1/role/getUserRoleList")
-    List<String> getUserRoleList(@RequestParam("userId") String userId);
+    @GetMapping("/v1/auth/role/getUserRoleList")
+    List<String> getUserRoleList(@RequestParam("userId") Long userId);
 
     /**
      * 获取用户权限列表
      */
-    @PostMapping("/v1/menu/getUserPermissionList")
+    @PostMapping("/v1/auth/menu/getUserPermissionList")
     List<String> getUserPermissionList(List<String> roles);
 }

@@ -12,7 +12,7 @@ import lombok.Data;
  */
 @Data
 @TableName("sys_role")
-public class Role extends BaseEntity<Role> {
+public class Role extends BaseEntity {
 
     private String roleName;
 

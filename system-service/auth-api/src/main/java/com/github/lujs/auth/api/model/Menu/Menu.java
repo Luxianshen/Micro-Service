@@ -12,7 +12,7 @@ import lombok.Data;
  */
 @Data
 @TableName("sys_menu")
-public class Menu extends BaseEntity<Menu> {
+public class Menu extends BaseEntity {
 
     /**
      * 菜单名称

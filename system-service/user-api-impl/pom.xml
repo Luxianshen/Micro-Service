@@ -17,11 +17,11 @@
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 		<!--权限校验-->
-		<!--<dependency>
+		<dependency>
 			<groupId>com.github.lujs</groupId>
 			<artifactId>auth-permission</artifactId>
 			<version>1.0.0-SNAPSHOT</version>
-		</dependency>-->
+		</dependency>
 		<dependency>
 		  <groupId>com.github.lujs</groupId>
 		  <artifactId>user-api</artifactId>

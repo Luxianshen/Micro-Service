@@ -16,7 +16,7 @@ spring:
         - id: user_route
           uri: http://localhost:8077/v1/user/
           predicates:
-            - Path=/v1/user/** # 请求地址携带hi的,则转发
+            - Path=/v1/user/**
         - id: token_route
           uri: http://localhost:8076/token/
           predicates:

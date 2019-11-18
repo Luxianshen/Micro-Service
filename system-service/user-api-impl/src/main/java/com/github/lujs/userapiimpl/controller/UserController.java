@@ -23,11 +23,10 @@ public class UserController extends BaseController {
 
     private final UserService userService;
 
-
-    @GetMapping("/getUserInfoByName")
+    @PostMapping("/checkUserLoginInfo")
     @Permission(action = Action.Skip)
-    public User getUserInfoByName(@RequestParam("userName") String userName) {
-        return userService.getUserInfoByName(userName);
+    public User checkUserLoginInfo(@RequestParam("agentId") String agentId,@RequestParam("agentAuth") String agentAuth) {
+        return userService.checkUserLoginInfo(agentId,agentAuth);
     }
 
 
@@ -36,7 +35,7 @@ public class UserController extends BaseController {
     @GetMapping("/get/{id}")
     @Permission(action = Action.Skip)
     public BaseResponse get(@PathVariable String id) {
-        User user = new User(id);
+        User user = new User();
         user = userService.get(user);
         return new BaseResponse(user);
     }

@@ -12,7 +12,7 @@ import lombok.Data;
  */
 @Data
 @TableName("sys_user_role")
-public class UserRole extends BaseEntity<UserRole> {
+public class UserRole extends BaseEntity {
 
     private String userId;
 

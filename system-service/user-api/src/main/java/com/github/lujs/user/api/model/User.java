@@ -1,9 +1,13 @@
 package com.github.lujs.user.api.model;
 
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.lujs.persistence.BaseEntity;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
-import java.util.List;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
 /**
  * @Describe: 用户实体
@@ -11,48 +15,55 @@ import java.util.List;
  * @Date: 2019/4/29 10:46
  * @Version: 1.0.0
  **/
+@EqualsAndHashCode(callSuper = true)
 @Data
-public class User extends BaseEntity<User> {
+@TableName("tb_user")
+public class User extends BaseEntity {
 
-    private String name;
+    @NotEmpty(message = "用户名必填")
+    @Size(min = 3, max = 30)
+    private String agentId;
 
-    private String username;
+    /**
+     * 加密密码
+     */
+    @JsonIgnore
+    private byte[] agentAuth;
 
-    private byte[] password;
-
+    /**
+     * 加密盐
+     */
+    @JsonIgnore
     private byte[] salt;
 
-    private String phone;
+    /**
+     * 用户状态
+     */
+    private Integer state;
 
-    private String avatar;
+    /**
+     * 用户姓名
+     */
+    private String name;
 
-    private String avatarId;
-
+    /**
+     * 用户邮箱
+     */
     private String email;
 
-    private String sex;
+    /**
+     * 用户头像地址
+     */
+    private String avatar;
 
-    private String born;
+    /**
+     * 用户性别
+     */
+    private Integer gender;
 
-    private String remark;
-
-    private String status;
-
-    private String deptName;
-
-    private String deptId;
-
-    public User() {
-        super();
-    }
-
-    public User(String id) {
-        this.id = id;
-    }
-
-    public User(String id,String name) {
-        this.id = id;
-        this.name = name;
-    }
+    /**
+     * 用户电话号码
+     */
+    private String phoneNo;
 
 }

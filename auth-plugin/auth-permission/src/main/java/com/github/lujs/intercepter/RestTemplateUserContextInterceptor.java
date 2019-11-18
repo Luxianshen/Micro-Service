@@ -29,9 +29,9 @@ public class RestTemplateUserContextInterceptor implements ClientHttpRequestInte
     public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution)
             throws IOException {
         //获取用户 todo
-        User user = new User("1","lisi");
-        request.getHeaders().add("x-user-id",user.getId());
-        request.getHeaders().add("x-user-name",user.getId());
+        //User user = new User("1","lisi");
+        request.getHeaders().add("x-user-id","1");
+        request.getHeaders().add("x-user-name","lisi");
         request.getHeaders().add("x-user-serviceName",request.getURI().getHost());
 
         return execution.execute(request, body);

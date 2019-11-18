@@ -14,6 +14,6 @@ public interface UserService extends IService<User> {
 
     public User get(User user);
 
-    public User getUserInfoByName(String userName);
+    public User checkUserLoginInfo(String agentId,String agentAuth);
 
 }

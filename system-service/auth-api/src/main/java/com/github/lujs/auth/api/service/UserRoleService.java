@@ -18,5 +18,5 @@ public interface UserRoleService extends IService<UserRole> {
      * @param userId 用户ID
      * @return 用户角色
      */
-    List<String> getUserRoleList(String userId);
+    List<String> getUserRoleList(Long userId);
 }

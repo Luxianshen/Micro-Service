@@ -3,7 +3,7 @@ package com.github.lujs.user.api.feign;
 import com.github.lujs.user.api.feign.hystrix.UserServiceHystrix;
 import com.github.lujs.user.api.model.User;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /**
@@ -17,7 +17,7 @@ public interface UserServiceClient {
     /**
      * 根据用户名获取用户信息
      */
-    @GetMapping("/v1/user/getUserInfoByName")
-    User getUserInfoByName(@RequestParam("userName") String userName);
+    @PostMapping("/v1/user/checkUserLoginInfo")
+    User checkUserLoginInfo(@RequestParam("agentId") String agentId,@RequestParam("agentAuth") String agentAuth);
 
 }

@@ -16,7 +16,7 @@ public class UserInfo implements Serializable {
 
     private String name;
 
-    private String username;
+    private String agentId;
 
     private String phone;
 
@@ -32,10 +32,14 @@ public class UserInfo implements Serializable {
 
     private String remark;
 
-    private String status;
+    private String state;
 
-    //用户角色列表
+    /**
+     * 用户角色列表
+     */
     private List<String> roleList;
-    //用户权限列表
+    /**
+     * 用户权限列表
+     */
     private List<String> permissionList;
 }

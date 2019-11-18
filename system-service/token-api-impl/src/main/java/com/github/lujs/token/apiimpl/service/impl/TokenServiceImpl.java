@@ -76,10 +76,10 @@ public class TokenServiceImpl implements TokenService {
             userInfo.setPermissionList(authServiceClient.getUserPermissionList(userInfo.getRoleList()));
             //生成token
             String random = String.valueOf(new Random().nextInt(6));
-            String token = generateToken(random, user.getUsername());
+            String token = generateToken(random, user.getAgentId());
             //放置在redis key 前缀+token随机数+用户名
-            RedisUtil.set(CommonConstant.TOKEN_CODE + user.getUsername(), token, 5000L);
-            RedisUtil.set(CommonConstant.TOKEN_CODE + random + user.getUsername(), userInfo, 5000L);
+            RedisUtil.set(CommonConstant.TOKEN_CODE + user.getAgentId(), token, 5000L);
+            RedisUtil.set(CommonConstant.TOKEN_CODE + random + user.getAgentId(), userInfo, 5000L);
 
             return token.replace("Bearer ","");
         }
@@ -94,34 +94,12 @@ public class TokenServiceImpl implements TokenService {
      */
     private User normalLogin(LoginInfo loginInfo) {
         //获取用户信息
-        User user = userServiceClient.getUserInfoByName(loginInfo.getUserName());
-        if (user != null && user.getStatus().equals(CommonConstant.STATUS_NORMAL)) {
-            //匹配密码
-            String credential = "";
-            try {
-                // 开始解密
-                credential = SysUtils.decryptAES(loginInfo.getPassWord(), "1234567887654321");
-                credential = credential.trim();
-                log.debug("credential decrypt success:{}", credential);
-            } catch (Exception e) {
-                log.error("credential decrypt fail:{}", credential);
-            }
-            boolean success = false;
-            try {
-                success = ToolSecurityPbkdf2.authenticate(credential, user.getPassword(), user.getSalt());
-            } catch (NoSuchAlgorithmException e) {
-                e.printStackTrace();
-            } catch (InvalidKeySpecException e) {
-                e.printStackTrace();
-            }
-            if (success) {
-                return user;
-            } else {
-                //todo
-                throw new BaseException(GlobalStatusCode.OBJECT_IS_NOT_EXIST);
-            }
+        User user = userServiceClient.checkUserLoginInfo(loginInfo.getUserName(),loginInfo.getPassWord());
+        if (user != null ) {
+            return user;
+        }else {
+            throw new BaseException(GlobalStatusCode.OBJECT_IS_NOT_EXIST);
         }
-        return null;
     }
 
     /**
