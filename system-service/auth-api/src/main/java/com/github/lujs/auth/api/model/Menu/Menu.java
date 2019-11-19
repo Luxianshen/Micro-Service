@@ -1,6 +1,8 @@
 package com.github.lujs.auth.api.model.Menu;
 
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.github.lujs.persistence.BaseEntity;
 import lombok.Data;
 
@@ -11,62 +13,59 @@ import lombok.Data;
  * @version: 1.0.0
  */
 @Data
-@TableName("sys_menu")
+@TableName("tb_menu")
 public class Menu extends BaseEntity {
 
     /**
-     * 菜单名称
+     * 权限名称
      */
-    private String name;
+    private String title;
 
     /**
-     * 菜单权限标识
+     * 权限类型
      */
-    private String permission;
+    private Integer type;
 
     /**
-     * url
+     * 权限状态
      */
-    private String url;
+    private Integer state;
 
     /**
-     * 重定向url
+     * 上级权限id
      */
-    private String redirect;
+    @JsonSerialize(using = ToStringSerializer.class)
+    private Long pid;
 
     /**
-     * 父菜单ID
+     * 排序
      */
-    private String parentId;
+    private Integer seq;
 
     /**
-     * 图标
-     */
-    private String icon;
-
-    /**
-     * 排序号
-     */
-    private String sort;
-
-    /**
-     * 类型
-     */
-    private String type;
-
-    /**
-     * 模块
-     */
-    private String component;
-
-    /**
-     * 路径
+     * 权限路径
      */
     private String path;
 
     /**
-     * 备注
+     * 权限编码
      */
-    private String remark;
+    private String permissionCode;
+
+    /**
+     * 权限资源图标
+     */
+    private String icon;
+
+    /**
+     * 权限资源描述
+     */
+    private String permissionDesc;
+
+    /**
+     * 所属系统
+     */
+    @JsonSerialize(using = ToStringSerializer.class)
+    private Long sysId;
 
 }

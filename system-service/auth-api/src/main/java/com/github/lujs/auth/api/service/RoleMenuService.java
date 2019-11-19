@@ -3,6 +3,7 @@ package com.github.lujs.auth.api.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.github.lujs.auth.api.model.RoleMenu.RoleMenu;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -14,9 +15,9 @@ import java.util.List;
 public interface RoleMenuService extends IService<RoleMenu> {
 
     /**
-     * 根据用户名称获取用户权限列表
-     * @param roleList 权限列表
-     * @return 用户权限
+     *
+     * @param roleId
+     * @return
      */
-    List<String> getUserPermissionList(List<String> roleList);
+    List<String> getRoleMenuCodes(String roleId);
 }

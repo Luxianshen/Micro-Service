@@ -68,7 +68,7 @@ public class TokenServiceImpl implements TokenService {
             //获取用户角色列表
             BeanUtils.copyProperties(user, userInfo);
             userInfo.setRoleList(authServiceClient.getUserRoleList(user.getId()));
-            userInfo.setPermissionList(authServiceClient.getUserPermissionList(userInfo.getRoleList()));
+            userInfo.setPermissionList(authServiceClient.getRolePermissionList(userInfo.getRoleList()));
             //生成token
             String random = String.valueOf(new Random().nextInt(6));
             String token = generateToken(random, user.getAgentId());

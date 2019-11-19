@@ -15,23 +15,22 @@ import java.util.List;
  * @Date 2019/7/11 11:37
  */
 @Service
-public class UserRoleServiceImpl  extends ServiceImpl<UserRoleMapper, UserRole> implements UserRoleService {
+public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> implements UserRoleService {
 
 
     /**
      * 返回用户的角色
+     *
      * @param userId 用户ID
      * @return 用户角色
      */
     @Override
     public List<String> getUserRoleList(Long userId) {
-        List<String> roleList = new ArrayList<>();
-        /*QueryWrapper<UserRole> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("user_id",userId);
-        List<UserRole> userRoleList = userRoleService.list(queryWrapper);
-        if(ObjectUtils.isNotEmpty(userRoleList)){
-            //userRoleList.forEach(x->roleList.add(x.getRoleId()));
-        }*/
+
+        List<String> roleList = baseMapper.getUserRoleList(userId);
+        if (roleList == null || roleList.size() < 1) {
+           return new ArrayList<>();
+        }
         return roleList;
     }
 }

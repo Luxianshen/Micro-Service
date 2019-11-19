@@ -21,7 +21,7 @@ public class AuthServiceHystrix implements AuthServiceClient {
     }
 
     @Override
-    public List<String> getUserPermissionList(List<String> roles) {
+    public List<String> getRolePermissionList(List<String> roles) {
         return new ArrayList<>();
     }
 }

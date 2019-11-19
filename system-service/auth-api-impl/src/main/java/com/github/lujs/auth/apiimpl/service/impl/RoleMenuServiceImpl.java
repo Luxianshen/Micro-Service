@@ -27,27 +27,7 @@ public class RoleMenuServiceImpl extends ServiceImpl<RoleMenuMapper, RoleMenu> i
 
 
     @Override
-    public List<String> getUserPermissionList(List<String> roleList) {
-
-        List<String> result = new ArrayList<>();
-        Set<String> menuIdList = new HashSet<>();
-        if (ObjectUtils.isEmpty(roleList)) {
-            return result;
-        }
-        //去除不同角色相同的权限
-        /*roleList.forEach(x -> {
-            QueryWrapper<RoleMenu> queryWrapper = new QueryWrapper<>();
-            queryWrapper.eq("role_id", x);
-            List<RoleMenu> roleMenuList = roleMenuService.list(queryWrapper);
-            roleMenuList.forEach(y -> menuIdList.add(y.getMenuId()));
-        });*/
-        //取出权限
-        /*if(ObjectUtils.isNotEmpty(menuIdList)){
-            QueryWrapper<Menu> queryWrapper = new QueryWrapper<>();
-            queryWrapper.in("id", menuIdList);
-            List<Menu> menuList = menuService.list(queryWrapper);
-            //menuList.forEach(x->result.add(x.getPermission()));
-        }*/
-        return result;
+    public List<String> getRoleMenuCodes(String roleId) {
+        return baseMapper.getRoleMenuCodes(roleId);
     }
 }

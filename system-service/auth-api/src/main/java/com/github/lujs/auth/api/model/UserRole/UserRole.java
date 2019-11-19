@@ -11,7 +11,7 @@ import lombok.Data;
  * @version: 1.0.0
  */
 @Data
-@TableName("sys_user_role")
+@TableName("tb_user_role_rel")
 public class UserRole extends BaseEntity {
 
     private String userId;

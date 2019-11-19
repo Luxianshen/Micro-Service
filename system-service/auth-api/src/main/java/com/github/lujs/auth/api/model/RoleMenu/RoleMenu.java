@@ -11,7 +11,7 @@ import lombok.Data;
  * @version: 1.0.0
  */
 @Data
-@TableName("sys_role_menu")
+@TableName("tb_role_menu_rel")
 public class RoleMenu extends BaseEntity {
 
     private String roleId;

@@ -3,6 +3,9 @@ package com.github.lujs.auth.apiimpl.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.github.lujs.auth.api.model.RoleMenu.RoleMenu;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * @Description: 角色菜单mapper
@@ -13,4 +16,5 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface RoleMenuMapper extends BaseMapper<RoleMenu> {
 
+    List<String> getRoleMenuCodes(@Param("roleId") String roleId);
 }
