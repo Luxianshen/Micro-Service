@@ -1,10 +1,13 @@
 package com.github.lujs.auth.api.model.Menu;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.github.lujs.persistence.BaseEntity;
 import lombok.Data;
+
+import java.util.List;
 
 /**
  * @Description: 菜单实体
@@ -19,7 +22,7 @@ public class Menu extends BaseEntity {
     /**
      * 权限名称
      */
-    private String title;
+    private String label;
 
     /**
      * 权限类型
@@ -63,9 +66,20 @@ public class Menu extends BaseEntity {
     private String permissionDesc;
 
     /**
+     * 组成
+     */
+    private String component;
+
+    /**
      * 所属系统
      */
     @JsonSerialize(using = ToStringSerializer.class)
     private Long sysId;
+
+    /**
+     * 子菜单
+     */
+    @TableField(exist = false)
+    private List<Menu> children;
 
 }

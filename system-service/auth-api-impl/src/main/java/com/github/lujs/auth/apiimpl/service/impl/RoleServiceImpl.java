@@ -68,11 +68,30 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
             menuQueryWrapper.in("id", menuIds);
             List<Menu> menuList = menuService.list(menuQueryWrapper);
             //把菜单设置进缓存
-            redisTemplate.opsForValue().set("test", menuList);
+            redisTemplate.opsForValue().set("test", getMenuTreeList(menuList,null));
             //获取菜单权限作为角色权限
             return menuList.stream().map(Menu::getPermissionCode).collect(Collectors.toList());
         }
 
         return new ArrayList<>();
     }
+
+
+    /**
+     * 查询所有菜单树
+     * JDK1.8
+     */
+    private List<Menu> getMenuTreeList(List<Menu> menuList,Long pid) {
+        // 查找所有菜单
+        List<Menu> childrenList = new ArrayList<>();
+        menuList.stream()
+                .filter(d -> Objects.equals(pid, d.getPid()))
+                .collect(Collectors.toList())
+                .forEach(d -> {
+                    d.setChildren(getMenuTreeList(menuList,d.getId()));
+                    childrenList.add(d);
+                });
+        return childrenList;
+    }
+
 }

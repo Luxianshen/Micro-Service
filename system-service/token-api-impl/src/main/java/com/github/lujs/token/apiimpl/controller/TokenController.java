@@ -8,6 +8,7 @@ import com.github.lujs.model.BaseResponse;
 import com.github.lujs.token.api.model.LoginInfo;
 import com.github.lujs.token.api.service.TokenService;
 import com.github.lujs.token.api.service.ValidCodeService;
+import com.github.lujs.utils.JwtUtil;
 import com.google.code.kaptcha.Producer;
 import lombok.AllArgsConstructor;
 import org.apache.commons.io.IOUtils;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
@@ -39,7 +41,7 @@ public class TokenController {
     private final ValidCodeService validCodeService;
 
     @GetMapping("/getToken/{userName}")
-    public String get(@PathVariable("userName") String userName){
+    public String get(@PathVariable("userName") String userName) {
         return null;
     }
 
@@ -49,26 +51,40 @@ public class TokenController {
     @PostMapping("/login")
     @Permission(action = Action.Skip)
     @ResponseBody
-    public Object login(LoginInfo loginInfo){
+    public Object login(LoginInfo loginInfo) {
         BaseResponse baseResponse = new BaseResponse();
         //密码加密传输 todo
-        if(StringUtils.isAllEmpty(loginInfo.getUserName(),loginInfo.getPassWord())){
+        if (StringUtils.isAllEmpty(loginInfo.getUserName(), loginInfo.getPassWord())) {
             //返回参数不全 提示
             throw new BaseException(GlobalStatusCode.INVALID_PARAMETER);
         }
         String token = targetService.login(loginInfo);
-        Map<String,Object> re = new HashMap<>();
-        re.put("access_token",token);
-        re.put("expires_in",5000);
-        re.put("refresh_token",token);
-        re.put("scope","read");
-        re.put("token_type","bearer");
+        Map<String, Object> re = new HashMap<>();
+        re.put("access_token", token);
+        re.put("expires_in", 5000);
+        re.put("refresh_token", token);
+        re.put("scope", "read");
+        re.put("token_type", "bearer");
         baseResponse.setData(re);
         return re;
     }
 
     /**
+     * 系统推出方法
+     */
+    @PostMapping("/removeToken")
+    @Permission(action = Action.Skip)
+    @ResponseBody
+    public void removeToken(HttpServletRequest request) {
+        String token = request.getHeader("authorization");
+        if (StringUtils.isNotEmpty(token)) {
+            JwtUtil.removeToken(token);
+        }
+    }
+
+    /**
      * 创建验证码
+     *
      * @return 返回验证码
      */
     @GetMapping("/code/{random}")

@@ -54,5 +54,18 @@ public class JwtUtil {
         }
     }
 
+    /**
+     * 去除token
+     * @param token 用户token
+     */
+    public static void removeToken(String token) {
+        //获取解析后的token body
+        Map<String, Object> body = Jwts.parser().setSigningKey(SECRET)
+                .parseClaimsJws(token.replace(TOKEN_PREFIX, "")).getBody();
+        String id = String.valueOf(body.get("id"));
+        String userName = (String) body.get("user");
+        RedisUtil.delete(CommonConstant.TOKEN_CODE + userName);
+        RedisUtil.delete(CommonConstant.TOKEN_CODE + id + userName);
+    }
 
 }
