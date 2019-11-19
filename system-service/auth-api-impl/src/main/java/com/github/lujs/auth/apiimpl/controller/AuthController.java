@@ -34,11 +34,7 @@ public class AuthController extends BaseController {
         if (roles == null || roles.size() < 1) {
             return new ArrayList<>();
         }
-        List<String> permissionList = roleService.getUserPermissionList(roles);
-
-        permissionList.add("hi");
-        permissionList.add("hello");
-        return permissionList;
+        return roleService.getUserPermissionList(roles);
     }
 
 
