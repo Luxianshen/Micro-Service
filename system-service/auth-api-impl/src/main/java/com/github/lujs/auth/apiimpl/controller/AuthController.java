@@ -1,8 +1,15 @@
 package com.github.lujs.auth.apiimpl.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.lujs.annotation.Action;
 import com.github.lujs.annotation.Permission;
+import com.github.lujs.auth.api.model.Menu.Menu;
+import com.github.lujs.auth.api.model.Role.Role;
+import com.github.lujs.auth.api.service.MenuService;
 import com.github.lujs.auth.api.service.RoleService;
+import com.github.lujs.model.BaseResponse;
 import com.github.lujs.web.BaseController;
 import lombok.AllArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -23,6 +30,8 @@ import java.util.List;
 public class AuthController extends BaseController {
 
     public final RoleService roleService;
+
+    public final MenuService menuService;
 
     public final RedisTemplate redisTemplate;
 
@@ -55,4 +64,28 @@ public class AuthController extends BaseController {
         return roleService.getUserRoleList(userId);
     }
 
+    /**
+     * 菜单查询
+     */
+    @PostMapping("/menu/page")
+    @Permission(action = Action.Skip)
+    public BaseResponse menuPage() {
+        QueryWrapper<Menu> queryWrapper = new QueryWrapper<>();
+        Page<Menu> page = new Page<>();
+        return successResponse(menuService.page(page,queryWrapper));
+    }
+
+    /**
+     * 分页查询角色信息
+     * @param request
+     * @return
+     */
+    @PostMapping("/role/page")
+    @Permission(action = Action.Skip)
+    public BaseResponse rolePage() {
+        IPage<Role> page = new Page<>();
+        QueryWrapper<Role> roleQueryWrapper = new QueryWrapper<>();
+        roleService.page(page, roleQueryWrapper);
+        return successResponse(page);
+    }
 }

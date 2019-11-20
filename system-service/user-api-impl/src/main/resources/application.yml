@@ -14,7 +14,7 @@ spring:
   #数据库
   datasource:
     name: test
-    url: jdbc:mysql://127.0.0.1:3306/micro_service?serverTimezone=UTC
+    url: jdbc:mysql://49.233.171.48:3306/micro_service?serverTimezone=UTC
     username: root
     password: root
     # 使用druid数据源

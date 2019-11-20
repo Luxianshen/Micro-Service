@@ -12,8 +12,7 @@ import java.io.Serializable;
  * @author mobinchao
  */
 @JsonPropertyOrder({"code", "msg", "data"})
-@JSONType(orders = {"code", "msg", "data"})
-public class BaseResponse implements Serializable {
+public class BaseResponse<T> implements Serializable {
 
     private Integer code;
 
