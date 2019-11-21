@@ -1,8 +1,11 @@
 package com.github.lujs.auth.apiimpl.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.github.lujs.auth.api.model.Role.Role;
 
+import com.github.lujs.auth.api.model.Role.RoleDto;
+import com.github.lujs.auth.api.model.Role.VOrgTree;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -17,4 +20,7 @@ import java.util.List;
 @Mapper
 public interface RoleMapper extends BaseMapper<Role> {
 
+    IPage<RoleDto> findAuthUser(IPage<RoleDto> page);
+
+    List<VOrgTree> findPermissionTree(VOrgTree tree, Integer type, Long roleId, Long pid);
 }

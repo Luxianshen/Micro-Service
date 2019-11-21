@@ -1,9 +1,12 @@
 package com.github.lujs.auth.apiimpl.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.lujs.auth.api.model.Menu.Menu;
 import com.github.lujs.auth.api.model.Role.Role;
+import com.github.lujs.auth.api.model.Role.RoleDto;
+import com.github.lujs.auth.api.model.Role.VOrgTree;
 import com.github.lujs.auth.api.service.MenuService;
 import com.github.lujs.auth.api.service.RoleMenuService;
 import com.github.lujs.auth.api.service.UserRoleService;
@@ -76,6 +79,16 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         return new ArrayList<>();
     }
 
+    @Override
+    public IPage<RoleDto> authUserPage(IPage<RoleDto> page) {
+        return baseMapper.findAuthUser(page);
+    }
+
+    @Override
+    public List<VOrgTree> findRolePermissionTree() {
+        return findChildren(null, 1, 1L, null);
+    }
+
 
     /**
      * 查询所有菜单树
@@ -92,6 +105,19 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
                     childrenList.add(d);
                 });
         return childrenList;
+    }
+
+    private List<VOrgTree> findChildren(VOrgTree tree, Integer type, Long roleId, Long pid) {
+        List<VOrgTree> children = baseMapper.findPermissionTree(tree,type,roleId,pid);
+        for (VOrgTree t : children) {
+            findChildren(t, type, roleId, t.getId());
+        }
+        if (null != tree) {
+            tree.setChildren(children);
+        } else if (null == tree) {
+            return children;
+        }
+        return null;
     }
 
 }

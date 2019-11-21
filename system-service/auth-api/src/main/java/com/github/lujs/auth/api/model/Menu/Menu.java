@@ -22,6 +22,10 @@ public class Menu extends BaseEntity {
     /**
      * 权限名称
      */
+    private String name;
+    /**
+     * 权限名称
+     */
     private String label;
 
     /**
@@ -75,6 +79,8 @@ public class Menu extends BaseEntity {
      */
     @JsonSerialize(using = ToStringSerializer.class)
     private Long sysId;
+
+    private String redirect;
 
     /**
      * 子菜单
