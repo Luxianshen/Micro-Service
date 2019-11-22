@@ -1,6 +1,5 @@
 package com.github.lujs.userapiimpl.controller;
 
-import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.lujs.annotation.Action;
@@ -9,13 +8,14 @@ import com.github.lujs.model.BaseRequest;
 import com.github.lujs.model.BaseResponse;
 import com.github.lujs.model.request.PrimaryKeyRequest;
 import com.github.lujs.user.api.model.User;
-import com.github.lujs.user.api.model.UserUpdateRequest;
 import com.github.lujs.user.api.service.UserService;
 import com.github.lujs.web.BaseController;
 import lombok.AllArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 /**
@@ -34,22 +34,25 @@ public class UserController extends BaseController {
 
     @PostMapping("/checkUserLoginInfo")
     @Permission(action = Action.Skip)
-    public User checkUserLoginInfo(@RequestParam("agentId") String agentId,@RequestParam("agentAuth") String agentAuth) {
-        return userService.checkUserLoginInfo(agentId,agentAuth);
+    public User checkUserLoginInfo(@RequestParam("agentId") String agentId, @RequestParam("agentAuth") String agentAuth) {
+        return userService.checkUserLoginInfo(agentId, agentAuth);
     }
 
 
-
-
-    @RequestMapping(value = "/info")
+    @GetMapping(value = "/info")
     @Permission(action = Action.Skip)
-    public Object testUser() {
-        User user = userService.getById(1L);
-        return user;
+    public BaseResponse info(HttpServletRequest request) {
+        String agentId = request.getHeader("x-user-name");
+        if (StringUtils.isNotEmpty(agentId)) {
+            return successResponse(userService.getUserByAgentId(agentId));
+        }else {
+            return failedResponse("用户不存在！");
+        }
     }
 
     /**
      * 用户分页
+     *
      * @return
      */
     @RequestMapping(value = "/page")
@@ -71,11 +74,14 @@ public class UserController extends BaseController {
     /**
      * 保存用户
      */
-    @PostMapping("/save")
+    @PostMapping("/register")
     @Permission(action = Action.Skip)
-    public BaseResponse save(@RequestBody BaseRequest<User> request) {
-        boolean flag = userService.save(request.getData());
-        return successResponse(flag);
+    public BaseResponse register(@Valid @RequestBody BaseRequest<User> request) {
+        if (null == userService.getUserByAgentId(request.getData().getAgentId()) && StringUtils.isNotEmpty(request.getData().getTmpAuth())) {
+            return successResponse(userService.register(request.getData()));
+        } else {
+            return failedResponse("用户已存在！");
+        }
     }
 
     /**
@@ -85,7 +91,7 @@ public class UserController extends BaseController {
     @Permission(action = Action.Skip)
     public BaseResponse update(@Valid @RequestBody BaseRequest<User> request) {
         User user = new User();
-        BeanUtils.copyProperties(request.getData(),user);
+        BeanUtils.copyProperties(request.getData(), user);
         boolean flag = userService.updateById(user);
         return successResponse(flag);
     }

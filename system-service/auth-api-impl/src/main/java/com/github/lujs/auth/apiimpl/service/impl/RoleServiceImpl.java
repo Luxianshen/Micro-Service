@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.lujs.auth.api.model.Menu.Menu;
 import com.github.lujs.auth.api.model.Role.Role;
 import com.github.lujs.auth.api.model.Role.RoleDto;
+import com.github.lujs.auth.api.model.Role.RoleQuery;
 import com.github.lujs.auth.api.model.Role.VOrgTree;
 import com.github.lujs.auth.api.service.MenuService;
 import com.github.lujs.auth.api.service.RoleMenuService;
@@ -61,17 +62,17 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
      * @return
      */
     @Override
-    public List<String> getUserPermissionList(List<String> roles) {
+    public List<String> getUserPermissionList(RoleQuery roleQuery) {
         //先获取角色菜单关系
         Set<String> menuIds = new HashSet<>();
-        roles.forEach(x -> menuIds.addAll(roleMenuService.getRoleMenuCodes(x)));
+        roleQuery.getRoles().forEach(x -> menuIds.addAll(roleMenuService.getRoleMenuCodes(x)));
         if (menuIds.size() > 0) {
             //获取菜单
             QueryWrapper<Menu> menuQueryWrapper = new QueryWrapper<>();
             menuQueryWrapper.in("id", menuIds);
             List<Menu> menuList = menuService.list(menuQueryWrapper);
             //把菜单设置进缓存
-            redisTemplate.opsForValue().set("test", getMenuTreeList(menuList,null));
+            redisTemplate.opsForValue().set(roleQuery.getAgentId()+"Menu", getMenuTreeList(menuList,null));
             //获取菜单权限作为角色权限
             return menuList.stream().map(Menu::getPermissionCode).collect(Collectors.toList());
         }

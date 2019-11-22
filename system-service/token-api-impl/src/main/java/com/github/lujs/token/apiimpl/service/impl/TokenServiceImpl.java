@@ -1,7 +1,9 @@
 package com.github.lujs.token.apiimpl.service.impl;
 
+import cn.hutool.core.util.RandomUtil;
 import com.github.lujs.Exception.BaseException;
 import com.github.lujs.auth.api.feign.AuthServiceClient;
+import com.github.lujs.auth.api.model.Role.RoleQuery;
 import com.github.lujs.constant.CommonConstant;
 import com.github.lujs.constant.GlobalStatusCode;
 import com.github.lujs.token.api.model.LoginInfo;
@@ -68,15 +70,18 @@ public class TokenServiceImpl implements TokenService {
             //获取用户角色列表
             BeanUtils.copyProperties(user, userInfo);
             userInfo.setRoleList(authServiceClient.getUserRoleList(user.getId()));
-            userInfo.setPermissionList(authServiceClient.getRolePermissionList(userInfo.getRoleList()));
+            RoleQuery roleQuery = new RoleQuery();
+            roleQuery.setAgentId(user.getAgentId());
+            roleQuery.setRoles(userInfo.getRoleList());
+            userInfo.setPermissionList(authServiceClient.getRolePermissionList(roleQuery));
             //生成token
-            String random = String.valueOf(new Random().nextInt(6));
+            String random = RandomUtil.randomString(5);
             String token = generateToken(random, user.getAgentId());
             //放置在redis key 前缀+token随机数+用户名
             RedisUtil.set(CommonConstant.TOKEN_CODE + user.getAgentId(), token, 5000L);
             RedisUtil.set(CommonConstant.TOKEN_CODE + random + user.getAgentId(), userInfo, 5000L);
 
-            return token.replace("Bearer ","");
+            return token;
         }
         return null;
     }

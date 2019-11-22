@@ -1,11 +1,14 @@
 package com.github.lujs.auth.api.feign;
 
 import com.github.lujs.auth.api.feign.hystrix.AuthServiceHystrix;
+import com.github.lujs.auth.api.model.Role.RoleQuery;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 /**
@@ -26,5 +29,5 @@ public interface AuthServiceClient {
      * 获取用户权限列表
      */
     @PostMapping("/v1/auth/menu/getRolePermissionList")
-    List<String> getRolePermissionList(List<String> roles);
+    List<String> getRolePermissionList(RoleQuery roleQuery);
 }

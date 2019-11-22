@@ -48,6 +48,9 @@ public class JwtUtil {
             }
             map.put("id", id);
             map.put("user", userName);
+            //刷新缓存
+            RedisUtil.setExpire(CommonConstant.TOKEN_CODE + userName,5000L);
+            RedisUtil.setExpire(CommonConstant.TOKEN_CODE + id + userName, 5000L);
             return map;
         } else {
             throw new PermissionException("token is null, please check!");
@@ -66,6 +69,7 @@ public class JwtUtil {
         String userName = (String) body.get("user");
         RedisUtil.delete(CommonConstant.TOKEN_CODE + userName);
         RedisUtil.delete(CommonConstant.TOKEN_CODE + id + userName);
+        RedisUtil.delete(userName+"Menu");
     }
 
 }

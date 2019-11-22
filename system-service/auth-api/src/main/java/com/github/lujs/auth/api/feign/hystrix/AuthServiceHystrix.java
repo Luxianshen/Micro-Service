@@ -1,6 +1,7 @@
 package com.github.lujs.auth.api.feign.hystrix;
 
 import com.github.lujs.auth.api.feign.AuthServiceClient;
+import com.github.lujs.auth.api.model.Role.RoleQuery;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -21,7 +22,7 @@ public class AuthServiceHystrix implements AuthServiceClient {
     }
 
     @Override
-    public List<String> getRolePermissionList(List<String> roles) {
+    public List<String> getRolePermissionList(RoleQuery roleQuery) {
         return new ArrayList<>();
     }
 }

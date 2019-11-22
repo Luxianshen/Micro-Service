@@ -1,5 +1,6 @@
 package com.github.lujs.user.api.model;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.lujs.persistence.BaseEntity;
@@ -66,4 +67,6 @@ public class User extends BaseEntity {
      */
     private String phoneNo;
 
+    @TableField(exist = false)
+    private String tmpAuth;
 }

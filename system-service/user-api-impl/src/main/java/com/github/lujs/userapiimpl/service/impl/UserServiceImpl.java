@@ -23,12 +23,9 @@ import java.security.spec.InvalidKeySpecException;
 @Slf4j
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
 
-    private final UserMapper userMapper;
-
     @Override
-    public User get(User user) {
-
-        return null;
+    public User getUserByAgentId(String agentId) {
+        return baseMapper.getUserByAgentId(agentId);
     }
 
     /**
@@ -39,7 +36,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      */
     @Override
     public User checkUserLoginInfo(String agentId, String agentAuth) {
-        User user = userMapper.getUserByAgentId(agentId);
+        User user = baseMapper.getUserByAgentId(agentId);
         if (user != null) {
             //匹配密码
             String credential = "";
@@ -61,5 +58,24 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             }
         }
         return null;
+    }
+
+    @Override
+    public boolean register(User user) {
+        try {
+            //密码处理
+            byte[] salt = ToolSecurityPbkdf2.generateSalt();
+            byte[] agentAuth = ToolSecurityPbkdf2.getEncryptedPassword(user.getTmpAuth(),salt);
+            user.setSalt(salt);
+            user.setAgentAuth(agentAuth);
+            user.init();
+            //保存信息
+            return save(user);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (InvalidKeySpecException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }
