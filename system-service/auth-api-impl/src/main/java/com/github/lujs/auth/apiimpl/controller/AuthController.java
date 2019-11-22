@@ -6,11 +6,10 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.lujs.annotation.Action;
 import com.github.lujs.annotation.Permission;
 import com.github.lujs.auth.api.model.Menu.Menu;
-import com.github.lujs.auth.api.model.Role.Role;
-import com.github.lujs.auth.api.model.Role.RoleDto;
-import com.github.lujs.auth.api.model.Role.RoleQuery;
-import com.github.lujs.auth.api.model.Role.VOrgTree;
+import com.github.lujs.auth.api.model.Role.*;
+import com.github.lujs.auth.api.model.RoleMenu.RoleMenu;
 import com.github.lujs.auth.api.service.MenuService;
+import com.github.lujs.auth.api.service.RoleMenuService;
 import com.github.lujs.auth.api.service.RoleService;
 import com.github.lujs.constant.GlobalStatusCode;
 import com.github.lujs.model.BaseRequest;
@@ -41,6 +40,8 @@ public class AuthController extends BaseController {
     public final RoleService roleService;
 
     public final MenuService menuService;
+
+    public final RoleMenuService roleMenuService;
 
     public final RedisTemplate redisTemplate;
 
@@ -207,9 +208,34 @@ public class AuthController extends BaseController {
      */
     @PostMapping("/role/findAuthPermissionTree")
     @Permission(action = Action.Skip)
-    public BaseResponse findAuthPermissionTree() {
-        List<VOrgTree> list = roleService.findRolePermissionTree();
+    public BaseResponse findAuthPermissionTree(@Valid @RequestBody BaseRequest<RolePermissionQuery> request) {
+        List<VOrgTree> list = roleService.findRolePermissionTree(request.getData());
         return successResponse(list);
+    }
+
+    /**
+     * 权限授权
+     * @param request
+     * @return
+     */
+    @PostMapping("/role/grant")
+    @Permission(action = Action.Skip)
+    public BaseResponse grant(@Valid @RequestBody BaseRequest<RoleMenu> request) {
+        return baseResponse(roleMenuService.save(request.getData()));
+    }
+
+    /**
+     * 取消授权
+     * @param request
+     * @return
+     */
+    @PostMapping("/role/revoke")
+    @Permission(action = Action.Skip)
+    public BaseResponse revoke(@Valid @RequestBody BaseRequest<RoleMenu> request) {
+        QueryWrapper<RoleMenu> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("role_id",request.getData().getRoleId());
+        queryWrapper.eq("menu_id",request.getData().getMenuId());
+        return baseResponse(roleMenuService.remove(queryWrapper));
     }
 
 }

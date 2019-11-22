@@ -2,10 +2,7 @@ package com.github.lujs.auth.api.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.github.lujs.auth.api.model.Role.Role;
-import com.github.lujs.auth.api.model.Role.RoleDto;
-import com.github.lujs.auth.api.model.Role.RoleQuery;
-import com.github.lujs.auth.api.model.Role.VOrgTree;
+import com.github.lujs.auth.api.model.Role.*;
 
 import java.util.List;
 
@@ -44,5 +41,5 @@ public interface RoleService extends IService<Role> {
      *
      * @return
      */
-    List<VOrgTree> findRolePermissionTree();
+    List<VOrgTree> findRolePermissionTree(RolePermissionQuery rolePermissionQuery);
 }

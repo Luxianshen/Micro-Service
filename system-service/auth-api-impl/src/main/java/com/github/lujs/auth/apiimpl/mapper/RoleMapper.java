@@ -22,5 +22,5 @@ public interface RoleMapper extends BaseMapper<Role> {
 
     IPage<RoleDto> findAuthUser(IPage<RoleDto> page);
 
-    List<VOrgTree> findPermissionTree(VOrgTree tree, Integer type, Long roleId, Long pid);
+    List<VOrgTree> findPermissionTree(VOrgTree tree, @Param("type") Integer type,@Param("roleId") Long roleId,@Param("pid") Long pid);
 }

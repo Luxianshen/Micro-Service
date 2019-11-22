@@ -43,14 +43,14 @@
 		rel.role_id = 1
 		and rel.menu_id = p.id
 		where
-		p.`type` = 0
+		p.`type` = #{type}
 		and sys_id = (
 		select
 		sys_id
 		from
 		tb_role
 		where
-		id = 1)
+		id = #{roleId})
 		<if test="pid == null">
 			and pid is null
 		</if>

@@ -4,10 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.lujs.auth.api.model.Menu.Menu;
-import com.github.lujs.auth.api.model.Role.Role;
-import com.github.lujs.auth.api.model.Role.RoleDto;
-import com.github.lujs.auth.api.model.Role.RoleQuery;
-import com.github.lujs.auth.api.model.Role.VOrgTree;
+import com.github.lujs.auth.api.model.Role.*;
 import com.github.lujs.auth.api.service.MenuService;
 import com.github.lujs.auth.api.service.RoleMenuService;
 import com.github.lujs.auth.api.service.UserRoleService;
@@ -86,8 +83,8 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     }
 
     @Override
-    public List<VOrgTree> findRolePermissionTree() {
-        return findChildren(null, 1, 1L, null);
+    public List<VOrgTree> findRolePermissionTree(RolePermissionQuery query) {
+        return findChildren(null, query.getType(), query.getRoleId(), null);
     }
 
 
