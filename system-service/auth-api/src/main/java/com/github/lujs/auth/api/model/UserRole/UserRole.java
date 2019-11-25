@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.github.lujs.persistence.BaseEntity;
 import lombok.Data;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * @Description: 用户角色关系实体
  * @Author: lujs
@@ -14,8 +16,14 @@ import lombok.Data;
 @TableName("tb_user_role_rel")
 public class UserRole extends BaseEntity {
 
-    private String userId;
+    @NotNull(
+            message = "userId"
+    )
+    private Long userId;
 
-    private String roleId;
+    @NotNull(
+            message = "roleId必填"
+    )
+    private Long roleId;
 
 }

@@ -24,7 +24,7 @@
 		FROM
 			tb_user u
 		LEFT JOIN tb_user_role_rel rel ON rel.user_id = u.id
-		AND rel.role_id = 1
+		AND rel.role_id = #{param.roleId}
 	    ) a
     WHERE
 	   1 = 1
@@ -40,7 +40,7 @@
 		from
 		tb_menu p
 		left join tb_role_menu_rel rel on
-		rel.role_id = 1
+		rel.role_id = #{roleId}
 		and rel.menu_id = p.id
 		where
 		p.`type` = #{type}

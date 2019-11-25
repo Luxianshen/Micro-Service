@@ -13,6 +13,7 @@ public class RoleDto extends BaseEntity {
 
     private String agentId;
 
+    private Long roleId;
     /**
      * 用户姓名
      */

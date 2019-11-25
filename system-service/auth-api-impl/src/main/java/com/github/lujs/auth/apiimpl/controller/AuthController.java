@@ -8,18 +8,22 @@ import com.github.lujs.annotation.Permission;
 import com.github.lujs.auth.api.model.Menu.Menu;
 import com.github.lujs.auth.api.model.Role.*;
 import com.github.lujs.auth.api.model.RoleMenu.RoleMenu;
+import com.github.lujs.auth.api.model.UserRole.UserRole;
 import com.github.lujs.auth.api.service.MenuService;
 import com.github.lujs.auth.api.service.RoleMenuService;
 import com.github.lujs.auth.api.service.RoleService;
+import com.github.lujs.auth.api.service.UserRoleService;
 import com.github.lujs.constant.GlobalStatusCode;
 import com.github.lujs.model.BaseRequest;
 import com.github.lujs.model.BaseResponse;
+import com.github.lujs.model.request.PageQuery;
 import com.github.lujs.model.request.PrimaryKeyRequest;
 import com.github.lujs.web.BaseController;
 import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -40,6 +44,8 @@ public class AuthController extends BaseController {
     public final RoleService roleService;
 
     public final MenuService menuService;
+
+    public final UserRoleService userRoleService;
 
     public final RoleMenuService roleMenuService;
 
@@ -62,8 +68,8 @@ public class AuthController extends BaseController {
     @RequestMapping(value = "/menu/userMenu")
     public BaseResponse userMenu(HttpServletRequest request) {
         String agentId = request.getHeader("x-user-name");
-        if(StringUtils.isNotEmpty(agentId)){
-            return successResponse(redisTemplate.opsForValue().get(agentId+"Menu"));
+        if (StringUtils.isNotEmpty(agentId)) {
+            return successResponse(redisTemplate.opsForValue().get(agentId + "Menu"));
         }
         return failedResponse(GlobalStatusCode.FAILED);
     }
@@ -76,11 +82,12 @@ public class AuthController extends BaseController {
     public BaseResponse menuPage() {
         QueryWrapper<Menu> queryWrapper = new QueryWrapper<>();
         Page<Menu> page = new Page<>();
-        return successResponse(menuService.page(page,queryWrapper));
+        return successResponse(menuService.page(page, queryWrapper));
     }
 
     /**
      * 获取菜单
+     *
      * @return
      */
     @PostMapping("/menu/get")
@@ -122,6 +129,7 @@ public class AuthController extends BaseController {
 
 
 //    role分界线
+
     /**
      * 获取用户角色
      */
@@ -134,6 +142,7 @@ public class AuthController extends BaseController {
 
     /**
      * 分页查询角色信息
+     *
      * @param request
      * @return
      */
@@ -148,6 +157,7 @@ public class AuthController extends BaseController {
 
     /**
      * 查询角色信息
+     *
      * @param request
      * @return
      */
@@ -179,6 +189,7 @@ public class AuthController extends BaseController {
 
     /**
      * 删除角色
+     *
      * @param request
      * @return
      */
@@ -190,19 +201,23 @@ public class AuthController extends BaseController {
 
     /**
      * 角色授权用户分页查询
+     *
      * @param request
      * @return
      */
     @PostMapping("/role/authUserPage")
     @Permission(action = Action.Skip)
-    public BaseResponse authUserPage() {
-        IPage<RoleDto> page  = new Page<>();
-        roleService.authUserPage(page);
+    public BaseResponse authUserPage(@RequestBody BaseRequest<PageQuery<RoleDto,RoleDto>> request) {
+
+        IPage<RoleDto> page = request.getData();
+        RoleDto params = request.getData().getParams();
+        roleService.authUserPage(page,params);
         return successResponse(page);
     }
 
     /**
      * 权限树
+     *
      * @param request
      * @return
      */
@@ -214,7 +229,35 @@ public class AuthController extends BaseController {
     }
 
     /**
+     * 角色添加用户
+     *
+     * @param request
+     * @return
+     */
+    @PostMapping("/role/addUser")
+    @Permission(action = Action.Skip)
+    public BaseResponse addUser(@Valid @RequestBody BaseRequest<UserRole> request) {
+        return baseResponse(userRoleService.save(request.getData()));
+    }
+
+    /**
+     * 角色添加用户
+     *
+     * @param request
+     * @return
+     */
+    @PostMapping("/role/removeUser")
+    @Permission(action = Action.Skip)
+    public BaseResponse removeUser(@Valid @RequestBody BaseRequest<UserRole> request) {
+        QueryWrapper<UserRole> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("user_id", request.getData().getUserId());
+        queryWrapper.eq("role_id", request.getData().getRoleId());
+        return baseResponse(userRoleService.remove(queryWrapper));
+    }
+
+    /**
      * 权限授权
+     *
      * @param request
      * @return
      */
@@ -226,6 +269,7 @@ public class AuthController extends BaseController {
 
     /**
      * 取消授权
+     *
      * @param request
      * @return
      */
@@ -233,9 +277,10 @@ public class AuthController extends BaseController {
     @Permission(action = Action.Skip)
     public BaseResponse revoke(@Valid @RequestBody BaseRequest<RoleMenu> request) {
         QueryWrapper<RoleMenu> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("role_id",request.getData().getRoleId());
-        queryWrapper.eq("menu_id",request.getData().getMenuId());
+        queryWrapper.eq("role_id", request.getData().getRoleId());
+        queryWrapper.eq("menu_id", request.getData().getMenuId());
         return baseResponse(roleMenuService.remove(queryWrapper));
     }
+
 
 }

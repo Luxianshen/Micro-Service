@@ -32,10 +32,12 @@ public interface RoleService extends IService<Role> {
 
     /**
      *
+     *
      * @param page
+     * @param param
      * @return
      */
-    IPage<RoleDto> authUserPage(IPage<RoleDto> page);
+    IPage<RoleDto> authUserPage(IPage<RoleDto> page, RoleDto param);
 
     /**
      *

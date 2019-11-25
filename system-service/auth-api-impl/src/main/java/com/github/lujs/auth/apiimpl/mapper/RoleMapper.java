@@ -20,7 +20,7 @@ import java.util.List;
 @Mapper
 public interface RoleMapper extends BaseMapper<Role> {
 
-    IPage<RoleDto> findAuthUser(IPage<RoleDto> page);
+    IPage<RoleDto> findAuthUser(IPage<RoleDto> page,@Param("param") RoleDto param);
 
     List<VOrgTree> findPermissionTree(VOrgTree tree, @Param("type") Integer type,@Param("roleId") Long roleId,@Param("pid") Long pid);
 }

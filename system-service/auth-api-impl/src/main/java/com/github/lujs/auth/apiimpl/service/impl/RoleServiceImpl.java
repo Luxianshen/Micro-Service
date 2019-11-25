@@ -10,7 +10,6 @@ import com.github.lujs.auth.api.service.RoleMenuService;
 import com.github.lujs.auth.api.service.UserRoleService;
 import com.github.lujs.auth.apiimpl.mapper.RoleMapper;
 import com.github.lujs.auth.api.service.RoleService;
-import com.github.lujs.auth.apiimpl.mapper.UserRoleMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -78,8 +77,8 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     }
 
     @Override
-    public IPage<RoleDto> authUserPage(IPage<RoleDto> page) {
-        return baseMapper.findAuthUser(page);
+    public IPage<RoleDto> authUserPage(IPage<RoleDto> page, RoleDto param) {
+        return baseMapper.findAuthUser(page,param);
     }
 
     @Override
