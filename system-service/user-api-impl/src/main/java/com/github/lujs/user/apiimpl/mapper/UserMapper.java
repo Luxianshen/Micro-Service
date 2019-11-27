@@ -1,4 +1,4 @@
-package com.github.lujs.userapiimpl.mapper;
+package com.github.lujs.user.apiimpl.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.github.lujs.user.api.model.User;

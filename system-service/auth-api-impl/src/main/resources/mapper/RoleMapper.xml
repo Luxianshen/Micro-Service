@@ -30,10 +30,10 @@
 	   1 = 1
    </select>
 
-	<select id="findPermissionTree" resultType="com.github.lujs.auth.api.model.Role.VOrgTree">
+	<select id="findMenuPermissionTree" resultType="com.github.lujs.auth.api.model.Role.VOrgTree">
 		select
 		p.id,
-		p.label,
+		p.name,
 		if(rel.menu_id is null,
 		false,
 		true) as checked
@@ -43,8 +43,35 @@
 		rel.role_id = #{roleId}
 		and rel.menu_id = p.id
 		where
-		p.`type` = #{type}
-		and sys_id = (
+		 sys_id = (
+		select
+		sys_id
+		from
+		tb_role
+		where
+		id = #{roleId})
+		<if test="pid == null">
+			and pid is null
+		</if>
+		<if test="pid != null">
+			and pid = #{pid}
+		</if>
+	</select>
+
+	<select id="findApiPermissionTree" resultType="com.github.lujs.auth.api.model.Role.VOrgTree">
+		select
+		p.id,
+		p.name,
+		if(rel.api_id is null,
+		false,
+		true) as checked
+		from
+		tb_api p
+		left join tb_role_api_rel rel on
+		rel.role_id = #{roleId}
+		and rel.api_id = p.id
+		where
+		sys_id = (
 		select
 		sys_id
 		from

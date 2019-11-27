@@ -29,11 +29,6 @@ public class Menu extends BaseEntity {
     private String label;
 
     /**
-     * 权限类型
-     */
-    private Integer type;
-
-    /**
      * 权限状态
      */
     private Integer state;

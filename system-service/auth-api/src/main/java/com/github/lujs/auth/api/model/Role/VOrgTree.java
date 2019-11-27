@@ -24,7 +24,7 @@ public class VOrgTree implements Serializable {
     /**
      * 节点名称
      */
-    private String label;
+    private String name;
 
     /**
      * 是否已勾选

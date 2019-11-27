@@ -102,4 +102,9 @@ public class TokenController {
         IOUtils.closeQuietly(out);
     }
 
+    @RequestMapping("test")
+    public String test(){
+        return "hi,i'm token";
+    }
+
 }

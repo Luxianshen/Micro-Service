@@ -1,4 +1,4 @@
-package com.github.lujs.userapiimpl.controller;
+package com.github.lujs.user.apiimpl.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;

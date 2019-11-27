@@ -1,9 +1,9 @@
-package com.github.lujs.userapiimpl.service.impl;
+package com.github.lujs.user.apiimpl.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.lujs.user.api.model.User;
 import com.github.lujs.user.api.service.UserService;
-import com.github.lujs.userapiimpl.mapper.UserMapper;
+import com.github.lujs.user.apiimpl.mapper.UserMapper;
 import com.github.lujs.utils.SysUtils;
 import com.github.lujs.utils.ToolSecurityPbkdf2;
 import lombok.AllArgsConstructor;

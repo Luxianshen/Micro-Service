@@ -10,6 +10,7 @@ import com.github.lujs.token.api.model.LoginInfo;
 import com.github.lujs.token.api.model.enums.LoginType;
 import com.github.lujs.token.api.service.TokenService;
 import com.github.lujs.token.api.service.ValidCodeService;
+import com.github.lujs.transmit.api.service.feign.TransmitServiceClient;
 import com.github.lujs.user.api.feign.UserServiceClient;
 import com.github.lujs.user.api.model.User;
 import com.github.lujs.user.api.model.UserInfo;
@@ -23,7 +24,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
-import java.util.Random;
 
 /**
  * @Description: token服务实现类
@@ -40,6 +40,8 @@ public class TokenServiceImpl implements TokenService {
     private  UserServiceClient userServiceClient;
     @Autowired
     private  AuthServiceClient authServiceClient;
+    @Autowired
+    private TransmitServiceClient transmitServiceClient;
 
     @Value("${validCode.flag}")
     private Boolean validCodeRequired;
@@ -74,6 +76,7 @@ public class TokenServiceImpl implements TokenService {
             roleQuery.setAgentId(user.getAgentId());
             roleQuery.setRoles(userInfo.getRoleList());
             userInfo.setPermissionList(authServiceClient.getRolePermissionList(roleQuery));
+            userInfo.setApiList(transmitServiceClient.getRoleApiList(roleQuery));
             //生成token
             String random = RandomUtil.randomString(5);
             String token = generateToken(random, user.getAgentId());

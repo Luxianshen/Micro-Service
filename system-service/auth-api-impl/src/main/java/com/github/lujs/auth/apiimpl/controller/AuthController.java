@@ -105,8 +105,7 @@ public class AuthController extends BaseController {
         Menu menu = request.getData();
         menu.setLabel(menu.getName());
         menu.init();
-        menuService.save(request.getData());
-        return successResponse(true);
+        return successResponse(menuService.save(menu));
     }
 
     /**
@@ -216,7 +215,7 @@ public class AuthController extends BaseController {
     }
 
     /**
-     * 权限树
+     * 菜单权限树
      *
      * @param request
      * @return

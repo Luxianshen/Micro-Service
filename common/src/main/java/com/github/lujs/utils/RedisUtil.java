@@ -167,7 +167,7 @@ public class RedisUtil {
      * @param map 对应多个键值
      * @return true 成功 false 失败
      */
-    public static boolean hashSet(String key, Map<String, Object> map) {
+    public static boolean hashSet(String key, Map<String, String> map) {
         try {
             redisTemplate.opsForHash().putAll(key, map);
             return true;

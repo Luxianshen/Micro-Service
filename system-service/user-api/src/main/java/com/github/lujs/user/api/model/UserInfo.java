@@ -42,4 +42,8 @@ public class UserInfo implements Serializable {
      * 用户权限列表
      */
     private List<String> permissionList;
+    /**
+     * 用户接口列表
+     */
+    private List<String> apiList;
 }

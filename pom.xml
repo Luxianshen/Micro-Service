@@ -19,6 +19,7 @@
         <module>gateway-service</module>
         <module>system-service</module>
         <module>auth-plugin</module>
+        <module>transmit-service</module>
     </modules>
 
     <properties>

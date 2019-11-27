@@ -105,7 +105,12 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     }
 
     private List<VOrgTree> findChildren(VOrgTree tree, Integer type, Long roleId, Long pid) {
-        List<VOrgTree> children = baseMapper.findPermissionTree(tree,type,roleId,pid);
+        List<VOrgTree> children;
+        if(type.equals(0)){
+             children = baseMapper.findMenuPermissionTree(tree,roleId,pid);
+        }else {
+             children = baseMapper.findApiPermissionTree(tree,roleId,pid);
+        }
         for (VOrgTree t : children) {
             findChildren(t, type, roleId, t.getId());
         }

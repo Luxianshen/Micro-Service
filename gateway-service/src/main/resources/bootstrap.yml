@@ -25,6 +25,10 @@ spring:
           uri: http://localhost:8075/v1/auth/
           predicates:
             - Path=/v1/auth/**
+        - id: transmit_route
+          uri: http://localhost:8079/transmit/
+          predicates:
+            - Path=/transmit/**
 #redis
   redis:
     host: 139.199.89.237
