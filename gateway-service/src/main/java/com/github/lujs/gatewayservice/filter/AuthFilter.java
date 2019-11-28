@@ -30,11 +30,11 @@ public class AuthFilter implements GlobalFilter, Ordered {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
 
+        System.out.println("网关开始："+System.currentTimeMillis());
         //获取对应的url
-        Route gatewayUrl = exchange.getRequiredAttribute(ServerWebExchangeUtils.GATEWAY_ROUTE_ATTR);
-        URI uri = gatewayUrl.getUri();
         ServerHttpRequest request = (ServerHttpRequest) exchange.getRequest();
         HttpHeaders header = request.getHeaders();
+
         String token = header.getFirst(JwtUtil.HEADER_AUTH);
         Map<String,String> userMap = JwtUtil.validateToken(token);
 
@@ -44,11 +44,11 @@ public class AuthFilter implements GlobalFilter, Ordered {
             //携带用户信息 访问信息
             mutate.header("x-user-id", userMap.get("id"));
             mutate.header("x-user-name", userMap.get("user"));
-            mutate.header("x-user-serviceName", uri.getHost());
         }else{
             throw new PermissionException("user not exist, please check");
         }
         ServerHttpRequest buildRequest = mutate.build();
+        System.out.println("网关结束："+System.currentTimeMillis());
         return chain.filter(exchange.mutate().request(buildRequest).build());
     }
 

@@ -24,6 +24,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -82,15 +83,14 @@ public class TransmitController extends BaseController {
     @Permission(action = Action.Skip)
     public Object testPost(HttpServletRequest request, @RequestBody Object o) {
 
-        if (ObjectUtil.isEmpty(o)) {
+        System.out.println("业务开始："+System.currentTimeMillis());
+        /*if (ObjectUtil.isEmpty(o)) {
             return failedResponse(GlobalStatusCode.INVALID_PARAMETER);
-        }
+        }*/
         //截取请求后缀 获取请求实体
-        QueryWrapper<ApiEntity> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("api_key", request.getHeader("apiKey"));
-        ApiEntity apiEntity = transmitService.getOne(queryWrapper);
+        ApiEntity apiEntity = transmitService.getApiByKey(request.getHeader("apiKey"));
 
-        if (ObjectUtil.isNotEmpty(apiEntity) && StringUtils.isNotEmpty(apiEntity.getRealUrl())) {
+        if (ObjectUtil.isNotEmpty(apiEntity) ) { //&& StringUtils.isNotEmpty(apiEntity.getRealUrl())
             //拿到header信息
             HttpHeaders requestHeaders = new HttpHeaders();
             Enumeration<String> headerNames = request.getHeaderNames();
@@ -100,7 +100,9 @@ public class TransmitController extends BaseController {
                 requestHeaders.add(key, value);
             }
             HttpEntity<String> httpEntity = new HttpEntity<String>(JSONUtil.toJsonStr(o), requestHeaders);
-            return restTemplate.postForEntity(apiEntity.getRealUrl(), httpEntity, Object.class);
+            ResponseEntity<Object> responseEntity = restTemplate.postForEntity(apiEntity.getRealUrl(), httpEntity, Object.class);
+            System.out.println("业务结束："+System.currentTimeMillis());
+            return responseEntity;
         }
         return failedResponse("接口不存在");
 

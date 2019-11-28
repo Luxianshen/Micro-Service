@@ -16,7 +16,10 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 /**
  * @Describe: 用户权限拦截器
@@ -28,25 +31,26 @@ import java.util.LinkedHashMap;
 @Slf4j
 public class ApiContextInterceptor extends HandlerInterceptorAdapter {
 
+    private static List<String> whiteRoute = new ArrayList<String>(Arrays.asList("192.168.4.79:8079"));
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
+        System.out.println("认证开始：" + System.currentTimeMillis());
         //过滤白名单
-        if(StringUtils.isNotEmpty(request.getHeader("origin"))&& request.getHeader("origin").equals("http://localhost:9527")){
-            return true;
-        }
-        //过滤feign
-        if(StringUtils.isNotEmpty(request.getHeader("user-agent"))&&request.getHeader("user-agent").equals("Java/1.8.0_161")){
+        if (whiteRoute.contains(request.getHeader("host"))) {
             return true;
         }
         //获取当接口的权限
         String apiKey = request.getHeader("apiKey");
+        String id = request.getHeader("x-user-id");
+        String name = request.getHeader("x-user-name");
         //存在访问路径
-        if (apiKey != null) {
+        if (!StringUtils.isAnyEmpty(apiKey, id, name)) {
             //查找用户信息
-            UserInfo userInfo = getUserInfo(request);
+            List<String> apiPermissionList = getUserInfo(id, name);
             //判断权限
-            if (null == userInfo || !UserPermissionUtil.validatePermission(userInfo, apiKey)) {
+            if (null == apiPermissionList || !validatePermission(apiPermissionList, apiKey)) {
                 //没有权限，直接输出json流 后期可改造为页面
                 response.setHeader("Content-Type", "application/json");
                 String noPermissionMsg = JSON.toJSONString("no permission access service, please check!");
@@ -55,6 +59,7 @@ public class ApiContextInterceptor extends HandlerInterceptorAdapter {
                 response.getWriter().close();
                 log.info("no permission access service, please check!");
             }
+            System.out.println("认证结束：" + System.currentTimeMillis());
             return true;
         }
         return false;
@@ -63,17 +68,31 @@ public class ApiContextInterceptor extends HandlerInterceptorAdapter {
     /**
      * 获取用户
      *
-     * @param request
+     * @param id id
+     * @param name name
      * @return 用户信息
      */
-    private UserInfo getUserInfo(HttpServletRequest request) {
-        String id = request.getHeader("x-user-id");
-        String name = request.getHeader("x-user-name");
-        if (StringUtils.isNotEmpty(name)) {
-            String tokenKey = CommonConstant.TOKEN_CODE + id + name;
-            return (UserInfo) RedisUtil.get(tokenKey);
+    private List<String> getUserInfo(String id, String name) {
+
+        String tokenKey = CommonConstant.TOKEN_CODE + id + name;
+        return ((UserInfo) RedisUtil.get(tokenKey)).getApiList();
+    }
+
+    /**
+     * 验证权限方法
+     *
+     * @return boolean
+     * @Param user 用户
+     * @Param tagCode 当前访问的权限标识
+     */
+    private static boolean validatePermission(List<String> apiPermissionList, String tagCode) {
+
+        //获取接口权限
+        String tagPermission = (String) RedisUtil.hashGet("apiMap", tagCode);
+        if (StringUtils.isNotEmpty(tagPermission) && apiPermissionList.contains(tagPermission)) {
+            return true;
         }
-        return null;
+        return false;
     }
 
 

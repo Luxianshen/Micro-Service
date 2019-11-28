@@ -6,7 +6,7 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: 127.0.0.1:8848
+        server-addr: 49.233.171.48:8848
     gateway:
       discovery:
         locator:
@@ -26,13 +26,19 @@ spring:
           predicates:
             - Path=/v1/auth/**
         - id: transmit_route
-          uri: http://localhost:8079/transmit/
+          uri: lb://transmit-service
+#          http://localhost:8079/transmit/
           predicates:
             - Path=/transmit/**
 #redis
   redis:
-    host: 139.199.89.237
-    port: 6380
+    host: 127.0.0.1
+    port: 6379
+    password: 123456
+    config:
+      maxTotal: 400
+      maxIdle: 10
+      maxWaitMillis: 100000
 #开启端点 2.0版本默认不开启监控端口
 management:
   endpoints:

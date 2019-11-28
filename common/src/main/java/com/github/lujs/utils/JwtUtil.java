@@ -35,8 +35,8 @@ public class JwtUtil {
             //获取解析后的token body
             Map<String, Object> body = Jwts.parser().setSigningKey(SECRET)
                     .parseClaimsJws(token.replace(TOKEN_PREFIX, "")).getBody();
-            String id = String.valueOf(body.get("id"));
-            String userName = (String) body.get("user");
+            String id = body.get("id").toString();
+            String userName = body.get("user").toString();
             //从缓存获取
             String redisToken = (String) RedisUtil.get(CommonConstant.TOKEN_CODE + userName);
             //判断token是否合法
@@ -49,8 +49,8 @@ public class JwtUtil {
             map.put("id", id);
             map.put("user", userName);
             //刷新缓存
-            RedisUtil.setExpire(CommonConstant.TOKEN_CODE + userName,5000L);
-            RedisUtil.setExpire(CommonConstant.TOKEN_CODE + id + userName, 5000L);
+            //RedisUtil.setExpire(CommonConstant.TOKEN_CODE + userName,5000L);
+            //RedisUtil.setExpire(CommonConstant.TOKEN_CODE + id + userName, 5000L);
             return map;
         } else {
             throw new PermissionException("token is null, please check!");
