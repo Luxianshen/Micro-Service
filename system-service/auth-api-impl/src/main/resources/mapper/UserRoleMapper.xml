@@ -7,4 +7,13 @@
         from tb_user_role_rel
         where user_id = #{userId}
     </select>
+
+    <select id="getRoleUserList" resultType="String">
+        select rel.user_id
+        from tb_user_role_rel rel left join
+        tb_role r on r.id = rel.role_id
+        where rel.role_id = #{roleId}
+        and r.default_role = 0
+    </select>
+
 </mapper>

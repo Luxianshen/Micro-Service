@@ -86,6 +86,15 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         return findChildren(null, query.getType(), query.getRoleId(), null);
     }
 
+    @Override
+    public List<String> getRoleUserList(Long roleId) {
+        List<String> users = userRoleService.getRoleUserList(roleId);
+        if (users != null) {
+            return users;
+        }
+        return new ArrayList<>();
+    }
+
 
     /**
      * 查询所有菜单树

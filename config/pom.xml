@@ -11,7 +11,6 @@
 
     <artifactId>config</artifactId>
 
-
     <dependencies>
         <!--集成mybatis plus-->
         <dependency>
@@ -24,6 +23,28 @@
             <artifactId>jackson-databind</artifactId>
             <version>2.10.0</version>
             <scope>compile</scope>
+        </dependency>
+        <!-- 数据库相关 -->
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis</artifactId>
+            <version>3.5.1</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid</artifactId>
+            <version>1.1.20</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cn.joysim</groupId>
+            <artifactId>jdff-config</artifactId>
+            <version>1.0.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
 

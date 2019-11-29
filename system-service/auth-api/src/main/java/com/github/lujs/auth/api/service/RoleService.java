@@ -31,8 +31,6 @@ public interface RoleService extends IService<Role> {
     List<String> getUserPermissionList(RoleQuery roleQuery);
 
     /**
-     *
-     *
      * @param page
      * @param param
      * @return
@@ -44,4 +42,6 @@ public interface RoleService extends IService<Role> {
      * @return
      */
     List<VOrgTree> findRolePermissionTree(RolePermissionQuery rolePermissionQuery);
+
+    List<String> getRoleUserList(Long roleId);
 }

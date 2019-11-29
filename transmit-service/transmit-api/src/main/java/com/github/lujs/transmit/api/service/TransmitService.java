@@ -17,4 +17,8 @@ public interface TransmitService extends IService<ApiEntity> {
      * @return 接口信息
      */
     ApiEntity getApiByKey(String apiKey);
+
+    Boolean deleteById(ApiEntity apiEntity);
+
+    Boolean updateApi(ApiEntity apiEntity);
 }

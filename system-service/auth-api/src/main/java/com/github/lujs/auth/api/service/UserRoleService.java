@@ -16,7 +16,14 @@ public interface UserRoleService extends IService<UserRole> {
     /**
      * 根据Id寻找用户角色
      * @param userId 用户ID
-     * @return 用户角色
+     * @return 角色列表
      */
     List<String> getUserRoleList(Long userId);
+
+    /**
+     * 根据Id寻找角色用户
+     * @param roleId 角色ID
+     * @return 用户列表
+     */
+    List<String> getRoleUserList(Long roleId);
 }

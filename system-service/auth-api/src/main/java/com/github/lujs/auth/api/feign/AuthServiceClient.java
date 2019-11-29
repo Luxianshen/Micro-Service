@@ -30,4 +30,10 @@ public interface AuthServiceClient {
      */
     @PostMapping("/v1/auth/menu/getRolePermissionList")
     List<String> getRolePermissionList(RoleQuery roleQuery);
+
+    /**
+     * 获取用户角色列表
+     */
+    @PostMapping("/v1/auth/role/getRoleUserList")
+    List<String> getRoleUserList(@RequestParam("roleId") Long roleId);
 }

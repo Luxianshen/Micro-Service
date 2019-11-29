@@ -4,6 +4,9 @@ import com.github.lujs.user.api.feign.UserServiceClient;
 import com.github.lujs.user.api.model.User;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @Description: 用户服务熔断
  * @Author lujs
@@ -14,6 +17,11 @@ public class UserServiceHystrix implements UserServiceClient {
 
     @Override
     public User checkUserLoginInfo(String agentId,String agentAuth) {
-        return null;
+        return new User();
+    }
+
+    @Override
+    public List<String> getUserAgentIds(List<String> userList) {
+        return new ArrayList<>();
     }
 }

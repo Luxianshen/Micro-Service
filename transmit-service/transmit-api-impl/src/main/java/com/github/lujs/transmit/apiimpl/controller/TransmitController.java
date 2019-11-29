@@ -7,7 +7,9 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.lujs.annotation.Action;
 import com.github.lujs.annotation.Permission;
+import com.github.lujs.auth.api.feign.AuthServiceClient;
 import com.github.lujs.auth.api.model.Role.RoleQuery;
+import com.github.lujs.constant.CommonConstant;
 import com.github.lujs.constant.GlobalStatusCode;
 import com.github.lujs.model.BaseRequest;
 import com.github.lujs.model.BaseResponse;
@@ -17,14 +19,15 @@ import com.github.lujs.transmit.api.model.RoleApiEntity;
 import com.github.lujs.transmit.api.model.User;
 import com.github.lujs.transmit.api.service.RoleApiService;
 import com.github.lujs.transmit.api.service.TransmitService;
+import com.github.lujs.user.api.feign.UserServiceClient;
 import com.github.lujs.web.BaseController;
 import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,9 +36,7 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.List;
+import java.util.*;
 
 /**
  * @Description: 请求转发控制层
@@ -54,6 +55,10 @@ public class TransmitController extends BaseController {
     private final TransmitService transmitService;
 
     private final RoleApiService roleApiService;
+
+    private final AuthServiceClient authServiceClient;
+
+    private final UserServiceClient userServiceClient;
 
     @RequestMapping("test1")
     @Permission(action = Action.Skip)
@@ -83,14 +88,13 @@ public class TransmitController extends BaseController {
     @Permission(action = Action.Skip)
     public Object testPost(HttpServletRequest request, @RequestBody Object o) {
 
-        System.out.println("业务开始："+System.currentTimeMillis());
-        /*if (ObjectUtil.isEmpty(o)) {
+        if (ObjectUtil.isEmpty(o)) {
             return failedResponse(GlobalStatusCode.INVALID_PARAMETER);
-        }*/
+        }
         //截取请求后缀 获取请求实体
         ApiEntity apiEntity = transmitService.getApiByKey(request.getHeader("apiKey"));
 
-        if (ObjectUtil.isNotEmpty(apiEntity) ) { //&& StringUtils.isNotEmpty(apiEntity.getRealUrl())
+        if (ObjectUtil.isNotEmpty(apiEntity) && StringUtils.isNotEmpty(apiEntity.getRealUrl())) {
             //拿到header信息
             HttpHeaders requestHeaders = new HttpHeaders();
             Enumeration<String> headerNames = request.getHeaderNames();
@@ -100,9 +104,7 @@ public class TransmitController extends BaseController {
                 requestHeaders.add(key, value);
             }
             HttpEntity<String> httpEntity = new HttpEntity<String>(JSONUtil.toJsonStr(o), requestHeaders);
-            ResponseEntity<Object> responseEntity = restTemplate.postForEntity(apiEntity.getRealUrl(), httpEntity, Object.class);
-            System.out.println("业务结束："+System.currentTimeMillis());
-            return responseEntity;
+            return restTemplate.postForEntity(apiEntity.getRealUrl(), httpEntity, Object.class);
         }
         return failedResponse("接口不存在");
 
@@ -141,7 +143,7 @@ public class TransmitController extends BaseController {
      */
     @PostMapping("/save")
     @Permission(action = Action.Skip)
-    public BaseResponse menuSave(@Valid @RequestBody BaseRequest<ApiEntity> request) {
+    public BaseResponse save(@Valid @RequestBody BaseRequest<ApiEntity> request) {
         ApiEntity apiEntity = request.getData();
         redisTemplate.opsForHash().put("apiMap", apiEntity.getApiKey(), apiEntity.getPermissionCode());
         return successResponse(transmitService.save(apiEntity));
@@ -155,8 +157,7 @@ public class TransmitController extends BaseController {
     public BaseResponse update(@Valid @RequestBody BaseRequest<ApiEntity> request) {
         ApiEntity apiEntity = new ApiEntity();
         BeanUtils.copyProperties(request.getData(), apiEntity);
-        boolean flag = transmitService.updateById(apiEntity);
-        return successResponse(flag);
+        return successResponse(transmitService.updateApi(apiEntity));
     }
 
     /**
@@ -164,11 +165,11 @@ public class TransmitController extends BaseController {
      */
     @PostMapping("/delete")
     @Permission(action = Action.Skip)
+    @CacheEvict(value = "transmits", key = "#apiEntity.apiKey")
     public BaseResponse delete(@Valid @RequestBody BaseRequest<PrimaryKeyRequest> request) {
         //去除缓存的key
         ApiEntity apiEntity = transmitService.getById(request.getData().getId());
-        redisTemplate.opsForHash().delete("apiMap", apiEntity.getApiKey());
-        return successResponse(transmitService.removeById(request.getData().getId()));
+        return successResponse(transmitService.deleteById(apiEntity));
     }
 
     /**
@@ -180,7 +181,7 @@ public class TransmitController extends BaseController {
     @PostMapping("/api/grant")
     @Permission(action = Action.Skip)
     public BaseResponse grant(@Valid @RequestBody BaseRequest<RoleApiEntity> request) {
-        return baseResponse(roleApiService.save(request.getData()));
+        return successResponse(roleApiService.save(request.getData()));
     }
 
     /**
@@ -195,7 +196,17 @@ public class TransmitController extends BaseController {
         QueryWrapper<RoleApiEntity> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("role_id", request.getData().getRoleId());
         queryWrapper.eq("api_id", request.getData().getApiId());
-        return baseResponse(roleApiService.remove(queryWrapper));
+        if (roleApiService.remove(queryWrapper)) {
+            List<String> userList = authServiceClient.getRoleUserList(request.getData().getRoleId());
+            List<String> agentIds = userServiceClient.getUserAgentIds(userList);
+            if(ObjectUtil.isNotEmpty(agentIds)){
+                Set<String> removeData = new HashSet<>(agentIds);
+                removeData.forEach(x-> redisTemplate.delete(CommonConstant.TOKEN_CODE +x));
+            }
+            return successResponse(GlobalStatusCode.SUCCESS);
+        } else {
+            return failedResponse(GlobalStatusCode.FAILED);
+        }
     }
 
     /**

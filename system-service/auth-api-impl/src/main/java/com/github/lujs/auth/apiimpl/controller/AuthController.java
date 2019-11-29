@@ -138,6 +138,15 @@ public class AuthController extends BaseController {
         return roleService.getUserRoleList(userId);
     }
 
+    /**
+     * 获取角色用户
+     */
+    @PostMapping("/role/getRoleUserList")
+    @Permission(action = Action.Skip)
+    public List<String> getRoleUserList(@RequestParam("roleId") Long roleId) {
+        return roleService.getRoleUserList(roleId);
+    }
+
 
     /**
      * 分页查询角色信息

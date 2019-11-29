@@ -82,7 +82,7 @@ public class TokenServiceImpl implements TokenService {
             String token = generateToken(random, user.getAgentId());
             //放置在redis key 前缀+token随机数+用户名
             RedisUtil.set(CommonConstant.TOKEN_CODE + user.getAgentId(), token, 5000L);
-            RedisUtil.set(CommonConstant.TOKEN_CODE + random + user.getAgentId(), userInfo, 5000L);
+            RedisUtil.set(CommonConstant.TOKEN_CODE + user.getAgentId() + random, userInfo, 5000L);
 
             return token;
         }

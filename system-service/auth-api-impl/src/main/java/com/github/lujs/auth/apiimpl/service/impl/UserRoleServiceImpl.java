@@ -33,4 +33,18 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
         }
         return roleList;
     }
+
+    /**
+     *
+     * @param roleId 角色ID
+     * @return
+     */
+    @Override
+    public List<String> getRoleUserList(Long roleId) {
+        List<String> userList = baseMapper.getRoleUserList(roleId);
+        if (userList == null || userList.size() < 1) {
+            return new ArrayList<>();
+        }
+        return userList;
+    }
 }

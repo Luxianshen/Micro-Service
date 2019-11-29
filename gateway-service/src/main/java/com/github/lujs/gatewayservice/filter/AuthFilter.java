@@ -1,12 +1,11 @@
 package com.github.lujs.gatewayservice.filter;
 
 import com.github.lujs.Exception.PermissionException;
+import com.github.lujs.Exception.status.PermissionStatusCode;
 import com.github.lujs.utils.JwtUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
-import org.springframework.cloud.gateway.route.Route;
-import org.springframework.cloud.gateway.support.ServerWebExchangeUtils;
 import org.springframework.core.Ordered;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.server.reactive.ServerHttpRequest;
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
-import java.net.URI;
 import java.util.Map;
 
 /**
@@ -30,7 +28,6 @@ public class AuthFilter implements GlobalFilter, Ordered {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
 
-        System.out.println("网关开始："+System.currentTimeMillis());
         //获取对应的url
         ServerHttpRequest request = (ServerHttpRequest) exchange.getRequest();
         HttpHeaders header = request.getHeaders();
@@ -45,10 +42,9 @@ public class AuthFilter implements GlobalFilter, Ordered {
             mutate.header("x-user-id", userMap.get("id"));
             mutate.header("x-user-name", userMap.get("user"));
         }else{
-            throw new PermissionException("user not exist, please check");
+            throw new PermissionException(PermissionStatusCode.TOKEN_ILLEGAL);
         }
         ServerHttpRequest buildRequest = mutate.build();
-        System.out.println("网关结束："+System.currentTimeMillis());
         return chain.filter(exchange.mutate().request(buildRequest).build());
     }
 
