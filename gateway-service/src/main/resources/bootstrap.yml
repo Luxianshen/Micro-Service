@@ -14,20 +14,19 @@ spring:
           lower-case-service-id: true
       routes:
         - id: user_route
-          uri: http://localhost:8077/v1/user/
+          uri: lb://user-service
           predicates:
-            - Path=/v1/user/**
+            - Path=/v1/user/**,/v1/userClient/**
         - id: token_route
-          uri: http://localhost:8076/token/
+          uri: lb://token-service
           predicates:
             - Path=/token/**
         - id: auth_route
-          uri: http://localhost:8075/v1/auth/
+          uri: lb://auth-service
           predicates:
-            - Path=/v1/auth/**
+            - Path=/v1/role/**,/v1/menu/**
         - id: transmit_route
           uri: lb://transmit-service
-#          http://localhost:8079/transmit/
           predicates:
             - Path=/transmit/**
 #redis

@@ -13,6 +13,8 @@ import com.github.lujs.token.api.service.ValidCodeService;
 import com.github.lujs.transmit.api.service.feign.TransmitServiceClient;
 import com.github.lujs.user.api.feign.UserServiceClient;
 import com.github.lujs.user.api.model.User;
+import com.github.lujs.user.api.model.UserClient;
+import com.github.lujs.user.api.model.UserClientInfo;
 import com.github.lujs.user.api.model.UserInfo;
 import com.github.lujs.utils.RedisUtil;
 import io.jsonwebtoken.Jwts;
@@ -24,6 +26,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * @Description: token服务实现类
@@ -87,6 +90,28 @@ public class TokenServiceImpl implements TokenService {
             return token;
         }
         return null;
+    }
+
+    /**
+     * 生成客户端token
+     * @param agentId 客户端Id
+     * @return token
+     */
+    @Override
+    public String generateClientToken(String agentId) {
+        //获取客户端接口权限
+        UserClientInfo userClientInfo = new UserClientInfo();
+        userClientInfo.setAgentId(agentId);
+        List<String> clientApiList = transmitServiceClient.getClientApiList(agentId);
+        userClientInfo.setApiList(clientApiList);
+        //生成token
+        String random = RandomUtil.randomString(5);
+        String token = generateToken(random, agentId);
+        //放置在redis key 前缀+token随机数+用户名
+        RedisUtil.set(CommonConstant.API_TOKEN_CODE + agentId, token, 5000L);
+        RedisUtil.set(CommonConstant.API_TOKEN_CODE + agentId + random, userClientInfo, 5000L);
+
+        return token;
     }
 
     /**

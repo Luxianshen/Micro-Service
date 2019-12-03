@@ -22,18 +22,18 @@ public interface AuthServiceClient {
     /**
      * 获取用户角色列表
      */
-    @PostMapping("/v1/auth/role/getUserRoleList")
+    @PostMapping("/v1/role/getUserRoleList")
     List<String> getUserRoleList(@RequestParam("userId") Long userId);
 
     /**
      * 获取用户权限列表
      */
-    @PostMapping("/v1/auth/menu/getRolePermissionList")
+    @PostMapping("/v1/menu/getRolePermissionList")
     List<String> getRolePermissionList(RoleQuery roleQuery);
 
     /**
      * 获取用户角色列表
      */
-    @PostMapping("/v1/auth/role/getRoleUserList")
+    @PostMapping("/v1/role/getRoleUserList")
     List<String> getRoleUserList(@RequestParam("roleId") Long roleId);
 }

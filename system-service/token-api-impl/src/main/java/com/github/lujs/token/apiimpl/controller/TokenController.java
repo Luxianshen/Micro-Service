@@ -8,7 +8,10 @@ import com.github.lujs.model.BaseResponse;
 import com.github.lujs.token.api.model.LoginInfo;
 import com.github.lujs.token.api.service.TokenService;
 import com.github.lujs.token.api.service.ValidCodeService;
+import com.github.lujs.user.api.feign.UserServiceClient;
+import com.github.lujs.user.api.model.UserClient;
 import com.github.lujs.utils.JwtUtil;
+import com.github.lujs.web.BaseController;
 import com.google.code.kaptcha.Producer;
 import lombok.AllArgsConstructor;
 import org.apache.commons.io.IOUtils;
@@ -32,7 +35,7 @@ import java.util.Map;
 @AllArgsConstructor
 @RestController
 @RequestMapping("/token")
-public class TokenController {
+public class TokenController extends BaseController {
 
     private final TokenService targetService;
 
@@ -40,10 +43,8 @@ public class TokenController {
 
     private final ValidCodeService validCodeService;
 
-    @GetMapping("/getToken/{userName}")
-    public String get(@PathVariable("userName") String userName) {
-        return null;
-    }
+    private final UserServiceClient userServiceClient;
+
 
     /**
      * 系统登陆方法
@@ -102,9 +103,22 @@ public class TokenController {
         IOUtils.closeQuietly(out);
     }
 
-    @RequestMapping("test")
-    public String test(){
-        return "hi,i'm token";
+    /**
+     * 客户端获取token方法
+     */
+    @PostMapping("/getToken")
+    @Permission(action = Action.Skip)
+    @ResponseBody
+    public BaseResponse getToken(UserClient userClient) {
+
+        //校验客户端
+        if (userServiceClient.checkUserClient(userClient)) {
+            //生成客户端token
+            String token = targetService.generateClientToken(userClient.getAgentId());
+            return successResponse(token);
+        }else {
+            return failedResponse(GlobalStatusCode.INVALID_PARAMETER);
+        }
     }
 
 }

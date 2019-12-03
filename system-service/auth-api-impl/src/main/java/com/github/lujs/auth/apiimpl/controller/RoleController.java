@@ -23,7 +23,6 @@ import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -38,8 +37,8 @@ import java.util.List;
  */
 @AllArgsConstructor
 @RestController
-@RequestMapping("/v1/auth")
-public class AuthController extends BaseController {
+@RequestMapping("/v1/role")
+public class RoleController extends BaseController {
 
     public final RoleService roleService;
 
@@ -51,88 +50,13 @@ public class AuthController extends BaseController {
 
     public final RedisTemplate redisTemplate;
 
-    /**
-     * 获取用户权限
-     */
-    @PostMapping("/menu/getRolePermissionList")
-    @Permission(action = Action.Skip)
-    public List<String> getRolePermissionList(@RequestBody RoleQuery roleQuery) {
-        if (roleQuery.getRoles() == null || roleQuery.getRoles().size() < 1) {
-            return new ArrayList<>();
-        }
-        return roleService.getUserPermissionList(roleQuery);
-    }
-
-
-    @Permission(action = Action.Skip)
-    @RequestMapping(value = "/menu/userMenu")
-    public BaseResponse userMenu(HttpServletRequest request) {
-        String agentId = request.getHeader("x-user-name");
-        if (StringUtils.isNotEmpty(agentId)) {
-            return successResponse(redisTemplate.opsForValue().get(agentId + "Menu"));
-        }
-        return failedResponse(GlobalStatusCode.FAILED);
-    }
-
-    /**
-     * 菜单查询
-     */
-    @PostMapping("/menu/page")
-    @Permission(action = Action.Skip)
-    public BaseResponse menuPage() {
-        QueryWrapper<Menu> queryWrapper = new QueryWrapper<>();
-        Page<Menu> page = new Page<>();
-        return successResponse(menuService.page(page, queryWrapper));
-    }
-
-    /**
-     * 获取菜单
-     *
-     * @return
-     */
-    @PostMapping("/menu/get")
-    @Permission(action = Action.Skip)
-    public BaseResponse menuGet(@Valid @RequestBody BaseRequest<PrimaryKeyRequest> request) {
-        return successResponse(menuService.getById(request.getData()));
-    }
-
-    /**
-     * 保存菜单
-     */
-    @PostMapping("/menu/save")
-    @Permission(action = Action.Skip)
-    public BaseResponse menuSave(@Valid @RequestBody BaseRequest<Menu> request) {
-        Menu menu = request.getData();
-        menu.setLabel(menu.getName());
-        menu.init();
-        return successResponse(menuService.save(menu));
-    }
-
-    /**
-     * 更新菜单
-     */
-    @PostMapping("/menu/update")
-    @Permission(action = Action.Skip)
-    public BaseResponse menuUpdate(@Valid @RequestBody BaseRequest<Menu> request) {
-        return successResponse(menuService.updateById(request.getData()));
-    }
-
-    /**
-     * 删除菜单
-     */
-    @PostMapping("/menu/delete")
-    @Permission(action = Action.Skip)
-    public BaseResponse menuDelete(@Valid @RequestBody BaseRequest<PrimaryKeyRequest> request) {
-        return successResponse(menuService.removeById(request.getData()));
-    }
-
 
 //    role分界线
 
     /**
      * 获取用户角色
      */
-    @PostMapping("/role/getUserRoleList")
+    @PostMapping("/getUserRoleList")
     @Permission(action = Action.Skip)
     public List<String> getUserRoleList(@RequestParam("userId") Long userId) {
         return roleService.getUserRoleList(userId);
@@ -141,7 +65,7 @@ public class AuthController extends BaseController {
     /**
      * 获取角色用户
      */
-    @PostMapping("/role/getRoleUserList")
+    @PostMapping("/getRoleUserList")
     @Permission(action = Action.Skip)
     public List<String> getRoleUserList(@RequestParam("roleId") Long roleId) {
         return roleService.getRoleUserList(roleId);
@@ -154,7 +78,7 @@ public class AuthController extends BaseController {
      * @param request
      * @return
      */
-    @PostMapping("/role/page")
+    @PostMapping("/page")
     @Permission(action = Action.Skip)
     public BaseResponse rolePage() {
         IPage<Role> page = new Page<>();
@@ -169,7 +93,7 @@ public class AuthController extends BaseController {
      * @param request
      * @return
      */
-    @PostMapping("/role/get")
+    @PostMapping("/get")
     @Permission(action = Action.Skip)
     public BaseResponse roleGet(@Valid @RequestBody BaseRequest<PrimaryKeyRequest> request) {
         return successResponse(roleService.getById(request.getData()));
@@ -178,7 +102,7 @@ public class AuthController extends BaseController {
     /**
      * 新增角色
      */
-    @PostMapping("/role/save")
+    @PostMapping("/save")
     @Permission(action = Action.Skip)
     public BaseResponse roleSave(@Valid @RequestBody BaseRequest<Role> request) {
         Role role = request.getData();
@@ -189,7 +113,7 @@ public class AuthController extends BaseController {
     /**
      * 更新角色
      */
-    @PostMapping("/role/update")
+    @PostMapping("/update")
     @Permission(action = Action.Skip)
     public BaseResponse roleUpdate(@Valid @RequestBody BaseRequest<Role> request) {
         return successResponse(roleService.updateById(request.getData()));
@@ -201,7 +125,7 @@ public class AuthController extends BaseController {
      * @param request
      * @return
      */
-    @PostMapping("/role/delete")
+    @PostMapping("/delete")
     @Permission(action = Action.Skip)
     public BaseResponse roleDelete(@Valid @RequestBody BaseRequest<PrimaryKeyRequest> request) {
         return successResponse(roleService.removeById(request.getData()));
@@ -213,7 +137,7 @@ public class AuthController extends BaseController {
      * @param request
      * @return
      */
-    @PostMapping("/role/authUserPage")
+    @PostMapping("/authUserPage")
     @Permission(action = Action.Skip)
     public BaseResponse authUserPage(@RequestBody BaseRequest<PageQuery<RoleDto,RoleDto>> request) {
 
@@ -229,7 +153,7 @@ public class AuthController extends BaseController {
      * @param request
      * @return
      */
-    @PostMapping("/role/findAuthPermissionTree")
+    @PostMapping("/findAuthPermissionTree")
     @Permission(action = Action.Skip)
     public BaseResponse findAuthPermissionTree(@Valid @RequestBody BaseRequest<RolePermissionQuery> request) {
         List<VOrgTree> list = roleService.findRolePermissionTree(request.getData());
@@ -242,7 +166,7 @@ public class AuthController extends BaseController {
      * @param request
      * @return
      */
-    @PostMapping("/role/addUser")
+    @PostMapping("/addUser")
     @Permission(action = Action.Skip)
     public BaseResponse addUser(@Valid @RequestBody BaseRequest<UserRole> request) {
         return baseResponse(userRoleService.save(request.getData()));
@@ -254,7 +178,7 @@ public class AuthController extends BaseController {
      * @param request
      * @return
      */
-    @PostMapping("/role/removeUser")
+    @PostMapping("/removeUser")
     @Permission(action = Action.Skip)
     public BaseResponse removeUser(@Valid @RequestBody BaseRequest<UserRole> request) {
         QueryWrapper<UserRole> queryWrapper = new QueryWrapper<>();
@@ -269,7 +193,7 @@ public class AuthController extends BaseController {
      * @param request
      * @return
      */
-    @PostMapping("/role/grant")
+    @PostMapping("/grant")
     @Permission(action = Action.Skip)
     public BaseResponse grant(@Valid @RequestBody BaseRequest<RoleMenu> request) {
         return baseResponse(roleMenuService.save(request.getData()));
@@ -281,7 +205,7 @@ public class AuthController extends BaseController {
      * @param request
      * @return
      */
-    @PostMapping("/role/revoke")
+    @PostMapping("/revoke")
     @Permission(action = Action.Skip)
     public BaseResponse revoke(@Valid @RequestBody BaseRequest<RoleMenu> request) {
         QueryWrapper<RoleMenu> queryWrapper = new QueryWrapper<>();

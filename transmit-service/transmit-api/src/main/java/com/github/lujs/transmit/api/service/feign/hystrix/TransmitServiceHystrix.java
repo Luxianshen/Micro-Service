@@ -19,4 +19,9 @@ public class TransmitServiceHystrix implements TransmitServiceClient {
     public List<String> getRoleApiList(RoleQuery roleQuery) {
         return new ArrayList<>();
     }
+
+    @Override
+    public List<String> getClientApiList(String agentId) {
+        return new ArrayList<>();
+    }
 }

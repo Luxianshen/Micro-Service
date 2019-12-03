@@ -2,6 +2,7 @@ package com.github.lujs.user.api.feign;
 
 import com.github.lujs.user.api.feign.hystrix.UserServiceHystrix;
 import com.github.lujs.user.api.model.User;
+import com.github.lujs.user.api.model.UserClient;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,4 +28,10 @@ public interface UserServiceClient {
      */
     @PostMapping("/v1/user/getUserAgentIds")
     List<String> getUserAgentIds(List<String> userList);
+
+    /**
+     * 根据客户端信息判断客户端是否合法
+     */
+    @PostMapping("/v1/userClient/checkUserClient")
+    boolean checkUserClient(UserClient userClient);
 }

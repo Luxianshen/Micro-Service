@@ -20,6 +20,11 @@ public class CommonConstant {
     public static final String TOKEN_CODE = SYS_CODE + "-U-Token";
 
     /**
+     * client用户token前缀
+     */
+    public static final String API_TOKEN_CODE = SYS_CODE + "-Api-Token";
+
+    /**
      * JSON 资源
      */
     public static final String CONTENT_TYPE = "application/json; charset=utf-8";

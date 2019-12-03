@@ -15,8 +15,10 @@ import com.github.lujs.model.BaseRequest;
 import com.github.lujs.model.BaseResponse;
 import com.github.lujs.model.request.PrimaryKeyRequest;
 import com.github.lujs.transmit.api.model.ApiEntity;
+import com.github.lujs.transmit.api.model.ApiEntityDto;
 import com.github.lujs.transmit.api.model.RoleApiEntity;
 import com.github.lujs.transmit.api.model.User;
+import com.github.lujs.transmit.api.service.ClientApiService;
 import com.github.lujs.transmit.api.service.RoleApiService;
 import com.github.lujs.transmit.api.service.TransmitService;
 import com.github.lujs.user.api.feign.UserServiceClient;
@@ -28,10 +30,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
@@ -55,6 +54,8 @@ public class TransmitController extends BaseController {
     private final TransmitService transmitService;
 
     private final RoleApiService roleApiService;
+
+    private final ClientApiService clientApiService;
 
     private final AuthServiceClient authServiceClient;
 
@@ -219,6 +220,27 @@ public class TransmitController extends BaseController {
             return new ArrayList<>();
         }
         return roleApiService.getRoleApiList(roleQuery);
+    }
+
+    /**
+     * 获取用户接口权限
+     */
+    @PostMapping("/api/getClientApiList")
+    @Permission(action = Action.Skip)
+    public List<String> getClientApiList(@RequestParam("agentId") String agentId) {
+
+        return clientApiService.getClientApiList(agentId);
+    }
+
+    /**
+     * 获取客户端接口情况
+     */
+    @PostMapping("/api/findClientPermissionTree")
+    @Permission(action = Action.Skip)
+    public BaseResponse findClientPermissionTree(@Valid @RequestBody BaseRequest<PrimaryKeyRequest> request) {
+
+        List<ApiEntityDto> clientApiPermission = clientApiService.getClientApiPermissions(request.getData().getId());
+        return successResponse(clientApiPermission);
     }
 
 }
