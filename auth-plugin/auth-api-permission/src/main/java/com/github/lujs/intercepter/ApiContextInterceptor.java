@@ -3,6 +3,7 @@ package com.github.lujs.intercepter;
 import com.github.lujs.Exception.PermissionException;
 import com.github.lujs.Exception.status.PermissionStatusCode;
 import com.github.lujs.constant.CommonConstant;
+import com.github.lujs.user.api.model.UserClientInfo;
 import com.github.lujs.user.api.model.UserInfo;
 import com.github.lujs.utils.RedisUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -26,13 +27,13 @@ import java.util.List;
 @Slf4j
 public class ApiContextInterceptor extends HandlerInterceptorAdapter {
 
-    private static List<String> whiteRoute = new ArrayList<String>(Arrays.asList("192.168.4.79:8079"));
+    private static List<String> whiteRoute = new ArrayList<String>(Arrays.asList("localhost"));
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
-        //过滤白名单
-        if (whiteRoute.contains(request.getHeader("host"))) {
+        //过滤白名单 x-user-host为空 即feign内部调用
+        if (whiteRoute.contains(request.getHeader("x-user-host")) || StringUtils.isEmpty(request.getHeader("x-user-host"))) {
             return true;
         }
         //获取当接口的权限
@@ -62,8 +63,8 @@ public class ApiContextInterceptor extends HandlerInterceptorAdapter {
      */
     private List<String> getUserInfo(String id, String name) {
 
-        String tokenKey = CommonConstant.TOKEN_CODE+ name + id ;
-        return ((UserInfo) RedisUtil.get(tokenKey)).getApiList();
+        String tokenKey = CommonConstant.API_TOKEN_CODE+ name + id ;
+        return ((UserClientInfo) RedisUtil.get(tokenKey)).getApiList();
     }
 
     /**

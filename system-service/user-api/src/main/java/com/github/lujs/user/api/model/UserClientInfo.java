@@ -34,7 +34,15 @@ public class UserClientInfo implements Serializable {
     /**
      * 随机串
      */
+    @NotNull(
+            message = "随机串必填"
+    )
     private String randomStr;
+
+    @NotNull(
+            message = "客户认签名"
+    )
+    private String sign;
 
     /**
      * 用户接口列表

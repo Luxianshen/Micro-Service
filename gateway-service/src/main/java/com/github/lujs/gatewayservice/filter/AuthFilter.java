@@ -29,11 +29,18 @@ public class AuthFilter implements GlobalFilter, Ordered {
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
 
         //获取对应的url
+        Map<String,String> userMap;
         ServerHttpRequest request = (ServerHttpRequest) exchange.getRequest();
         HttpHeaders header = request.getHeaders();
 
         String token = header.getFirst(JwtUtil.HEADER_AUTH);
-        Map<String,String> userMap = JwtUtil.validateToken(token);
+        String reqHost = header.getFirst("Host");
+
+        if(StringUtils.isEmpty(header.getFirst(JwtUtil.API_REQ))){
+            userMap = JwtUtil.validateToken(token,true);
+        }else {
+            userMap = JwtUtil.validateToken(token,false);
+        }
 
         ServerHttpRequest.Builder mutate = request.mutate();
         //检验是否本系统用户
@@ -41,6 +48,7 @@ public class AuthFilter implements GlobalFilter, Ordered {
             //携带用户信息 访问信息
             mutate.header("x-user-id", userMap.get("id"));
             mutate.header("x-user-name", userMap.get("user"));
+            mutate.header("x-user-host", reqHost);
         }else{
             throw new PermissionException(PermissionStatusCode.TOKEN_ILLEGAL);
         }

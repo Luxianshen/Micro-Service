@@ -1,6 +1,7 @@
 package com.github.lujs.token.api.service;
 
 import com.github.lujs.token.api.model.LoginInfo;
+import com.github.lujs.user.api.model.UserClient;
 
 /**
  * @Description: token服务
@@ -21,5 +22,5 @@ public interface TokenService {
      * @param agentId 客户端Id
      * @return token
      */
-    String generateClientToken(String agentId);
+    String generateClientToken(UserClient userClient);
 }

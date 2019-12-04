@@ -3,6 +3,7 @@ package com.github.lujs.user.api.feign.hystrix;
 import com.github.lujs.user.api.feign.UserServiceClient;
 import com.github.lujs.user.api.model.User;
 import com.github.lujs.user.api.model.UserClient;
+import com.github.lujs.user.api.model.UserClientInfo;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -27,7 +28,7 @@ public class UserServiceHystrix implements UserServiceClient {
     }
 
     @Override
-    public boolean checkUserClient(UserClient userClient) {
-        return false;
+    public UserClient checkUserClient(UserClientInfo userClientInfo) {
+        return null;
     }
 }

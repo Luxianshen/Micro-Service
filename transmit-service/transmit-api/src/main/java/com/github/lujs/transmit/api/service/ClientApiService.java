@@ -13,8 +13,8 @@ import java.util.List;
  */
 public interface ClientApiService extends IService<ClientApiEntity> {
 
-    List<String> getClientApiList(String agentId);
+    List<String> getClientApiList(Long clientId);
 
-    List<ApiEntityDto> getClientApiPermissions(Long agentId);
+    List<ApiEntityDto> getClientApiPermissions(Long clientId);
 
 }

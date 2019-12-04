@@ -21,7 +21,7 @@ public class TransmitServiceHystrix implements TransmitServiceClient {
     }
 
     @Override
-    public List<String> getClientApiList(String agentId) {
+    public List<String> getClientApiList(Long clientId) {
         return new ArrayList<>();
     }
 }

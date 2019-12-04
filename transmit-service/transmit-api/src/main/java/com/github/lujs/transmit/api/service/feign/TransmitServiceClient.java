@@ -26,5 +26,5 @@ public interface TransmitServiceClient {
      * 获取客户端权限列表
      */
     @PostMapping("/transmit/api/getClientApiList")
-    List<String> getClientApiList(@RequestParam("agentId") String agentId);
+    List<String> getClientApiList(@RequestParam("clientId") Long clientId);
 }

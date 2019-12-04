@@ -16,7 +16,7 @@ import java.util.List;
 @Mapper
 public interface ClientApiMapper extends BaseMapper<ClientApiEntity> {
 
-    List<String> getClientApiCodes(@Param("agentId") String agentId);
+    List<String> getClientApiCodes(@Param("clientId") Long clientId);
 
     List<ApiEntityDto> getClientApiPermissions(@Param("agentId") Long agentId);
 }

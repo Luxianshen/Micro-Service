@@ -96,18 +96,18 @@ public class UserClientController extends BaseController {
      */
     @PostMapping("/checkUserClient")
     @Permission(action = Action.Skip)
-    public Boolean checkUserClient(@RequestBody UserClientInfo userClientInfo) {
+    public UserClient checkUserClient(@RequestBody UserClientInfo userClientInfo) {
 
         UserClient checkClient = userClientService.getClientByAgentId(userClientInfo.getAgentId());
         if (null != checkClient) {
             //比较加密串
-            String checkAuth = DigestUtils.md5Hex("agentId=" + checkClient.getAgentId() + "&agentAuth=" + checkClient.getAgentAuth()
-                    + "&randomStr=" + userClientInfo.getRandomStr() + "&key=" + checkClient.getMacKey());
-            if (checkAuth.equals(userClientInfo.getAgentAuth())) {
-                return true;
+            String checkAuth = DigestUtils.md5Hex("agentId=" + checkClient.getAgentId() + "&randomStr=" + userClientInfo.getAgentAuth() +
+                    "&randomStr=" + userClientInfo.getRandomStr() + "&key=" + checkClient.getMacKey());
+            if (checkAuth.equals(userClientInfo.getSign())) {
+                return checkClient;
             }
         }
-        return false;
+        return null;
     }
 
 }

@@ -10,6 +10,7 @@ import com.github.lujs.token.api.service.TokenService;
 import com.github.lujs.token.api.service.ValidCodeService;
 import com.github.lujs.user.api.feign.UserServiceClient;
 import com.github.lujs.user.api.model.UserClient;
+import com.github.lujs.user.api.model.UserClientInfo;
 import com.github.lujs.utils.JwtUtil;
 import com.github.lujs.web.BaseController;
 import com.google.code.kaptcha.Producer;
@@ -108,13 +109,13 @@ public class TokenController extends BaseController {
      */
     @PostMapping("/getToken")
     @Permission(action = Action.Skip)
-    @ResponseBody
-    public BaseResponse getToken(UserClient userClient) {
+    public BaseResponse getToken(@RequestBody UserClientInfo userClientInfo) {
 
         //校验客户端
-        if (userServiceClient.checkUserClient(userClient)) {
+        UserClient userClient = userServiceClient.checkUserClient(userClientInfo);
+        if (null != userClient) {
             //生成客户端token
-            String token = targetService.generateClientToken(userClient.getAgentId());
+            String token = targetService.generateClientToken(userClient);
             return successResponse(token);
         }else {
             return failedResponse(GlobalStatusCode.INVALID_PARAMETER);

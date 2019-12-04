@@ -79,10 +79,12 @@ public class TokenServiceImpl implements TokenService {
             roleQuery.setAgentId(user.getAgentId());
             roleQuery.setRoles(userInfo.getRoleList());
             userInfo.setPermissionList(authServiceClient.getRolePermissionList(roleQuery));
-            userInfo.setApiList(transmitServiceClient.getRoleApiList(roleQuery));
+            //userInfo.setApiList(transmitServiceClient.getRoleApiList(roleQuery)); todo 暂时不用
             //生成token
             String random = RandomUtil.randomString(5);
             String token = generateToken(random, user.getAgentId());
+            //清除旧token
+            RedisUtil.delete(CommonConstant.TOKEN_CODE + user.getAgentId());
             //放置在redis key 前缀+token随机数+用户名
             RedisUtil.set(CommonConstant.TOKEN_CODE + user.getAgentId(), token, 5000L);
             RedisUtil.set(CommonConstant.TOKEN_CODE + user.getAgentId() + random, userInfo, 5000L);
@@ -94,22 +96,25 @@ public class TokenServiceImpl implements TokenService {
 
     /**
      * 生成客户端token
-     * @param agentId 客户端Id
+     * @param userClient 客户端
      * @return token
      */
     @Override
-    public String generateClientToken(String agentId) {
+    public String generateClientToken(UserClient userClient) {
+
         //获取客户端接口权限
         UserClientInfo userClientInfo = new UserClientInfo();
-        userClientInfo.setAgentId(agentId);
-        List<String> clientApiList = transmitServiceClient.getClientApiList(agentId);
+        userClientInfo.setAgentId(userClient.getAgentId());
+        List<String> clientApiList = transmitServiceClient.getClientApiList(userClient.getId());
         userClientInfo.setApiList(clientApiList);
         //生成token
         String random = RandomUtil.randomString(5);
-        String token = generateToken(random, agentId);
+        String token = generateToken(random, userClient.getAgentId());
+        //清除旧token
+        RedisUtil.delete(CommonConstant.API_TOKEN_CODE + userClient.getAgentId());
         //放置在redis key 前缀+token随机数+用户名
-        RedisUtil.set(CommonConstant.API_TOKEN_CODE + agentId, token, 5000L);
-        RedisUtil.set(CommonConstant.API_TOKEN_CODE + agentId + random, userClientInfo, 5000L);
+        RedisUtil.set(CommonConstant.API_TOKEN_CODE + userClient.getAgentId(), token, 5000L);
+        RedisUtil.set(CommonConstant.API_TOKEN_CODE + userClient.getAgentId() + random, userClientInfo, 5000L);
 
         return token;
     }

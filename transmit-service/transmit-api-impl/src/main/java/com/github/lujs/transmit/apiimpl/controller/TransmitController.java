@@ -14,10 +14,7 @@ import com.github.lujs.constant.GlobalStatusCode;
 import com.github.lujs.model.BaseRequest;
 import com.github.lujs.model.BaseResponse;
 import com.github.lujs.model.request.PrimaryKeyRequest;
-import com.github.lujs.transmit.api.model.ApiEntity;
-import com.github.lujs.transmit.api.model.ApiEntityDto;
-import com.github.lujs.transmit.api.model.RoleApiEntity;
-import com.github.lujs.transmit.api.model.User;
+import com.github.lujs.transmit.api.model.*;
 import com.github.lujs.transmit.api.service.ClientApiService;
 import com.github.lujs.transmit.api.service.RoleApiService;
 import com.github.lujs.transmit.api.service.TransmitService;
@@ -186,7 +183,7 @@ public class TransmitController extends BaseController {
     }
 
     /**
-     * 接口授权
+     * 取消接口授权
      *
      * @param request
      * @return
@@ -200,9 +197,9 @@ public class TransmitController extends BaseController {
         if (roleApiService.remove(queryWrapper)) {
             List<String> userList = authServiceClient.getRoleUserList(request.getData().getRoleId());
             List<String> agentIds = userServiceClient.getUserAgentIds(userList);
-            if(ObjectUtil.isNotEmpty(agentIds)){
+            if (ObjectUtil.isNotEmpty(agentIds)) {
                 Set<String> removeData = new HashSet<>(agentIds);
-                removeData.forEach(x-> redisTemplate.delete(CommonConstant.TOKEN_CODE +x));
+                removeData.forEach(x -> redisTemplate.delete(CommonConstant.TOKEN_CODE + x));
             }
             return successResponse(GlobalStatusCode.SUCCESS);
         } else {
@@ -227,9 +224,8 @@ public class TransmitController extends BaseController {
      */
     @PostMapping("/api/getClientApiList")
     @Permission(action = Action.Skip)
-    public List<String> getClientApiList(@RequestParam("agentId") String agentId) {
-
-        return clientApiService.getClientApiList(agentId);
+    public List<String> getClientApiList(@RequestParam("clientId") Long clientId) {
+        return clientApiService.getClientApiList(clientId);
     }
 
     /**
@@ -241,6 +237,39 @@ public class TransmitController extends BaseController {
 
         List<ApiEntityDto> clientApiPermission = clientApiService.getClientApiPermissions(request.getData().getId());
         return successResponse(clientApiPermission);
+    }
+
+    /**
+     * 接口授权
+     *
+     * @param request
+     * @return
+     */
+    @PostMapping("/grant")
+    @Permission(action = Action.Skip)
+    public BaseResponse clientGrant(@Valid @RequestBody BaseRequest<ClientApiEntity> request) {
+        return successResponse(clientApiService.save(request.getData()));
+    }
+
+    /**
+     * 取消接口授权
+     *
+     * @param request
+     * @return
+     */
+    @PostMapping("/revoke")
+    @Permission(action = Action.Skip)
+    public BaseResponse clientRevoke(@Valid @RequestBody BaseRequest<ClientApiEntity> request) {
+        QueryWrapper<ClientApiEntity> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("client_id", request.getData().getClientId());
+        queryWrapper.eq("api_id", request.getData().getApiId());
+        if (clientApiService.remove(queryWrapper)) {
+
+            redisTemplate.delete(CommonConstant.API_TOKEN_CODE + request.getData().getAgentId());
+            return successResponse(GlobalStatusCode.SUCCESS);
+        } else {
+            return failedResponse(GlobalStatusCode.FAILED);
+        }
     }
 
 }

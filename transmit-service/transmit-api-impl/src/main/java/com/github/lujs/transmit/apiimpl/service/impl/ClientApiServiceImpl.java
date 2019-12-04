@@ -19,9 +19,9 @@ import java.util.List;
 public class ClientApiServiceImpl extends ServiceImpl<ClientApiMapper, ClientApiEntity> implements ClientApiService {
 
     @Override
-    public List<String> getClientApiList(String agentId) {
+    public List<String> getClientApiList(Long clientId) {
 
-        List<String> clientApiList = baseMapper.getClientApiCodes(agentId);
+        List<String> clientApiList = baseMapper.getClientApiCodes(clientId);
         if (null != clientApiList) {
             return clientApiList;
         }

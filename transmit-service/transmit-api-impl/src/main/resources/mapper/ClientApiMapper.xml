@@ -3,7 +3,11 @@
 <mapper namespace="com.github.lujs.transmit.apiimpl.mapper.ClientApiMapper">
 
     <select id="getClientApiCodes" resultType="java.lang.String">
-      select id from tb_client_api
+      select permission_code
+      from tb_api a
+      LEFT JOIN  tb_client_api_rel rel
+      ON a.id = rel.api_id
+      WHERE rel.client_id = #{clientId}
    </select>
 
     <select id="getClientApiPermissions" resultType="com.github.lujs.transmit.api.model.ApiEntityDto">

@@ -21,8 +21,9 @@ public class JwtUtil {
     public static final String SECRET = "qazwsx123444$#%#()*&& asdaswwi1235 ?;!@#kmmmpom in***xx**&";
     public static final String TOKEN_PREFIX = "Bearer";
     public static final String HEADER_AUTH = "Authorization";
+    public static final String API_REQ = "apiKey";
 
-    public static Map<String, String> validateToken(String token) {
+    public static Map<String, String> validateToken(String token,boolean flag) {
         //判断token是否为空
         if (StringUtils.isNotEmpty(token)) {
             HashMap<String, String> map = new HashMap<String, String>();
@@ -37,7 +38,12 @@ public class JwtUtil {
             String id = body.get("id").toString();
             String userName = body.get("user").toString();
             //从缓存获取
-            String redisToken = (String) RedisUtil.get(CommonConstant.TOKEN_CODE + userName);
+            String redisToken;
+            if(flag){
+                redisToken = (String) RedisUtil.get(CommonConstant.TOKEN_CODE + userName);
+            }else {
+                redisToken = (String) RedisUtil.get(CommonConstant.API_TOKEN_CODE + userName);
+            }
             //判断token是否合法
             if (StringUtils.isEmpty(userName)) {
                 throw new PermissionException(PermissionStatusCode.TOKEN_ILLEGAL);
@@ -56,6 +62,7 @@ public class JwtUtil {
         }
     }
 
+
     /**
      * 去除token
      * @param token 用户token
@@ -70,5 +77,6 @@ public class JwtUtil {
         RedisUtil.delete(CommonConstant.TOKEN_CODE + userName + id);
         RedisUtil.delete(userName+"Menu");
     }
+
 
 }
