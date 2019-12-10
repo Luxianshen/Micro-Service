@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.github.lujs.model.request.PrimaryKeyRequest;
 import com.github.lujs.transmit.api.model.ApiEntity;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * @Description:
  * @Author lujs
@@ -21,4 +23,5 @@ public interface TransmitService extends IService<ApiEntity> {
     Boolean deleteById(ApiEntity apiEntity);
 
     Boolean updateApi(ApiEntity apiEntity);
+
 }

@@ -1,10 +1,8 @@
 package com.github.lujs.intercepter;
 
-import com.github.lujs.Exception.PermissionException;
 import com.github.lujs.Exception.status.PermissionStatusCode;
 import com.github.lujs.constant.CommonConstant;
 import com.github.lujs.user.api.model.UserClientInfo;
-import com.github.lujs.user.api.model.UserInfo;
 import com.github.lujs.utils.RedisUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -13,9 +11,8 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.io.PrintWriter;
+import java.util.*;
 
 /**
  * @Describe: 用户权限拦截器
@@ -27,7 +24,7 @@ import java.util.List;
 @Slf4j
 public class ApiContextInterceptor extends HandlerInterceptorAdapter {
 
-    private static List<String> whiteRoute = new ArrayList<String>(Arrays.asList("localhost"));
+    private static List<String> whiteRoute = new ArrayList<String>(Arrays.asList("localhost","127.0.0.1:8078"));
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -47,11 +44,13 @@ public class ApiContextInterceptor extends HandlerInterceptorAdapter {
             //判断权限
             if (null == apiPermissionList || !validatePermission(apiPermissionList, apiKey)) {
                 log.info("no permission access service, please check!");
-                throw new PermissionException(PermissionStatusCode.NO_PERMISSION);
+                sendMessage(response,PermissionStatusCode.NO_PERMISSION);
+                return false;
             }
             return true;
         }
-        throw new PermissionException(PermissionStatusCode.NO_TOKEN);
+        sendMessage(response,PermissionStatusCode.NO_TOKEN);
+        return false;
     }
 
     /**
@@ -82,6 +81,17 @@ public class ApiContextInterceptor extends HandlerInterceptorAdapter {
             return true;
         }
         return false;
+    }
+
+    public static void sendMessage(HttpServletResponse response, PermissionStatusCode statusCode) throws Exception {
+
+        response.setCharacterEncoding("utf-8");
+        response.setContentType("application/json; charset=utf-8");
+        PrintWriter writer = response.getWriter();
+        Map<String, String> map = new HashMap<>();
+        map.put("status",statusCode.code().toString());
+        map.put("msg", statusCode.text());
+        writer.write(map.toString());
     }
 
 

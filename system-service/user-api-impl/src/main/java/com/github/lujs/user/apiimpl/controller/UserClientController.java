@@ -101,7 +101,7 @@ public class UserClientController extends BaseController {
         UserClient checkClient = userClientService.getClientByAgentId(userClientInfo.getAgentId());
         if (null != checkClient) {
             //比较加密串
-            String checkAuth = DigestUtils.md5Hex("agentId=" + checkClient.getAgentId() + "&randomStr=" + userClientInfo.getAgentAuth() +
+            String checkAuth = DigestUtils.md5Hex("agentId=" + checkClient.getAgentId() + "&agentAuth=" + userClientInfo.getAgentAuth() +
                     "&randomStr=" + userClientInfo.getRandomStr() + "&key=" + checkClient.getMacKey());
             if (checkAuth.equals(userClientInfo.getSign())) {
                 return checkClient;

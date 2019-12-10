@@ -8,9 +8,9 @@ spring:
       discovery:
         server-addr: 49.233.171.48:8848
     gateway:
+      enabled: true
       discovery:
         locator:
-          enabled: true
           lower-case-service-id: true
       routes:
         - id: user_route
@@ -29,15 +29,30 @@ spring:
           uri: lb://transmit-service
           predicates:
             - Path=/transmit/**
-#redis
+    sentinel:
+      datasource:
+        ds:
+          nacos:
+            server-addr: 49.233.171.48:8848
+            data-id: transmit-flow
+            group-id: DEFAULT_GROUP
+            ruleType: gw-flow
+      transport:
+        dashboard: localhost:8080
+      filter:
+        enabled: true
+      scg.fallback:
+        mode: response
+        response-status: 444
+        response-body: '流量太大，被限流啦！'
+      scg:
+        order: -100
+  #redis
   redis:
     host: 127.0.0.1
     port: 6379
     password: 123456
-    config:
-      maxTotal: 400
-      maxIdle: 10
-      maxWaitMillis: 100000
+
 #开启端点 2.0版本默认不开启监控端口
 management:
   endpoints:
@@ -45,5 +60,5 @@ management:
       exposure:
         include: '*'
   security:
-   basic:
-    enabled: false
+    basic:
+      enabled: false

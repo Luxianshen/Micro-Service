@@ -21,11 +21,6 @@
 			<artifactId>spring-cloud-starter-gateway</artifactId>
 		</dependency>
 		<!--nacos相关-->
-		<dependency>
-			<groupId>com.alibaba.nacos</groupId>
-			<artifactId>nacos-client</artifactId>
-			<version>0.6.2</version>
-		</dependency>
         <dependency>
             <groupId>com.github.lujs</groupId>
             <artifactId>common</artifactId>
@@ -42,6 +37,27 @@
 			<artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
 			<version>0.2.2.RELEASE</version>
 		</dependency>
-    </dependencies>
+		<!-- sentinel开始 -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-webflux</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.alibaba.cloud</groupId>
+			<artifactId>spring-cloud-starter-alibaba-sentinel</artifactId>
+			<version>2.1.1.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>com.alibaba.cloud</groupId>
+			<artifactId>spring-cloud-alibaba-sentinel-gateway</artifactId>
+			<version>2.1.1.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>com.alibaba.csp</groupId>
+			<artifactId>sentinel-datasource-nacos</artifactId>
+			<version>1.7.0</version>
+		</dependency>
+
+	</dependencies>
 
 </project>

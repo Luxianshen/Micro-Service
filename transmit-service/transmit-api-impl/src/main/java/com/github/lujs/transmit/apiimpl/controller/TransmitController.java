@@ -20,6 +20,7 @@ import com.github.lujs.transmit.api.service.RoleApiService;
 import com.github.lujs.transmit.api.service.TransmitService;
 import com.github.lujs.user.api.feign.UserServiceClient;
 import com.github.lujs.web.BaseController;
+import com.netflix.ribbon.proxy.annotation.Hystrix;
 import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -82,6 +83,7 @@ public class TransmitController extends BaseController {
 
     }
 
+    @Hystrix
     @RequestMapping("testPost")
     @Permission(action = Action.Skip)
     public Object testPost(HttpServletRequest request, @RequestBody Object o) {
@@ -116,6 +118,9 @@ public class TransmitController extends BaseController {
         //return sendPostRequest(apiEntity.getRealUrl(), requestEntity);
     }
 
+    private Object getDefaultValue(HttpServletRequest request, @RequestBody Object o) {
+        return failedResponse("接口压力太大");
+    }
 
     /**
      * 接口分页
