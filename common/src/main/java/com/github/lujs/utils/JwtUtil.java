@@ -18,6 +18,7 @@ import java.util.Map;
  */
 public class JwtUtil {
 
+
     public static final String SECRET = "qazwsx123444$#%#()*&& asdaswwi1235 ?;!@#kmmmpom in***xx**&";
     public static final String TOKEN_PREFIX = "Bearer";
     public static final String HEADER_AUTH = "Authorization";
@@ -26,7 +27,8 @@ public class JwtUtil {
     public static Map<String, String> validateToken(String token,boolean flag) {
         //判断token是否为空
         if (StringUtils.isNotEmpty(token)) {
-            HashMap<String, String> map = new HashMap<String, String>();
+            HashMap<String, String> map = new HashMap<String, String>(2);
+            String redisToken;
             //获取解析后的token body
             Map<String, Object> body;
             try{
@@ -38,7 +40,6 @@ public class JwtUtil {
             String id = body.get("id").toString();
             String userName = body.get("user").toString();
             //从缓存获取
-            String redisToken;
             if(flag){
                 redisToken = (String) RedisUtil.get(CommonConstant.TOKEN_CODE + userName);
             }else {
@@ -54,8 +55,8 @@ public class JwtUtil {
             map.put("id", id);
             map.put("user", userName);
             //刷新缓存
-            //RedisUtil.setExpire(CommonConstant.TOKEN_CODE + userName,5000L);
-            //RedisUtil.setExpire(CommonConstant.TOKEN_CODE + userName + id, 5000L);
+            RedisUtil.setExpire(CommonConstant.TOKEN_CODE + userName,5000L);
+            RedisUtil.setExpire(CommonConstant.TOKEN_CODE + userName + id, 5000L);
             return map;
         } else {
             throw new PermissionException(PermissionStatusCode.NO_TOKEN);

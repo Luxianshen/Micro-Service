@@ -17,13 +17,13 @@ import com.github.lujs.user.api.model.UserClient;
 import com.github.lujs.user.api.model.UserClientInfo;
 import com.github.lujs.user.api.model.UserInfo;
 import com.github.lujs.utils.JwtUtil;
-import com.github.lujs.utils.RedisUtil;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -35,15 +35,18 @@ import java.util.List;
  * @Date 2019/7/10 13:50
  */
 @Service
+//@AllArgsConstructor
 @Slf4j
 public class TokenServiceImpl implements TokenService {
 
     @Autowired
-    private  ValidCodeService validCodeService;
+    private RedisTemplate redisTemplate;
     @Autowired
-    private  UserServiceClient userServiceClient;
+    private ValidCodeService validCodeService;
     @Autowired
-    private  AuthServiceClient authServiceClient;
+    private UserServiceClient userServiceClient;
+    @Autowired
+    private AuthServiceClient authServiceClient;
     @Autowired
     private TransmitServiceClient transmitServiceClient;
 
@@ -82,10 +85,10 @@ public class TokenServiceImpl implements TokenService {
             String random = RandomUtil.randomString(5);
             String token = generateToken(random, user.getAgentId());
             //清除旧token
-            RedisUtil.delete(CommonConstant.TOKEN_CODE + user.getAgentId());
+            redisTemplate.delete(CommonConstant.TOKEN_CODE + user.getAgentId());
             //放置在redis key 前缀+token随机数+用户名
-            RedisUtil.set(CommonConstant.TOKEN_CODE + user.getAgentId(), token, 5000L);
-            RedisUtil.set(CommonConstant.TOKEN_CODE + user.getAgentId() + random, userInfo, 5000L);
+            redisTemplate.opsForValue().set(CommonConstant.TOKEN_CODE + user.getAgentId(), token, 5000L);
+            redisTemplate.opsForValue().set(CommonConstant.TOKEN_CODE + user.getAgentId() + random, userInfo, 5000L);
 
             return token;
         }
@@ -94,6 +97,7 @@ public class TokenServiceImpl implements TokenService {
 
     /**
      * 生成客户端token
+     *
      * @param userClient 客户端
      * @return token
      */
@@ -109,10 +113,10 @@ public class TokenServiceImpl implements TokenService {
         String random = RandomUtil.randomString(5);
         String token = generateToken(random, userClient.getAgentId());
         //清除旧token
-        RedisUtil.delete(CommonConstant.API_TOKEN_CODE + userClient.getAgentId());
+        redisTemplate.delete(CommonConstant.API_TOKEN_CODE + userClient.getAgentId());
         //放置在redis key 前缀+token随机数+用户名
-        RedisUtil.set(CommonConstant.API_TOKEN_CODE + userClient.getAgentId(), token, 5000L);
-        RedisUtil.set(CommonConstant.API_TOKEN_CODE + userClient.getAgentId() + random, userClientInfo, 5000L);
+        redisTemplate.opsForValue().set(CommonConstant.API_TOKEN_CODE + userClient.getAgentId(), token, 5000L);
+        redisTemplate.opsForValue().set(CommonConstant.API_TOKEN_CODE + userClient.getAgentId() + random, userClientInfo, 5000L);
 
         return token;
     }
@@ -125,10 +129,10 @@ public class TokenServiceImpl implements TokenService {
      */
     private User normalLogin(LoginInfo loginInfo) {
         //获取用户信息
-        User user = userServiceClient.checkUserLoginInfo(loginInfo.getUserName(),loginInfo.getPassWord());
-        if (user != null ) {
+        User user = userServiceClient.checkUserLoginInfo(loginInfo.getUserName(), loginInfo.getPassWord());
+        if (user != null) {
             return user;
-        }else {
+        } else {
             throw new BaseException(GlobalStatusCode.OBJECT_IS_NOT_EXIST);
         }
     }
@@ -161,6 +165,5 @@ public class TokenServiceImpl implements TokenService {
                 .signWith(SignatureAlgorithm.HS512, JwtUtil.SECRET).compact();
         return JwtUtil.TOKEN_PREFIX + " " + jwt;
     }
-
 
 }

@@ -25,7 +25,7 @@ public class CommonConfiguration extends WebMvcConfigurerAdapter {
      * 添加拦截器
      */
     @Override
-    public void addInterceptors(InterceptorRegistry registry){
+    public void addInterceptors(InterceptorRegistry registry) {
         //添加自定义用户拦截器
         registry.addInterceptor(new UserContextInterceptor());
     }
@@ -35,7 +35,7 @@ public class CommonConfiguration extends WebMvcConfigurerAdapter {
      */
     @LoadBalanced
     @Bean
-    public RestTemplate restTemplate(){
+    public RestTemplate restTemplate() {
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.getInterceptors().add(new RestTemplateUserContextInterceptor());
         return restTemplate;
