@@ -11,7 +11,7 @@ public interface ValidCodeService {
      * 验证 验证码
      * @return 创建结果
      */
-    public Boolean checkValidCode(String random, String validCode);
+    Boolean checkValidCode(String random, String validCode);
 
     /**
      * 保存 验证码

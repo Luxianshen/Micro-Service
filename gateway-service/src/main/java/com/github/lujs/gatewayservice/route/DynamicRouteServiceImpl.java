@@ -15,12 +15,11 @@ import reactor.core.publisher.Mono;
  * @Date: 2019/4/28 14:59
  * @Version: 1.0.0
  **/
-
 @Service
 public class DynamicRouteServiceImpl implements ApplicationEventPublisherAware {
 
     @Autowired
-    private RouteDefinitionWriter routeDefinitionWriter; //路由服务
+    private RouteDefinitionWriter routeDefinitionWriter;
 
     private ApplicationEventPublisher publisher;
 
@@ -32,7 +31,7 @@ public class DynamicRouteServiceImpl implements ApplicationEventPublisherAware {
     /**
      * 路由新增方法
      */
-    public String add(RouteDefinition definition){
+    public String add(RouteDefinition definition) {
         routeDefinitionWriter.save(Mono.just(definition)).subscribe();
         this.publisher.publishEvent(new RefreshRoutesEvent(this));
         return "success";
@@ -41,17 +40,17 @@ public class DynamicRouteServiceImpl implements ApplicationEventPublisherAware {
     /**
      * 路由更新方法
      */
-    public String update(RouteDefinition definition){
-        try{
+    public String update(RouteDefinition definition) {
+        try {
             //先旧删除路由
             this.routeDefinitionWriter.delete(Mono.just(definition.getId()));
-        }catch (Exception e){
-            return "update fail,not find route  routeId: "+definition.getId();
+        } catch (Exception e) {
+            return "update fail,not find route  routeId: " + definition.getId();
         }
-        try{
+        try {
             //更新路由
             this.routeDefinitionWriter.save(Mono.just(definition)).subscribe();
-        }catch (Exception e){
+        } catch (Exception e) {
             return "update route  fail";
         }
         return "success";
@@ -59,6 +58,7 @@ public class DynamicRouteServiceImpl implements ApplicationEventPublisherAware {
 
     /**
      * 路由删除方法
+     *
      * @param id
      * @return
      */

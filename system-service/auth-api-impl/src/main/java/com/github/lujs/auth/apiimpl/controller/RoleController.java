@@ -5,28 +5,26 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.lujs.annotation.Action;
 import com.github.lujs.annotation.Permission;
-import com.github.lujs.auth.api.model.Menu.Menu;
-import com.github.lujs.auth.api.model.Role.*;
+import com.github.lujs.auth.api.model.Role.Role;
+import com.github.lujs.auth.api.model.Role.RoleDto;
+import com.github.lujs.auth.api.model.Role.RolePermissionQuery;
+import com.github.lujs.auth.api.model.Role.VOrgTree;
 import com.github.lujs.auth.api.model.RoleMenu.RoleMenu;
 import com.github.lujs.auth.api.model.UserRole.UserRole;
 import com.github.lujs.auth.api.service.MenuService;
 import com.github.lujs.auth.api.service.RoleMenuService;
 import com.github.lujs.auth.api.service.RoleService;
 import com.github.lujs.auth.api.service.UserRoleService;
-import com.github.lujs.constant.GlobalStatusCode;
 import com.github.lujs.model.BaseRequest;
 import com.github.lujs.model.BaseResponse;
 import com.github.lujs.model.request.PageQuery;
 import com.github.lujs.model.request.PrimaryKeyRequest;
 import com.github.lujs.web.BaseController;
 import lombok.AllArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -139,11 +137,11 @@ public class RoleController extends BaseController {
      */
     @PostMapping("/authUserPage")
     @Permission(action = Action.Skip)
-    public BaseResponse authUserPage(@RequestBody BaseRequest<PageQuery<RoleDto,RoleDto>> request) {
+    public BaseResponse authUserPage(@RequestBody BaseRequest<PageQuery<RoleDto, RoleDto>> request) {
 
         IPage<RoleDto> page = request.getData();
         RoleDto params = request.getData().getParams();
-        roleService.authUserPage(page,params);
+        roleService.authUserPage(page, params);
         return successResponse(page);
     }
 

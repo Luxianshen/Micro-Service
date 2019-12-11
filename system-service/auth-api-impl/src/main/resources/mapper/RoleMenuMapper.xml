@@ -6,5 +6,6 @@
       select menu_id as menuId
       from tb_role_menu_rel
       where role_id = #{roleId}
+      and menu_id is not null
    </select>
 </mapper>

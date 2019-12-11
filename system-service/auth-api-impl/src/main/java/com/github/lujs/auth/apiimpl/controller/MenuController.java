@@ -1,28 +1,28 @@
 package com.github.lujs.auth.apiimpl.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.lujs.annotation.Action;
 import com.github.lujs.annotation.Permission;
 import com.github.lujs.auth.api.model.Menu.Menu;
-import com.github.lujs.auth.api.model.Role.*;
-import com.github.lujs.auth.api.model.RoleMenu.RoleMenu;
-import com.github.lujs.auth.api.model.UserRole.UserRole;
+import com.github.lujs.auth.api.model.Role.RoleQuery;
 import com.github.lujs.auth.api.service.MenuService;
 import com.github.lujs.auth.api.service.RoleMenuService;
 import com.github.lujs.auth.api.service.RoleService;
 import com.github.lujs.auth.api.service.UserRoleService;
+import com.github.lujs.constant.CommonConstant;
 import com.github.lujs.constant.GlobalStatusCode;
 import com.github.lujs.model.BaseRequest;
 import com.github.lujs.model.BaseResponse;
-import com.github.lujs.model.request.PageQuery;
 import com.github.lujs.model.request.PrimaryKeyRequest;
 import com.github.lujs.web.BaseController;
 import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -66,7 +66,7 @@ public class MenuController extends BaseController {
     @Permission(action = Action.Skip)
     @RequestMapping(value = "/userMenu")
     public BaseResponse userMenu(HttpServletRequest request) {
-        String agentId = request.getHeader("x-user-name");
+        String agentId = request.getHeader(CommonConstant.REQUEST_NAME_HEADER);
         if (StringUtils.isNotEmpty(agentId)) {
             return successResponse(redisTemplate.opsForValue().get(agentId + "Menu"));
         }

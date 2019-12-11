@@ -12,9 +12,9 @@ import com.github.lujs.user.api.model.User;
 
 public interface UserService extends IService<User> {
 
-    public User getUserByAgentId(String agentId);
+    User getUserByAgentId(String agentId);
 
-    public User checkUserLoginInfo(String agentId,String agentAuth);
+    User checkUserLoginInfo(String agentId,String agentAuth);
 
     /**
      * 注册用户

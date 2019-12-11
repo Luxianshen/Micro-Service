@@ -25,18 +25,19 @@ public class DynamicRouteServiceImplByNacos {
     @Autowired
     private DynamicRouteServiceImpl dynamicRouteService;
 
-    public DynamicRouteServiceImplByNacos(){
+    public DynamicRouteServiceImplByNacos() {
 
         dynamicRouteByNacosListener(Global.getConfig("nacos.dataId"), Global.getConfig("nacos.group"));
     }
 
     /**
      * 监听自动触发
+     *
      * @param dataId config id
      * @param group  config group
      */
     private void dynamicRouteByNacosListener(String dataId, String group) {
-        try{
+        try {
             //注册配置
             ConfigService configService = NacosFactory.createConfigService(Global.getConfig("nacos.url"));
             //设置监听事件
@@ -48,13 +49,13 @@ public class DynamicRouteServiceImplByNacos {
 
                 @Override
                 public void receiveConfigInfo(String configInfo) {
-                     //获取到配置，对路由进行更新
-                    RouteDefinition definition = JSON.parseObject(configInfo,RouteDefinition.class);
+                    //获取到配置，对路由进行更新
+                    RouteDefinition definition = JSON.parseObject(configInfo, RouteDefinition.class);
                     dynamicRouteService.update(definition);
                 }
             });
-        }catch (NacosException e){
-            System.err.println("路由更新出错："+e.getErrMsg());
+        } catch (NacosException e) {
+            System.err.println("路由更新出错：" + e.getErrMsg());
         }
     }
 }

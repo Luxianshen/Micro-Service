@@ -1,6 +1,5 @@
 package com.github.lujs.user.api.model;
 
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.github.lujs.persistence.BaseEntity;
 import lombok.Data;

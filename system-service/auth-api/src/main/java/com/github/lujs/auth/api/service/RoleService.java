@@ -22,10 +22,7 @@ public interface RoleService extends IService<Role> {
     List<String> getUserRoleList(Long userId);
 
     /**
-     *
-     *
-     * @param agentId
-     * @param roles
+     * @param roleQuery 角色查询实体
      * @return
      */
     List<String> getUserPermissionList(RoleQuery roleQuery);

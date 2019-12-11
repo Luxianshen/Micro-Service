@@ -75,6 +75,11 @@ public class Menu extends BaseEntity {
     @JsonSerialize(using = ToStringSerializer.class)
     private Long sysId;
 
+    /**
+     * 是否隐藏
+     */
+    private Integer hidden;
+
     private String redirect;
 
     /**

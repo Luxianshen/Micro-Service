@@ -2,8 +2,8 @@ package com.github.lujs.auth.apiimpl.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.lujs.auth.api.model.Menu.Menu;
-import com.github.lujs.auth.apiimpl.mapper.MenuMapper;
 import com.github.lujs.auth.api.service.MenuService;
+import com.github.lujs.auth.apiimpl.mapper.MenuMapper;
 import org.springframework.stereotype.Service;
 
 /**

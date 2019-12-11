@@ -2,6 +2,7 @@ package com.github.lujs.gatewayservice.filter;
 
 import com.github.lujs.Exception.PermissionException;
 import com.github.lujs.Exception.status.PermissionStatusCode;
+import com.github.lujs.constant.CommonConstant;
 import com.github.lujs.utils.JwtUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
@@ -46,9 +47,9 @@ public class AuthFilter implements GlobalFilter, Ordered {
         //检验是否本系统用户
         if(StringUtils.isNotEmpty(userMap.get("user"))){
             //携带用户信息 访问信息
-            mutate.header("x-user-id", userMap.get("id"));
-            mutate.header("x-user-name", userMap.get("user"));
-            mutate.header("x-user-host", reqHost);
+            mutate.header(CommonConstant.REQUEST_ID_HEADER, userMap.get("id"));
+            mutate.header(CommonConstant.REQUEST_NAME_HEADER, userMap.get("user"));
+            mutate.header(CommonConstant.REQUEST_HOST_HEADER, reqHost);
         }else{
             throw new PermissionException(PermissionStatusCode.TOKEN_ILLEGAL);
         }

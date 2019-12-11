@@ -1,5 +1,7 @@
 package com.github.lujs.gatewayservice.model;
 
+import lombok.Data;
+
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -9,6 +11,7 @@ import java.util.Map;
  * @Date: 2019/4/28 14:42
  * @Version: 1.0.0
  **/
+@Data
 public class GatewayPredicateDefinition {
 
     /**
@@ -21,19 +24,4 @@ public class GatewayPredicateDefinition {
      */
     private Map<String, String> args = new LinkedHashMap<>();
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Map<String, String> getArgs() {
-        return args;
-    }
-
-    public void setArgs(Map<String, String> args) {
-        this.args = args;
-    }
 }

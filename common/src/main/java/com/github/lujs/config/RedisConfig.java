@@ -29,15 +29,14 @@ public class RedisConfig extends CachingConfigurerSupport {
 
     /**
      * RedisTemplate配置
+     *
      * @param factory
      * @return
      */
     @Bean
     public RedisTemplate<String, String> redisTemplate(RedisConnectionFactory factory) {
         StringRedisTemplate template = new StringRedisTemplate(factory);
-
         template.setValueSerializer(fastJson2JsonRedisSerializer());
-
         template.afterPropertiesSet();
         return template;
     }

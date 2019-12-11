@@ -65,8 +65,8 @@ public class UserContextInterceptor extends HandlerInterceptorAdapter {
      * @return 用户信息
      */
     private UserInfo getUserInfo(HttpServletRequest request) {
-        String id = request.getHeader("x-user-id");
-        String name = request.getHeader("x-user-name");
+        String id = request.getHeader(CommonConstant.REQUEST_ID_HEADER);
+        String name = request.getHeader(CommonConstant.REQUEST_NAME_HEADER);
         if (StringUtils.isNotEmpty(name)) {
             String tokenKey = CommonConstant.TOKEN_CODE + name + id;
             return (UserInfo) RedisUtil.get(tokenKey);

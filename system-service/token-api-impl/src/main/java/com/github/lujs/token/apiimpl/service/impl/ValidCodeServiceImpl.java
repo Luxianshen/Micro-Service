@@ -27,11 +27,11 @@ public class ValidCodeServiceImpl implements ValidCodeService {
 
 
     @Override
-    public Boolean checkValidCode(String random,String validCode) {
-        if(StringUtils.isNotEmpty(validCode)){
-            String code = (String) RedisUtil.get(CommonConstant.SYS_CODE+random);
-            if(StringUtils.isNotEmpty(code) && code.equals(validCode)){
-                redisTemplate.delete(CommonConstant.SYS_CODE+random);
+    public Boolean checkValidCode(String random, String validCode) {
+        if (StringUtils.isNotEmpty(validCode)) {
+            String code = (String) RedisUtil.get(CommonConstant.SYS_CODE + random);
+            if (StringUtils.isNotEmpty(code) && code.equals(validCode)) {
+                redisTemplate.delete(CommonConstant.SYS_CODE + random);
                 return true;
             }
         }
@@ -41,6 +41,6 @@ public class ValidCodeServiceImpl implements ValidCodeService {
     @Override
     public void saveImageCode(String random, String text) {
         //保存验证码
-        RedisUtil.set(CommonConstant.SYS_CODE+random, text, timeout);
+        RedisUtil.set(CommonConstant.SYS_CODE + random, text, timeout);
     }
 }

@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.lujs.user.api.model.UserClient;
 import com.github.lujs.user.api.service.UserClientService;
 import com.github.lujs.user.apiimpl.mapper.UserClientMapper;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.stereotype.Service;
@@ -15,7 +14,6 @@ import org.springframework.stereotype.Service;
  * @Author lujs
  * @Date 2019/7/11 9:53
  */
-@AllArgsConstructor
 @Service
 @Slf4j
 public class UserClientServiceImpl extends ServiceImpl<UserClientMapper, UserClient> implements UserClientService {

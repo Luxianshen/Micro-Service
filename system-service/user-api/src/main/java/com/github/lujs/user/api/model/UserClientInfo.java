@@ -1,6 +1,5 @@
 package com.github.lujs.user.api.model;
 
-import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;

@@ -1,11 +1,11 @@
 package com.github.lujs.constant;
 
-
 import com.github.lujs.model.enums.ValueEnum;
 
 /**
  * 全局异常状态码
- * @author mobinchao
+ *
+ * @author Lujs
  */
 public enum GlobalStatusCode implements ValueEnum {
 

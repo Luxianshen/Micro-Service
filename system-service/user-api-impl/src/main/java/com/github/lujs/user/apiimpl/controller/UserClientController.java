@@ -13,7 +13,6 @@ import com.github.lujs.user.api.service.UserClientService;
 import com.github.lujs.web.BaseController;
 import lombok.AllArgsConstructor;
 import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

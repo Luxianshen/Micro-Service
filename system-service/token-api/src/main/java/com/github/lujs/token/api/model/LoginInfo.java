@@ -10,16 +10,28 @@ import lombok.Data;
 @Data
 public class LoginInfo {
 
-    //账号
+    /**
+     * 账号
+     */
     private String userName;
-    //密码
+    /**
+     * 密码
+     */
     private String passWord;
-    //验证码
+    /**
+     * 验证码
+     */
     private String validCode;
-    //短信验证码
+    /**
+     * 短信验证码
+     */
     private String msgValidCode;
-    //登陆类型
+    /**
+     * 登陆类型
+     */
     private Integer loginType;
-    //随机码
+    /**
+     * 随机码
+     */
     private String randomStr;
 }

@@ -4,7 +4,6 @@ package com.github.lujs.util;
 import com.github.lujs.user.api.model.UserInfo;
 
 import java.util.List;
-import java.util.Set;
 
 /**
  * @Describe: 用户权限验证工具

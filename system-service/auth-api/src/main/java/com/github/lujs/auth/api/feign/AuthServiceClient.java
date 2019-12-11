@@ -3,12 +3,9 @@ package com.github.lujs.auth.api.feign;
 import com.github.lujs.auth.api.feign.hystrix.AuthServiceHystrix;
 import com.github.lujs.auth.api.model.Role.RoleQuery;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
 import java.util.List;
 
 /**
@@ -16,7 +13,7 @@ import java.util.List;
  * @Author lujs
  * @Date 2019/11/13 15:17
  */
-@FeignClient(name = "auth-service",fallback = AuthServiceHystrix.class)
+@FeignClient(name = "auth-service", fallback = AuthServiceHystrix.class)
 public interface AuthServiceClient {
 
     /**

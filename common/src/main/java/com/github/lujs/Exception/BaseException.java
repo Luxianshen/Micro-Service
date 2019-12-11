@@ -1,6 +1,5 @@
 package com.github.lujs.Exception;
 
-
 import com.github.lujs.model.enums.ValueEnum;
 
 /**

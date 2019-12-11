@@ -30,6 +30,7 @@ spring:
           predicates:
             - Path=/transmit/**
     sentinel:
+      eager: true
       datasource:
         ds:
           nacos:
@@ -38,7 +39,7 @@ spring:
             group-id: DEFAULT_GROUP
             ruleType: gw-flow
       transport:
-        dashboard: localhost:8080
+        dashboard: 127.0.0.1:8080
       filter:
         enabled: true
       scg.fallback:

@@ -1,16 +1,16 @@
 package com.github.lujs.common;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.NoSuchElementException;
-import java.util.Properties;
-
 import cn.hutool.core.io.IoUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.NoSuchElementException;
+import java.util.Properties;
 
 /**
  * @Describe: 配置文件加载类
@@ -132,8 +132,6 @@ public class PropertiesLoader {
         Properties props = new Properties();
 
         for (String location : resourcesPaths) {
-
-//			logger.debug("Loading properties file from:" + location);
 
             InputStream is = null;
             try {

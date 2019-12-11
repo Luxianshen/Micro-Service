@@ -15,11 +15,11 @@ public interface TokenService {
      * @param loginInfo 登陆信息
      * @return token
      */
-    public String login(LoginInfo loginInfo);
+    String login(LoginInfo loginInfo);
 
     /**
      * 生成客户端token
-     * @param agentId 客户端Id
+     * @param userClient 客户端
      * @return token
      */
     String generateClientToken(UserClient userClient);

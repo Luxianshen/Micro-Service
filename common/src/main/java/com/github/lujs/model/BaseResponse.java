@@ -1,6 +1,5 @@
 package com.github.lujs.model;
 
-import com.alibaba.fastjson.annotation.JSONType;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.github.lujs.constant.GlobalStatusCode;
 import com.github.lujs.model.enums.ValueEnum;

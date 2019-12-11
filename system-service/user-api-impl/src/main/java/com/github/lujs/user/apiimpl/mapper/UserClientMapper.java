@@ -1,7 +1,6 @@
 package com.github.lujs.user.apiimpl.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.github.lujs.user.api.model.User;
 import com.github.lujs.user.api.model.UserClient;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;

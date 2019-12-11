@@ -29,7 +29,6 @@ public class Global {
 
     /**
      * 获取配置
-     * @see getConfig('adminPath')
      */
     public static String getConfig(String key) {
         key = key.trim();

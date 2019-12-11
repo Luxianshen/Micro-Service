@@ -3,7 +3,6 @@ package com.github.lujs.auth.apiimpl.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.github.lujs.auth.api.model.Role.Role;
-
 import com.github.lujs.auth.api.model.Role.RoleDto;
 import com.github.lujs.auth.api.model.Role.VOrgTree;
 import org.apache.ibatis.annotations.Mapper;

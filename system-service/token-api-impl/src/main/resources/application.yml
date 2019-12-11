@@ -16,5 +16,5 @@ spring:
 
 #验证码开关
 validCode:
-  flag: false
-  timeout: 60
+   flag: false
+   timeout: 60

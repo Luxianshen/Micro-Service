@@ -4,8 +4,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.github.lujs.auth.api.model.Menu.Menu;
 import org.apache.ibatis.annotations.Mapper;
 
-import java.util.List;
-
 /**
  * @Description: 菜单mapper
  * @Author: lujs
@@ -15,5 +13,4 @@ import java.util.List;
 @Mapper
 public interface MenuMapper extends BaseMapper<Menu> {
 
-    List<Menu> findByRole(String role);
 }

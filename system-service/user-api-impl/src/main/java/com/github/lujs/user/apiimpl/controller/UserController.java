@@ -50,7 +50,7 @@ public class UserController extends BaseController {
         String agentId = request.getHeader("x-user-name");
         if (StringUtils.isNotEmpty(agentId)) {
             return successResponse(userService.getUserByAgentId(agentId));
-        }else {
+        } else {
             return failedResponse("用户不存在！");
         }
     }
@@ -120,7 +120,7 @@ public class UserController extends BaseController {
             return new ArrayList<>();
         }
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-        queryWrapper.in("id",userIds);
+        queryWrapper.in("id", userIds);
         return userService.list(queryWrapper).stream().map(User::getAgentId).collect(Collectors.toList());
     }
 

@@ -6,7 +6,6 @@ import com.github.lujs.user.api.service.UserService;
 import com.github.lujs.user.apiimpl.mapper.UserMapper;
 import com.github.lujs.utils.SysUtils;
 import com.github.lujs.utils.ToolSecurityPbkdf2;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +17,6 @@ import java.security.spec.InvalidKeySpecException;
  * @Author lujs
  * @Date 2019/7/11 9:53
  */
-@AllArgsConstructor
 @Service
 @Slf4j
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {

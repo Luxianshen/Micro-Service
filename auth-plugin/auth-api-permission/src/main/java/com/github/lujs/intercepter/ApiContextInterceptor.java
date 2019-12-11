@@ -24,19 +24,22 @@ import java.util.*;
 @Slf4j
 public class ApiContextInterceptor extends HandlerInterceptorAdapter {
 
+    /**
+     * 本地转发 或者网关转发
+     */
     private static List<String> whiteRoute = new ArrayList<String>(Arrays.asList("localhost","127.0.0.1:8078"));
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
         //过滤白名单 x-user-host为空 即feign内部调用
-        if (whiteRoute.contains(request.getHeader("x-user-host")) || StringUtils.isEmpty(request.getHeader("x-user-host"))) {
+        if (whiteRoute.contains(request.getHeader(CommonConstant.REQUEST_HOST_HEADER)) || StringUtils.isEmpty(request.getHeader(CommonConstant.REQUEST_HOST_HEADER))) {
             return true;
         }
         //获取当接口的权限
         String apiKey = request.getHeader("apiKey");
-        String id = request.getHeader("x-user-id");
-        String name = request.getHeader("x-user-name");
+        String id = request.getHeader(CommonConstant.REQUEST_ID_HEADER);
+        String name = request.getHeader(CommonConstant.REQUEST_NAME_HEADER);
         //存在访问路径
         if (!StringUtils.isAnyEmpty(apiKey, id, name)) {
             //查找用户信息

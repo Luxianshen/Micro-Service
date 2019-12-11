@@ -16,6 +16,7 @@ import com.github.lujs.user.api.model.User;
 import com.github.lujs.user.api.model.UserClient;
 import com.github.lujs.user.api.model.UserClientInfo;
 import com.github.lujs.user.api.model.UserInfo;
+import com.github.lujs.utils.JwtUtil;
 import com.github.lujs.utils.RedisUtil;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -48,9 +49,6 @@ public class TokenServiceImpl implements TokenService {
 
     @Value("${validCode.flag}")
     private Boolean validCodeRequired;
-
-    private static final String SECRET = "qazwsx123444$#%#()*&& asdaswwi1235 ?;!@#kmmmpom in***xx**&";
-    private static final String TOKEN_PREFIX = "Bearer";
 
     @Override
     public String login(LoginInfo loginInfo) {
@@ -160,10 +158,8 @@ public class TokenServiceImpl implements TokenService {
 
         //生成jwt token
         String jwt = Jwts.builder().setSubject("user info").setClaims(map)
-                .signWith(SignatureAlgorithm.HS512, SECRET).compact();
-        String finalJwt = TOKEN_PREFIX + " " + jwt;
-
-        return finalJwt;
+                .signWith(SignatureAlgorithm.HS512, JwtUtil.SECRET).compact();
+        return JwtUtil.TOKEN_PREFIX + " " + jwt;
     }
 
 

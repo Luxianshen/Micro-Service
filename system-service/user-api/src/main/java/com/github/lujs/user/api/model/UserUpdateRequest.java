@@ -9,7 +9,8 @@ import java.io.Serializable;
 
 /**
  * 用户信息更新vo
- * @author: binchao
+ *
+ * @author: Lujs
  * @date: 2019-01-31 15:16
  * @desc:
  */

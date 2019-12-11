@@ -78,5 +78,4 @@ public class JwtUtil {
         RedisUtil.delete(userName+"Menu");
     }
 
-
 }
