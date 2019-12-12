@@ -8,6 +8,7 @@ import com.github.lujs.model.BaseResponse;
 import com.github.lujs.token.api.model.LoginInfo;
 import com.github.lujs.token.api.service.TokenService;
 import com.github.lujs.token.api.service.ValidCodeService;
+import com.github.lujs.token.apiimpl.config.TokenProperties;
 import com.github.lujs.user.api.feign.UserServiceClient;
 import com.github.lujs.user.api.model.UserClient;
 import com.github.lujs.user.api.model.UserClientInfo;
@@ -38,6 +39,8 @@ import java.util.Map;
 @RequestMapping("/token")
 public class TokenController extends BaseController {
 
+    private final TokenProperties tokenProperties;
+
     private final TokenService targetService;
 
     private final Producer producer;
@@ -63,7 +66,7 @@ public class TokenController extends BaseController {
         String token = targetService.login(loginInfo);
         Map<String, Object> re = new HashMap<>();
         re.put("access_token", token);
-        re.put("expires_in", 5000);
+        re.put("expires_in", tokenProperties.getTokenTime());
         re.put("refresh_token", token);
         re.put("scope", "read");
         re.put("token_type", "bearer");

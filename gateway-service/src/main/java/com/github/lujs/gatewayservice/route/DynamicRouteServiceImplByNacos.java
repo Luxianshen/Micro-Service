@@ -18,7 +18,6 @@ import java.util.concurrent.Executor;
  * @Date: 2019/4/28 15:27
  * @Version: 1.0.0
  **/
-
 @Component
 public class DynamicRouteServiceImplByNacos {
 

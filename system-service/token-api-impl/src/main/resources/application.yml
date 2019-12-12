@@ -15,6 +15,7 @@ spring:
     password: 123456
 
 #验证码开关
-validCode:
-   flag: false
-   timeout: 60
+valid:
+   tokenTime: 3600
+   vaildFlag: false
+   vaildTime: 60

@@ -10,19 +10,21 @@ import com.github.lujs.token.api.model.LoginInfo;
 import com.github.lujs.token.api.model.enums.LoginType;
 import com.github.lujs.token.api.service.TokenService;
 import com.github.lujs.token.api.service.ValidCodeService;
+import com.github.lujs.token.apiimpl.config.TokenProperties;
 import com.github.lujs.transmit.api.service.feign.TransmitServiceClient;
 import com.github.lujs.user.api.feign.UserServiceClient;
 import com.github.lujs.user.api.model.User;
 import com.github.lujs.user.api.model.UserClient;
 import com.github.lujs.user.api.model.UserClientInfo;
 import com.github.lujs.user.api.model.UserInfo;
-import com.github.lujs.utils.JwtUtil;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -35,28 +37,26 @@ import java.util.List;
  * @Date 2019/7/10 13:50
  */
 @Service
-//@AllArgsConstructor
+@AllArgsConstructor
 @Slf4j
 public class TokenServiceImpl implements TokenService {
 
-    @Autowired
-    private RedisTemplate redisTemplate;
-    @Autowired
-    private ValidCodeService validCodeService;
-    @Autowired
-    private UserServiceClient userServiceClient;
-    @Autowired
-    private AuthServiceClient authServiceClient;
-    @Autowired
-    private TransmitServiceClient transmitServiceClient;
+    private final TokenProperties tokenProperties;
 
-    @Value("${validCode.flag}")
-    private Boolean validCodeRequired;
+    private final RedisTemplate redisTemplate;
+
+    private final ValidCodeService validCodeService;
+
+    private final UserServiceClient userServiceClient;
+
+    private final AuthServiceClient authServiceClient;
+
+    private final TransmitServiceClient transmitServiceClient;
 
     @Override
     public String login(LoginInfo loginInfo) {
         //开启了验证码
-        if (validCodeRequired) {
+        if (tokenProperties.getValidFlag()) {
             Boolean result = validCodeService.checkValidCode(loginInfo.getRandomStr(), loginInfo.getValidCode());
             if (!result) {
                 throw new BaseException(GlobalStatusCode.INVALID_PARAMETER);
@@ -87,8 +87,8 @@ public class TokenServiceImpl implements TokenService {
             //清除旧token
             redisTemplate.delete(CommonConstant.TOKEN_CODE + user.getAgentId());
             //放置在redis key 前缀+token随机数+用户名
-            redisTemplate.opsForValue().set(CommonConstant.TOKEN_CODE + user.getAgentId(), token, 5000L);
-            redisTemplate.opsForValue().set(CommonConstant.TOKEN_CODE + user.getAgentId() + random, userInfo, 5000L);
+            redisTemplate.opsForValue().set(CommonConstant.TOKEN_CODE + user.getAgentId(), token, tokenProperties.getTokenTime());
+            redisTemplate.opsForValue().set(CommonConstant.TOKEN_CODE + user.getAgentId() + random, userInfo, tokenProperties.getTokenTime());
 
             return token;
         }
@@ -115,8 +115,8 @@ public class TokenServiceImpl implements TokenService {
         //清除旧token
         redisTemplate.delete(CommonConstant.API_TOKEN_CODE + userClient.getAgentId());
         //放置在redis key 前缀+token随机数+用户名
-        redisTemplate.opsForValue().set(CommonConstant.API_TOKEN_CODE + userClient.getAgentId(), token, 5000L);
-        redisTemplate.opsForValue().set(CommonConstant.API_TOKEN_CODE + userClient.getAgentId() + random, userClientInfo, 5000L);
+        redisTemplate.opsForValue().set(CommonConstant.API_TOKEN_CODE + userClient.getAgentId(), token, tokenProperties.getTokenTime());
+        redisTemplate.opsForValue().set(CommonConstant.API_TOKEN_CODE + userClient.getAgentId() + random, userClientInfo, tokenProperties.getTokenTime());
 
         return token;
     }
@@ -162,8 +162,8 @@ public class TokenServiceImpl implements TokenService {
 
         //生成jwt token
         String jwt = Jwts.builder().setSubject("user info").setClaims(map)
-                .signWith(SignatureAlgorithm.HS512, JwtUtil.SECRET).compact();
-        return JwtUtil.TOKEN_PREFIX + " " + jwt;
+                .signWith(SignatureAlgorithm.HS512, CommonConstant.SECRET).compact();
+        return CommonConstant.TOKEN_PREFIX + " " + jwt;
     }
 
 }

@@ -8,6 +8,7 @@ import com.github.lujs.transmit.api.model.RoleApiEntity;
 import com.github.lujs.transmit.api.service.RoleApiService;
 import com.github.lujs.transmit.api.service.TransmitService;
 import com.github.lujs.transmit.apiimpl.mapper.RoleApiMapper;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,11 +23,11 @@ import java.util.stream.Collectors;
  * @Author lujs
  * @Date 2019/11/26 11:49
  */
+@AllArgsConstructor
 @Service
 public class RoleApiServiceImpl extends ServiceImpl<RoleApiMapper, RoleApiEntity> implements RoleApiService {
 
-    @Autowired
-    private TransmitService transmitService;
+    private final TransmitService transmitService;
 
     @Override
     public List<String> getRoleApiList(RoleQuery roleQuery) {

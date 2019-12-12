@@ -5,6 +5,7 @@ import com.github.lujs.transmit.api.model.ApiEntityDto;
 import com.github.lujs.transmit.api.model.ClientApiEntity;
 import com.github.lujs.transmit.api.service.ClientApiService;
 import com.github.lujs.transmit.apiimpl.mapper.ClientApiMapper;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import java.util.List;
  * @Author lujs
  * @Date 2019/11/26 11:49
  */
+@AllArgsConstructor
 @Service
 public class ClientApiServiceImpl extends ServiceImpl<ClientApiMapper, ClientApiEntity> implements ClientApiService {
 

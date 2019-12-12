@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.lujs.auth.api.model.UserRole.UserRole;
 import com.github.lujs.auth.api.service.UserRoleService;
 import com.github.lujs.auth.apiimpl.mapper.UserRoleMapper;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ import java.util.List;
  * @Author lujs
  * @Date 2019/7/11 11:37
  */
+@AllArgsConstructor
 @Service
 public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> implements UserRoleService {
 

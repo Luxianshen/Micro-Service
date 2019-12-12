@@ -30,11 +30,6 @@ public class JwtUtil {
         JwtUtil.redisTemplate = redisTemplate;
     }
 
-    public static final String SECRET = "qazwsx123444$#%#()*&& asdaswwi1235 ?;!@#kmmmpom in***xx**&";
-    public static final String TOKEN_PREFIX = "Bearer";
-    public static final String HEADER_AUTH = "Authorization";
-    public static final String API_REQ = "apiKey";
-
     public static Map<String, String> validateToken(String token,boolean flag) {
         //判断token是否为空
         if (StringUtils.isNotEmpty(token)) {
@@ -43,8 +38,8 @@ public class JwtUtil {
             //获取解析后的token body
             Map<String, Object> body;
             try{
-                body = Jwts.parser().setSigningKey(SECRET)
-                        .parseClaimsJws(token.replace(TOKEN_PREFIX, "")).getBody();
+                body = Jwts.parser().setSigningKey(CommonConstant.SECRET)
+                        .parseClaimsJws(token.replace(CommonConstant.TOKEN_PREFIX, "")).getBody();
             }catch (Exception e){
                 throw new PermissionException(PermissionStatusCode.TOKEN_ILLEGAL);
             }
@@ -65,9 +60,9 @@ public class JwtUtil {
             }
             map.put("id", id);
             map.put("user", userName);
-            //刷新缓存
-            redisTemplate.expire(CommonConstant.TOKEN_CODE + userName,5000L,TimeUnit.SECONDS);
-            redisTemplate.expire(CommonConstant.TOKEN_CODE + userName + id, 5000L, TimeUnit.SECONDS);
+            //刷新缓存 默认续30分钟
+            redisTemplate.expire(CommonConstant.TOKEN_CODE + userName,3600L,TimeUnit.SECONDS);
+            redisTemplate.expire(CommonConstant.TOKEN_CODE + userName + id, 3600L, TimeUnit.SECONDS);
             return map;
         } else {
             throw new PermissionException(PermissionStatusCode.NO_TOKEN);
@@ -81,8 +76,8 @@ public class JwtUtil {
      */
     public static void removeToken(String token) {
         //获取解析后的token body
-        Map<String, Object> body = Jwts.parser().setSigningKey(SECRET)
-                .parseClaimsJws(token.replace(TOKEN_PREFIX, "")).getBody();
+        Map<String, Object> body = Jwts.parser().setSigningKey(CommonConstant.SECRET)
+                .parseClaimsJws(token.replace(CommonConstant.TOKEN_PREFIX, "")).getBody();
         String id = String.valueOf(body.get("id"));
         String userName = (String) body.get("user");
         JwtUtil.redisTemplate.delete(CommonConstant.TOKEN_CODE + userName);

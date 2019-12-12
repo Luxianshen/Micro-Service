@@ -2,10 +2,10 @@ package com.github.lujs.token.apiimpl.service.impl;
 
 import com.github.lujs.constant.CommonConstant;
 import com.github.lujs.token.api.service.ValidCodeService;
+import com.github.lujs.token.apiimpl.config.TokenProperties;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -15,15 +15,14 @@ import org.springframework.stereotype.Service;
  * @Date 2019/7/10 14:20
  */
 @Service
+@AllArgsConstructor
 @Slf4j
 public class ValidCodeServiceImpl implements ValidCodeService {
 
-    @Value("${validCode.timeout}")
-    private Long timeout;
 
-    @Autowired
-    private RedisTemplate<String,String> redisTemplate;
+    private final TokenProperties tokenProperties;
 
+    private final RedisTemplate<String,String> redisTemplate;
 
     @Override
     public Boolean checkValidCode(String random, String validCode) {
@@ -40,6 +39,6 @@ public class ValidCodeServiceImpl implements ValidCodeService {
     @Override
     public void saveImageCode(String random, String text) {
         //保存验证码
-        redisTemplate.opsForValue().set(CommonConstant.SYS_CODE + random, text, timeout);
+        redisTemplate.opsForValue().set(CommonConstant.SYS_CODE + random, text, tokenProperties.getValidTime());
     }
 }

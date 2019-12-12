@@ -1,5 +1,6 @@
 package com.github.lujs.auth.apiimpl.service.impl;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -7,11 +8,10 @@ import com.github.lujs.auth.api.model.Menu.Menu;
 import com.github.lujs.auth.api.model.Role.*;
 import com.github.lujs.auth.api.service.MenuService;
 import com.github.lujs.auth.api.service.RoleMenuService;
+import com.github.lujs.auth.api.service.RoleService;
 import com.github.lujs.auth.api.service.UserRoleService;
 import com.github.lujs.auth.apiimpl.mapper.RoleMapper;
-import com.github.lujs.auth.api.service.RoleService;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -23,20 +23,17 @@ import java.util.stream.Collectors;
  * @Author lujs
  * @Date 2019/7/11 11:36
  */
+@AllArgsConstructor
 @Service
 public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements RoleService {
 
-    @Autowired
-    private UserRoleService userRoleService;
+    private final UserRoleService userRoleService;
 
-    @Autowired
-    private RoleMenuService roleMenuService;
+    private final RoleMenuService roleMenuService;
 
-    @Autowired
-    private MenuService menuService;
+    private final MenuService menuService;
 
-    @Autowired
-    private RedisTemplate redisTemplate;
+    private final RedisTemplate redisTemplate;
 
     /**
      * 获取用户角色
@@ -67,7 +64,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
             //获取菜单
             QueryWrapper<Menu> menuQueryWrapper = new QueryWrapper<>();
             menuQueryWrapper.in("id", menuIds);
-            List<Menu> menuList = menuService.list(menuQueryWrapper).stream().filter(menu-> menu.getPid() != null).collect(Collectors.toList());
+            List<Menu> menuList = menuService.list(menuQueryWrapper).stream().filter(menu -> menu.getPid() != null).collect(Collectors.toList());
             //把菜单设置进缓存
             redisTemplate.opsForValue().set(roleQuery.getAgentId() + "Menu", getMenuTreeList(menuList, 1L));
             //获取菜单权限作为角色权限
@@ -126,7 +123,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         }
         if (null != tree) {
             tree.setChildren(children);
-        } else if (null == tree) {
+        } else if (ObjectUtil.isEmpty(tree)) {
             return children;
         }
         return null;

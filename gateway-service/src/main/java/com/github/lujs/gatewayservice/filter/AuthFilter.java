@@ -34,10 +34,10 @@ public class AuthFilter implements GlobalFilter, Ordered {
         ServerHttpRequest request = (ServerHttpRequest) exchange.getRequest();
         HttpHeaders header = request.getHeaders();
 
-        String token = header.getFirst(JwtUtil.HEADER_AUTH);
-        String reqHost = header.getFirst("Host");
+        String token = header.getFirst(CommonConstant.HEADER_AUTH);
+        String reqHost = header.getFirst(CommonConstant.REQ_HOST);
 
-        if(StringUtils.isEmpty(header.getFirst(JwtUtil.API_REQ))){
+        if(StringUtils.isEmpty(header.getFirst(CommonConstant.API_REQ))){
             userMap = JwtUtil.validateToken(token,true);
         }else {
             userMap = JwtUtil.validateToken(token,false);
