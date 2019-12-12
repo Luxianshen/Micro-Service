@@ -16,7 +16,7 @@ public enum GlobalStatusCode implements ValueEnum {
 
     USER_LOGOUT(401, "用户未登录"),
 
-    PERMISSION_DENY(403, "无权访问"),
+    PERMISSION_DENY(403, "127.0.0.1:8848"),
 
     RES_NOT_EXIST(404, "资源不存在"),
 

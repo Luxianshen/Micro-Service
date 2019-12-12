@@ -1,11 +1,16 @@
 /*
+Navicat MySQL Data Transfer
+
+Source Server         : 49.233.171.48
+Source Server Version : 50728
+Source Host           : 49.233.171.48:3306
 Source Database       : micro_service
 
 Target Server Type    : MYSQL
 Target Server Version : 50728
 File Encoding         : 65001
 
-Date: 2019-11-29 17:26:11
+Date: 2019-12-12 15:09:56
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -40,6 +45,50 @@ INSERT INTO `tb_api` VALUES ('1', null, '测试post接口', 'TESTPOST', 'http://
 INSERT INTO `tb_api` VALUES ('1199244318487085057', null, '测试get接口', 'TESTGET', 'http://localhost:8079/transmit/test1', '0', '1', '0', '10', 'test:get', '1', '2019-11-26 14:10:04', '2019-11-26 14:10:08', '0');
 
 -- ----------------------------
+-- Table structure for tb_client
+-- ----------------------------
+DROP TABLE IF EXISTS `tb_client`;
+CREATE TABLE `tb_client` (
+  `id` bigint(19) NOT NULL COMMENT '主键',
+  `agent_id` varchar(100) DEFAULT NULL COMMENT '用户名',
+  `agent_auth` varchar(255) DEFAULT NULL COMMENT '代理密码 md5加密字符串',
+  `mac_key` varchar(255) DEFAULT NULL COMMENT '客户端key',
+  `state` tinyint(2) DEFAULT '1' COMMENT '是否启用 0：否 1：是',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+  `deleted` tinyint(2) DEFAULT '0' COMMENT '是否删除 0：未删除 1：已删除',
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE KEY `admin_user_username_uk` (`agent_id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPACT COMMENT='系统用户信息';
+
+-- ----------------------------
+-- Records of tb_client
+-- ----------------------------
+INSERT INTO `tb_client` VALUES ('1', 'admin', '1', '超级管理员', '1', '2019-01-30 01:12:26', null, '0');
+INSERT INTO `tb_client` VALUES ('1201770602308136961', 'TestClient', 'e406412472641db5d0f42a45cc9ff415', '66a8848d9425c4e8e561937653cad6cc', '1', null, null, '0');
+
+-- ----------------------------
+-- Table structure for tb_client_api_rel
+-- ----------------------------
+DROP TABLE IF EXISTS `tb_client_api_rel`;
+CREATE TABLE `tb_client_api_rel` (
+  `id` bigint(19) NOT NULL,
+  `client_id` bigint(19) DEFAULT NULL COMMENT '角色id',
+  `api_id` bigint(19) DEFAULT NULL COMMENT '用户id',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+  `deleted` tinyint(2) DEFAULT '0' COMMENT '是否删除：0、未删除  1、已删除',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='机构用户关联表';
+
+-- ----------------------------
+-- Records of tb_client_api_rel
+-- ----------------------------
+INSERT INTO `tb_client_api_rel` VALUES ('1202042568055267329', '1', '1', null, null, '0');
+INSERT INTO `tb_client_api_rel` VALUES ('1202079144718209026', '1201770602308136961', '1199244318487085057', null, null, '0');
+INSERT INTO `tb_client_api_rel` VALUES ('1204690148119650305', '1201770602308136961', '1', null, null, '0');
+
+-- ----------------------------
 -- Table structure for tb_menu
 -- ----------------------------
 DROP TABLE IF EXISTS `tb_menu`;
@@ -60,6 +109,7 @@ CREATE TABLE `tb_menu` (
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
   `deleted` tinyint(2) DEFAULT '0' COMMENT '是否删除 0:未删除,1:已删除',
   `redirect` varchar(255) DEFAULT NULL,
+  `hidden` tinyint(2) DEFAULT '0' COMMENT '是否隐藏 @枚举 0否 1是',
   PRIMARY KEY (`id`) USING BTREE,
   KEY `sys_id` (`sys_id`,`permission_code`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPACT COMMENT='系统权限信息';
@@ -67,12 +117,16 @@ CREATE TABLE `tb_menu` (
 -- ----------------------------
 -- Records of tb_menu
 -- ----------------------------
-INSERT INTO `tb_menu` VALUES ('1094068184018956289', null, '系统管理', '系统管理', '1', '0', '/admin', 'admin', 'component', null, '0', 'Layout', '2019-02-09 10:59:16', null, '0', null);
-INSERT INTO `tb_menu` VALUES ('1094071492502704131', '1094068184018956289', '角色管理', '角色管理', '1', '0', 'role', 'admin:role', 'component', null, '0', 'views/admin/role/index', '2019-02-09 11:12:25', null, '0', null);
-INSERT INTO `tb_menu` VALUES ('1094071492502704132', '1094068184018956289', '菜单管理', '菜单管理', '1', '0', 'permission', 'admin:permission', 'component', null, '0', 'views/admin/permission/index', '2019-02-09 11:12:25', null, '0', null);
-INSERT INTO `tb_menu` VALUES ('1094071492502704133', '1094068184018956289', '授权管理', '授权管理', '1', '0', 'role/auth/:id', 'admin:role:auth', 'component', null, '0', 'views/admin/role/auth', '2019-02-09 11:12:25', null, '0', null);
-INSERT INTO `tb_menu` VALUES ('1094071492502704134', '1094068184018956289', '用户管理', '用户管理', '1', '0', 'user', 'admin:user', 'component', null, '0', 'views/admin/user/index', '2019-02-09 11:12:25', null, '0', null);
-INSERT INTO `tb_menu` VALUES ('1199167935111045121', '1094068184018956289', '接口管理', '接口管理', '1', '0', 'transmit', 'admin:transmit', 'component', null, '0', 'views/admin/transmit/index', '2019-11-26 03:28:10', null, '0', null);
+INSERT INTO `tb_menu` VALUES ('1', null, '网关系统', '网关系统', '1', '0', '', '', 'component', null, '0', '', '2019-02-09 10:59:16', null, '0', '', '0');
+INSERT INTO `tb_menu` VALUES ('1094068184018956289', '1', '系统管理', '系统管理', '1', '0', '/admin', 'admin', 'component', null, '0', 'Layout', '2019-02-09 10:59:16', null, '0', '', '0');
+INSERT INTO `tb_menu` VALUES ('1094068184018956290', '1', '客户端管理', '客户端管理', '1', '0', '/admin', 'admin', 'component', null, '0', 'Layout', '2019-02-09 10:59:16', null, '0', '', '0');
+INSERT INTO `tb_menu` VALUES ('1094071492502704131', '1094068184018956289', '角色管理', '角色管理', '1', '0', 'role', 'admin:role', 'component', null, '0', 'views/admin/role/index', '2019-02-09 11:12:25', null, '0', null, '0');
+INSERT INTO `tb_menu` VALUES ('1094071492502704132', '1094068184018956289', '菜单管理', '菜单管理', '1', '0', 'permission', 'admin:permission', 'component', null, '0', 'views/admin/permission/index', '2019-02-09 11:12:25', null, '0', null, '0');
+INSERT INTO `tb_menu` VALUES ('1094071492502704133', '1094068184018956289', '授权管理', '授权管理', '1', '0', 'role/auth/:id', 'admin:role:auth', 'component', null, '0', 'views/admin/role/auth', '2019-02-09 11:12:25', null, '0', null, '1');
+INSERT INTO `tb_menu` VALUES ('1094071492502704134', '1094068184018956289', '用户管理', '用户管理', '1', '0', 'user', 'admin:user', 'component', null, '0', 'views/admin/user/index', '2019-02-09 11:12:25', null, '0', null, '0');
+INSERT INTO `tb_menu` VALUES ('1199167935111045121', '1094068184018956289', '接口管理', '接口管理', '1', '0', 'transmit', 'admin:transmit', 'component', null, '0', 'views/admin/transmit/index', '2019-11-26 03:28:10', null, '0', null, '0');
+INSERT INTO `tb_menu` VALUES ('1199167935111045122', '1094068184018956290', '客户端列表', '客户端列表', '1', '0', 'userClient', 'admin:userClient', 'component', null, '0', 'views/admin/userClient/index', '2019-11-26 03:28:10', null, '0', null, '0');
+INSERT INTO `tb_menu` VALUES ('1199167935111045123', '1094068184018956290', '接口授权管理', '接口授权管理', '1', '0', 'userClient/auth/:id', 'admin:userClient:auth', 'component', null, '0', 'views/admin/userClient/auth', '2019-02-09 11:12:25', null, '0', null, '1');
 
 -- ----------------------------
 -- Table structure for tb_role
@@ -114,8 +168,8 @@ CREATE TABLE `tb_role_api_rel` (
 -- ----------------------------
 -- Records of tb_role_api_rel
 -- ----------------------------
-INSERT INTO `tb_role_api_rel` VALUES ('1200256782695723010', '1', '1', null, null, '0');
 INSERT INTO `tb_role_api_rel` VALUES ('1200311811423195137', '1', '1199244318487085057', null, null, '0');
+INSERT INTO `tb_role_api_rel` VALUES ('1200351120427683841', '1', '1', null, null, '0');
 
 -- ----------------------------
 -- Table structure for tb_role_menu_rel
@@ -134,7 +188,6 @@ CREATE TABLE `tb_role_menu_rel` (
 -- ----------------------------
 -- Records of tb_role_menu_rel
 -- ----------------------------
-INSERT INTO `tb_role_menu_rel` VALUES ('2', '1', '1094068184018956289', '2019-11-19 11:43:02', null, '0');
 INSERT INTO `tb_role_menu_rel` VALUES ('1197810014984970241', '1', '1094071492502704131', null, null, '0');
 INSERT INTO `tb_role_menu_rel` VALUES ('1197810156307849217', '1', '1094071492502704132', null, null, '0');
 INSERT INTO `tb_role_menu_rel` VALUES ('1197811098419830785', '1', '1094071492502704134', null, null, '0');
@@ -145,6 +198,12 @@ INSERT INTO `tb_role_menu_rel` VALUES ('1198864889353142274', '11988507302594887
 INSERT INTO `tb_role_menu_rel` VALUES ('1198864898689662977', '1198850730259488770', '1094068184018956289', null, null, '0');
 INSERT INTO `tb_role_menu_rel` VALUES ('1199506543005249537', '1', '1199167935111045121', null, null, '0');
 INSERT INTO `tb_role_menu_rel` VALUES ('1200311966905995265', '1198850730259488770', '1094071492502704133', null, null, '0');
+INSERT INTO `tb_role_menu_rel` VALUES ('1204342044501516290', '1', '1094068184018956290', null, null, '0');
+INSERT INTO `tb_role_menu_rel` VALUES ('1204670852651888642', '1', '1199167935111045122', null, null, '0');
+INSERT INTO `tb_role_menu_rel` VALUES ('1204670854367358977', '1', '1199167935111045123', null, null, '0');
+INSERT INTO `tb_role_menu_rel` VALUES ('1204961894265626625', '1', '1094068184018956288', null, null, '0');
+INSERT INTO `tb_role_menu_rel` VALUES ('1204967268318261250', '1', '1094068184018956289', null, null, '0');
+INSERT INTO `tb_role_menu_rel` VALUES ('1204967920696082433', '1', '1', null, null, '0');
 
 -- ----------------------------
 -- Table structure for tb_user

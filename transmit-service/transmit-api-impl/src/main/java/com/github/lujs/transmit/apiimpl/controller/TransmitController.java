@@ -75,22 +75,22 @@ public class TransmitController extends BaseController {
         return successResponse(user);
     }
 
-    @RequestMapping("testGet")
+    @RequestMapping("apiGet")
     @Permission(action = Action.Skip)
-    public Object testGet(HttpServletRequest request) {
+    public Object apiGet(HttpServletRequest request) {
 
         //截取请求后缀 获取请求实体
         QueryWrapper<ApiEntity> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("api_key", request.getHeader("apiKey"));
+        queryWrapper.eq("api_key", request.getHeader(CommonConstant.API_REQ));
         ApiEntity apiEntity = transmitService.getOne(queryWrapper);
         return restTemplate.getForEntity(apiEntity.getRealUrl(), Object.class);
 
     }
 
     @Hystrix
-    @RequestMapping("testPost")
+    @RequestMapping("apiPost")
     @Permission(action = Action.Skip)
-    public Object testPost(HttpServletRequest request, @RequestBody Object o) {
+    public Object apiPost(HttpServletRequest request, @RequestBody Object o) {
 
         if (ObjectUtil.isEmpty(o)) {
             return failedResponse(GlobalStatusCode.INVALID_PARAMETER);
@@ -120,10 +120,6 @@ public class TransmitController extends BaseController {
             return sendPostRequest(apiEntity.getRealUrl(), requestEntity);
         }*/
         //return sendPostRequest(apiEntity.getRealUrl(), requestEntity);
-    }
-
-    private Object getDefaultValue(HttpServletRequest request, @RequestBody Object o) {
-        return failedResponse("接口压力太大");
     }
 
     /**

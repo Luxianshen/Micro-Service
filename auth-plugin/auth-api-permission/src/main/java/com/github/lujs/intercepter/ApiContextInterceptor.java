@@ -1,5 +1,6 @@
 package com.github.lujs.intercepter;
 
+import com.github.lujs.Exception.PermissionException;
 import com.github.lujs.Exception.status.PermissionStatusCode;
 import com.github.lujs.constant.CommonConstant;
 import com.github.lujs.user.api.model.UserClientInfo;
@@ -45,7 +46,7 @@ public class ApiContextInterceptor extends HandlerInterceptorAdapter {
             return true;
         }
         //获取当接口的权限
-        String apiKey = request.getHeader("apiKey");
+        String apiKey = request.getHeader(CommonConstant.API_REQ);
         String id = request.getHeader(CommonConstant.REQUEST_ID_HEADER);
         String name = request.getHeader(CommonConstant.REQUEST_NAME_HEADER);
         //存在访问路径
@@ -55,13 +56,15 @@ public class ApiContextInterceptor extends HandlerInterceptorAdapter {
             //判断权限
             if (null == apiPermissionList || !validatePermission(apiPermissionList, apiKey)) {
                 log.info("no permission access service, please check!");
-                sendMessage(response,PermissionStatusCode.NO_PERMISSION);
-                return false;
+                throw new PermissionException(PermissionStatusCode.NO_PERMISSION);
+                //sendMessage(response,PermissionStatusCode.NO_PERMISSION);
+                //return false;
             }
             return true;
         }
-        sendMessage(response,PermissionStatusCode.NO_TOKEN);
-        return false;
+        throw new PermissionException(PermissionStatusCode.NO_TOKEN);
+        //sendMessage(response,PermissionStatusCode.NO_TOKEN);
+        //return false;
     }
 
     /**
