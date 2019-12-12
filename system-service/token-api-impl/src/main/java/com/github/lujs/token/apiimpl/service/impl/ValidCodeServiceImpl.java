@@ -2,8 +2,6 @@ package com.github.lujs.token.apiimpl.service.impl;
 
 import com.github.lujs.constant.CommonConstant;
 import com.github.lujs.token.api.service.ValidCodeService;
-import com.github.lujs.utils.RedisUtil;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;

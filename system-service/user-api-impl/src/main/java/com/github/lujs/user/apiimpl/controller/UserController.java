@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.lujs.annotation.Action;
 import com.github.lujs.annotation.Permission;
+import com.github.lujs.constant.CommonConstant;
 import com.github.lujs.model.BaseRequest;
 import com.github.lujs.model.BaseResponse;
 import com.github.lujs.model.request.PrimaryKeyRequest;
@@ -47,7 +48,7 @@ public class UserController extends BaseController {
     @GetMapping(value = "/info")
     @Permission(action = Action.Skip)
     public BaseResponse info(HttpServletRequest request) {
-        String agentId = request.getHeader("x-user-name");
+        String agentId = request.getHeader(CommonConstant.REQUEST_NAME_HEADER);
         if (StringUtils.isNotEmpty(agentId)) {
             return successResponse(userService.getUserByAgentId(agentId));
         } else {

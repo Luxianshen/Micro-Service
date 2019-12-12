@@ -3,9 +3,10 @@ package com.github.lujs.intercepter;
 import com.github.lujs.Exception.status.PermissionStatusCode;
 import com.github.lujs.constant.CommonConstant;
 import com.github.lujs.user.api.model.UserClientInfo;
-import com.github.lujs.utils.RedisUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -23,6 +24,13 @@ import java.util.*;
 @Component
 @Slf4j
 public class ApiContextInterceptor extends HandlerInterceptorAdapter {
+
+    private static RedisTemplate<String, Object> redisTemplate;
+
+    @Autowired
+    public void setRedisTemplate(RedisTemplate redisTemplate) {
+        ApiContextInterceptor.redisTemplate = redisTemplate;
+    }
 
     /**
      * 本地转发 或者网关转发
@@ -66,7 +74,7 @@ public class ApiContextInterceptor extends HandlerInterceptorAdapter {
     private List<String> getUserInfo(String id, String name) {
 
         String tokenKey = CommonConstant.API_TOKEN_CODE+ name + id ;
-        return ((UserClientInfo) RedisUtil.get(tokenKey)).getApiList();
+        return ((UserClientInfo) redisTemplate.opsForValue().get(tokenKey)).getApiList();
     }
 
     /**
@@ -79,7 +87,7 @@ public class ApiContextInterceptor extends HandlerInterceptorAdapter {
     private static boolean validatePermission(List<String> apiPermissionList, String tagCode) {
 
         //获取接口权限
-        String tagPermission = (String) RedisUtil.hashGet("apiMap", tagCode);
+        String tagPermission = (String) redisTemplate.opsForHash().get("apiMap", tagCode);
         if (StringUtils.isNotEmpty(tagPermission) && apiPermissionList.contains(tagPermission)) {
             return true;
         }

@@ -5,9 +5,13 @@ import com.github.lujs.Exception.status.PermissionStatusCode;
 import com.github.lujs.constant.CommonConstant;
 import io.jsonwebtoken.Jwts;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -16,8 +20,15 @@ import java.util.Map;
  * @Data: 2019/4/2823:28
  * @version: 1.0.0
  */
+@Component
 public class JwtUtil {
 
+    private static RedisTemplate<String, String> redisTemplate;
+
+    @Autowired
+    public void setRedisTemplate(RedisTemplate redisTemplate) {
+        JwtUtil.redisTemplate = redisTemplate;
+    }
 
     public static final String SECRET = "qazwsx123444$#%#()*&& asdaswwi1235 ?;!@#kmmmpom in***xx**&";
     public static final String TOKEN_PREFIX = "Bearer";
@@ -41,9 +52,9 @@ public class JwtUtil {
             String userName = body.get("user").toString();
             //从缓存获取
             if(flag){
-                redisToken = (String) RedisUtil.get(CommonConstant.TOKEN_CODE + userName);
+                redisToken = redisTemplate.opsForValue().get(CommonConstant.TOKEN_CODE + userName);
             }else {
-                redisToken = (String) RedisUtil.get(CommonConstant.API_TOKEN_CODE + userName);
+                redisToken = redisTemplate.opsForValue().get(CommonConstant.API_TOKEN_CODE + userName);
             }
             //判断token是否合法
             if (StringUtils.isEmpty(userName)) {
@@ -55,8 +66,8 @@ public class JwtUtil {
             map.put("id", id);
             map.put("user", userName);
             //刷新缓存
-            RedisUtil.setExpire(CommonConstant.TOKEN_CODE + userName,5000L);
-            RedisUtil.setExpire(CommonConstant.TOKEN_CODE + userName + id, 5000L);
+            redisTemplate.expire(CommonConstant.TOKEN_CODE + userName,5000L,TimeUnit.SECONDS);
+            redisTemplate.expire(CommonConstant.TOKEN_CODE + userName + id, 5000L, TimeUnit.SECONDS);
             return map;
         } else {
             throw new PermissionException(PermissionStatusCode.NO_TOKEN);
@@ -74,9 +85,9 @@ public class JwtUtil {
                 .parseClaimsJws(token.replace(TOKEN_PREFIX, "")).getBody();
         String id = String.valueOf(body.get("id"));
         String userName = (String) body.get("user");
-        RedisUtil.delete(CommonConstant.TOKEN_CODE + userName);
-        RedisUtil.delete(CommonConstant.TOKEN_CODE + userName + id);
-        RedisUtil.delete(userName+"Menu");
+        JwtUtil.redisTemplate.delete(CommonConstant.TOKEN_CODE + userName);
+        JwtUtil.redisTemplate.delete(CommonConstant.TOKEN_CODE + userName + id);
+        JwtUtil.redisTemplate.delete(userName+"Menu");
     }
 
 }

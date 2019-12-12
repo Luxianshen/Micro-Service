@@ -10,6 +10,7 @@ import com.github.lujs.auth.api.service.RoleMenuService;
 import com.github.lujs.auth.api.service.UserRoleService;
 import com.github.lujs.auth.apiimpl.mapper.RoleMapper;
 import com.github.lujs.auth.api.service.RoleService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -54,7 +55,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     }
 
     /**
-     * @param roles
+     * @param roleQuery
      * @return
      */
     @Override
@@ -66,9 +67,9 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
             //获取菜单
             QueryWrapper<Menu> menuQueryWrapper = new QueryWrapper<>();
             menuQueryWrapper.in("id", menuIds);
-            List<Menu> menuList = menuService.list(menuQueryWrapper);
+            List<Menu> menuList = menuService.list(menuQueryWrapper).stream().filter(menu-> menu.getPid() != null).collect(Collectors.toList());
             //把菜单设置进缓存
-            redisTemplate.opsForValue().set(roleQuery.getAgentId() + "Menu", getMenuTreeList(menuList, null));
+            redisTemplate.opsForValue().set(roleQuery.getAgentId() + "Menu", getMenuTreeList(menuList, 1L));
             //获取菜单权限作为角色权限
             return menuList.stream().map(Menu::getPermissionCode).collect(Collectors.toList());
         }
