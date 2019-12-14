@@ -16,7 +16,7 @@ public class TokenProperties {
 
     private Integer tokenTime;
 
-    private Boolean validFlag;
+    private Boolean codeFlag;
 
-    private Integer validTime;
+    private Integer codeTime;
 }

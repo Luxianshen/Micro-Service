@@ -9,7 +9,7 @@
     </parent>
     <artifactId>auth-api-impl</artifactId>
     <version>1.0.0-SNAPSHOT</version>
-    <name>auth-apiimpl</name>
+    <name>auth-service</name>
     <description>Demo project for Spring Boot</description>
 
     <properties>

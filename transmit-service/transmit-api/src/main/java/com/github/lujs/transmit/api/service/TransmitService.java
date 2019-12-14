@@ -1,10 +1,7 @@
 package com.github.lujs.transmit.api.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.github.lujs.model.request.PrimaryKeyRequest;
 import com.github.lujs.transmit.api.model.ApiEntity;
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * @Description:

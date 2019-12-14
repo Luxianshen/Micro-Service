@@ -9,7 +9,7 @@
 		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 	<artifactId>user-api-impl</artifactId>
-	<name>user-apiimpl</name>
+	<name>user-service</name>
 
 	<dependencies>
 		<dependency>

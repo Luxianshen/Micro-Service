@@ -56,7 +56,7 @@ public class TokenServiceImpl implements TokenService {
     @Override
     public String login(LoginInfo loginInfo) {
         //开启了验证码
-        if (tokenProperties.getValidFlag()) {
+        if (tokenProperties.getCodeFlag()) {
             Boolean result = validCodeService.checkValidCode(loginInfo.getRandomStr(), loginInfo.getValidCode());
             if (!result) {
                 throw new BaseException(GlobalStatusCode.INVALID_PARAMETER);

@@ -39,6 +39,6 @@ public class ValidCodeServiceImpl implements ValidCodeService {
     @Override
     public void saveImageCode(String random, String text) {
         //保存验证码
-        redisTemplate.opsForValue().set(CommonConstant.SYS_CODE + random, text, tokenProperties.getValidTime());
+        redisTemplate.opsForValue().set(CommonConstant.SYS_CODE + random, text, tokenProperties.getCodeTime());
     }
 }

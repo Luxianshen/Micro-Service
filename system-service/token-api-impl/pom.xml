@@ -10,6 +10,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>token-api-impl</artifactId>
+    <name>token-service</name>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>

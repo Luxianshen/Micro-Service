@@ -41,11 +41,6 @@
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
         </dependency>
-        <dependency>
-            <groupId>cn.joysim</groupId>
-            <artifactId>jdff-config</artifactId>
-            <version>1.0.1-SNAPSHOT</version>
-        </dependency>
     </dependencies>
 
 </project>
