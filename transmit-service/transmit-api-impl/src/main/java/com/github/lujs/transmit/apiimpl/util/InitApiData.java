@@ -1,41 +1,45 @@
-package com.github.lujs.util;
+package com.github.lujs.transmit.apiimpl.util;
 
 import com.github.lujs.transmit.api.model.ApiEntity;
 import com.github.lujs.transmit.api.service.TransmitService;
-import com.github.lujs.utils.SpringContextHolder;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * @Description: 初始化接口权限
+ * @Description:
  * @Author lujs
- * @Date 2019/11/27 14:51
+ * @Date 2019/12/16 22:39
  */
 @Component
-public class InitApiMapUtil {
-
-    private static RedisTemplate<String, Object> redisTemplate;
+@Slf4j
+public class InitApiData implements ApplicationRunner {
 
     @Autowired
-    public void setRedisTemplate(RedisTemplate redisTemplate) {
-        InitApiMapUtil.redisTemplate = redisTemplate;
-    }
+    private RedisTemplate redisTemplate;
 
-    private final static TransmitService transmitService = SpringContextHolder.getBean(TransmitService.class);
+    @Autowired
+    private TransmitService transmitService;
 
-    @PostConstruct
-    private static void initApiMap() {
+    @Override
+    @Async
+    public void run(ApplicationArguments arg) throws Exception {
+        // 加载接口权限缓存
         List<ApiEntity> apiList = transmitService.list();
         if (apiList != null && apiList.size() > 0) {
+            log.info("开始初始化接口权限！");
             Map<String, String> apiMap = apiList.stream().collect(Collectors.toMap(ApiEntity::getApiKey, ApiEntity::getPermissionCode, (k1, k2) -> k1));
             redisTemplate.opsForHash().putAll("apiMap", apiMap);
+            log.info("完成初始化接口权限！");
         }
     }
-
 }
+

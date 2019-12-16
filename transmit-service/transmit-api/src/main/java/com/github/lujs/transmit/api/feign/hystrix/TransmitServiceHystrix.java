@@ -1,7 +1,8 @@
-package com.github.lujs.transmit.api.service.feign.hystrix;
+package com.github.lujs.transmit.api.feign.hystrix;
 
 import com.github.lujs.auth.api.model.Role.RoleQuery;
-import com.github.lujs.transmit.api.service.feign.TransmitServiceClient;
+import com.github.lujs.transmit.api.feign.TransmitServiceClient;
+import com.github.lujs.transmit.api.model.ApiEntity;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -23,5 +24,10 @@ public class TransmitServiceHystrix implements TransmitServiceClient {
     @Override
     public List<String> getClientApiList(Long clientId) {
         return new ArrayList<>();
+    }
+
+    @Override
+    public ApiEntity getApiByKey(String apiKey) {
+        return null;
     }
 }

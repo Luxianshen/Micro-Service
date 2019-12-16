@@ -1,7 +1,6 @@
 package com.github.lujs.transmit.apiimpl.controller;
 
 import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -22,22 +21,18 @@ import com.github.lujs.transmit.api.service.ClientApiService;
 import com.github.lujs.transmit.api.service.RoleApiService;
 import com.github.lujs.transmit.api.service.TransmitService;
 import com.github.lujs.user.api.feign.UserServiceClient;
-import com.github.lujs.user.api.model.User;
 import com.github.lujs.web.BaseController;
-import com.netflix.ribbon.proxy.annotation.Hystrix;
 import lombok.AllArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * @Description: 请求转发控制层
@@ -48,8 +43,6 @@ import java.util.*;
 @RestController
 @RequestMapping("/transmit")
 public class TransmitController extends BaseController {
-
-    private final RestTemplate restTemplate;
 
     private final RedisTemplate redisTemplate;
 
@@ -63,64 +56,6 @@ public class TransmitController extends BaseController {
 
     private final UserServiceClient userServiceClient;
 
-    @RequestMapping("test1")
-    @Permission(action = Action.Skip)
-    public BaseResponse test1() {
-        return successResponse("hi test1");
-    }
-
-    @PostMapping("test2")
-    @Permission(action = Action.Skip)
-    public BaseResponse test2(@RequestBody User user) {
-        return successResponse(user);
-    }
-
-    @RequestMapping("apiGet")
-    @Permission(action = Action.Skip)
-    public Object apiGet(HttpServletRequest request) {
-
-        //截取请求后缀 获取请求实体
-        QueryWrapper<ApiEntity> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("api_key", request.getHeader(CommonConstant.API_REQ));
-        ApiEntity apiEntity = transmitService.getOne(queryWrapper);
-        return restTemplate.getForEntity(apiEntity.getRealUrl(), Object.class);
-
-    }
-
-    @Hystrix
-    @RequestMapping("apiPost")
-    @Permission(action = Action.Skip)
-    public Object apiPost(HttpServletRequest request, @RequestBody Object o) {
-
-        if (ObjectUtil.isEmpty(o)) {
-            return failedResponse(GlobalStatusCode.INVALID_PARAMETER);
-        }
-        //截取请求后缀 获取请求实体
-        ApiEntity apiEntity = transmitService.getApiByKey(request.getHeader("apiKey"));
-
-        if (ObjectUtil.isNotEmpty(apiEntity) && StringUtils.isNotEmpty(apiEntity.getRealUrl())) {
-            //拿到header信息
-            HttpHeaders requestHeaders = new HttpHeaders();
-            Enumeration<String> headerNames = request.getHeaderNames();
-            while (headerNames.hasMoreElements()) {
-                String key = headerNames.nextElement();
-                String value = request.getHeader(key);
-                requestHeaders.add(key, value);
-            }
-            HttpEntity<String> httpEntity = new HttpEntity<String>(JSONUtil.toJsonStr(o), requestHeaders);
-            return restTemplate.postForEntity(apiEntity.getRealUrl(), httpEntity, Object.class);
-        }
-        return failedResponse("接口不存在");
-
-        //获取parameter信息
-        /*Map<String, ?> params = request.getParameterMap();
-        if (params != null && params.size() > 0) {
-            JSONObject jsonParams = JSONUtil.parseObj(params);
-            HttpEntity<JSONObject> requestEntity = new HttpEntity<>(jsonParams, requestHeaders);
-            return sendPostRequest(apiEntity.getRealUrl(), requestEntity);
-        }*/
-        //return sendPostRequest(apiEntity.getRealUrl(), requestEntity);
-    }
 
     /**
      * 接口分页
@@ -173,6 +108,19 @@ public class TransmitController extends BaseController {
         //去除缓存的key
         ApiEntity apiEntity = transmitService.getById(request.getData().getId());
         return successResponse(transmitService.deleteById(apiEntity));
+    }
+
+    /**
+     * 根据apiKey获取接口信息
+     * @param apiKey
+     * @return 接口信息
+     */
+    @PostMapping("/api/getApiByKey")
+    @Permission(action = Action.Skip)
+    public ApiEntity getApiByKey(@RequestParam("apiKey") String apiKey) {
+        QueryWrapper<ApiEntity> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("api_key", apiKey);
+       return transmitService.getOne(queryWrapper);
     }
 
     /**

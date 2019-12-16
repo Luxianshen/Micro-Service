@@ -33,19 +33,9 @@ public class ApiContextInterceptor extends HandlerInterceptorAdapter {
         ApiContextInterceptor.redisTemplate = redisTemplate;
     }
 
-    /**
-     * 本地转发 或者网关转发
-     */
-    private static List<String> whiteRoute = new ArrayList<String>(Arrays.asList("localhost","127.0.0.1:8078","gateway.jximec.com"));
-
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
 
-        //过滤白名单 x-user-host为空 即feign内部调用
-        log.info("地址："+ request.getHeader(CommonConstant.REQUEST_HOST_HEADER));
-        if (whiteRoute.contains(request.getHeader(CommonConstant.REQUEST_HOST_HEADER)) || StringUtils.isEmpty(request.getHeader(CommonConstant.REQUEST_HOST_HEADER))) {
-            return true;
-        }
         //获取当接口的权限
         String apiKey = request.getHeader(CommonConstant.API_REQ);
         String id = request.getHeader(CommonConstant.REQUEST_ID_HEADER);
@@ -58,14 +48,10 @@ public class ApiContextInterceptor extends HandlerInterceptorAdapter {
             if (null == apiPermissionList || !validatePermission(apiPermissionList, apiKey)) {
                 log.info("no permission access service, please check!");
                 throw new PermissionException(PermissionStatusCode.NO_PERMISSION);
-                //sendMessage(response,PermissionStatusCode.NO_PERMISSION);
-                //return false;
             }
             return true;
         }
         throw new PermissionException(PermissionStatusCode.NO_TOKEN);
-        //sendMessage(response,PermissionStatusCode.NO_TOKEN);
-        //return false;
     }
 
     /**
@@ -97,17 +83,5 @@ public class ApiContextInterceptor extends HandlerInterceptorAdapter {
         }
         return false;
     }
-
-    public static void sendMessage(HttpServletResponse response, PermissionStatusCode statusCode) throws Exception {
-
-        response.setCharacterEncoding("utf-8");
-        response.setContentType("application/json; charset=utf-8");
-        PrintWriter writer = response.getWriter();
-        Map<String, String> map = new HashMap<>();
-        map.put("status",statusCode.code().toString());
-        map.put("msg", statusCode.text());
-        writer.write(map.toString());
-    }
-
 
 }

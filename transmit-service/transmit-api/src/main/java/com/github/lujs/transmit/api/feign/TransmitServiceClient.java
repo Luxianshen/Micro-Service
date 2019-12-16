@@ -1,7 +1,8 @@
-package com.github.lujs.transmit.api.service.feign;
+package com.github.lujs.transmit.api.feign;
 
 import com.github.lujs.auth.api.model.Role.RoleQuery;
-import com.github.lujs.transmit.api.service.feign.hystrix.TransmitServiceHystrix;
+import com.github.lujs.transmit.api.feign.hystrix.TransmitServiceHystrix;
+import com.github.lujs.transmit.api.model.ApiEntity;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,4 +28,11 @@ public interface TransmitServiceClient {
      */
     @PostMapping("/transmit/api/getClientApiList")
     List<String> getClientApiList(@RequestParam("clientId") Long clientId);
+
+    /**
+     * 根据apiKey获取接口信息
+     */
+    @PostMapping("/transmit/api/getApiByKey")
+    ApiEntity getApiByKey(@RequestParam("apiKey") String apiKey);
+
 }

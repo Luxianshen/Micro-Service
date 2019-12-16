@@ -11,7 +11,7 @@ import com.github.lujs.token.api.model.enums.LoginType;
 import com.github.lujs.token.api.service.TokenService;
 import com.github.lujs.token.api.service.ValidCodeService;
 import com.github.lujs.token.apiimpl.config.TokenProperties;
-import com.github.lujs.transmit.api.service.feign.TransmitServiceClient;
+import com.github.lujs.transmit.api.feign.TransmitServiceClient;
 import com.github.lujs.user.api.feign.UserServiceClient;
 import com.github.lujs.user.api.model.User;
 import com.github.lujs.user.api.model.UserClient;
@@ -22,9 +22,6 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
