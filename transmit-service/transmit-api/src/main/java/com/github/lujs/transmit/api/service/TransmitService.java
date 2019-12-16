@@ -12,6 +12,7 @@ public interface TransmitService extends IService<ApiEntity> {
 
     /**
      * 获取接口（缓存）
+     *
      * @param apiKey apiKey
      * @return 接口信息
      */

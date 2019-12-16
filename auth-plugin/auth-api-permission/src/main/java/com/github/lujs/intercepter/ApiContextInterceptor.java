@@ -36,12 +36,13 @@ public class ApiContextInterceptor extends HandlerInterceptorAdapter {
     /**
      * 本地转发 或者网关转发
      */
-    private static List<String> whiteRoute = new ArrayList<String>(Arrays.asList("localhost","127.0.0.1:8078"));
+    private static List<String> whiteRoute = new ArrayList<String>(Arrays.asList("localhost","127.0.0.1:8078","gateway.jximec.com"));
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
 
         //过滤白名单 x-user-host为空 即feign内部调用
+        log.info("地址："+ request.getHeader(CommonConstant.REQUEST_HOST_HEADER));
         if (whiteRoute.contains(request.getHeader(CommonConstant.REQUEST_HOST_HEADER)) || StringUtils.isEmpty(request.getHeader(CommonConstant.REQUEST_HOST_HEADER))) {
             return true;
         }

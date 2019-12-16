@@ -24,7 +24,7 @@ public class TransmitServiceImpl extends ServiceImpl<TransmitMapper, ApiEntity> 
     private final RedisTemplate redisTemplate;
 
     @Override
-    @Cacheable(value = "transmits" , key = "#apiKey")
+    @Cacheable(value = "transmits", key = "#apiKey")
     public ApiEntity getApiByKey(String apiKey) {
         QueryWrapper<ApiEntity> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("api_key", apiKey);
@@ -32,14 +32,14 @@ public class TransmitServiceImpl extends ServiceImpl<TransmitMapper, ApiEntity> 
     }
 
     @Override
-    @CacheEvict(value = "transmits" , key = "#apiEntity.apiKey" )
+    @CacheEvict(value = "transmits", key = "#apiEntity.apiKey")
     public Boolean updateApi(ApiEntity apiEntity) {
         redisTemplate.opsForHash().put("apiMap", apiEntity.getApiKey(), apiEntity.getPermissionCode());
         return updateById(apiEntity);
     }
 
     @Override
-    @CacheEvict(value = "transmits" , key = "#apiEntity.apiKey")
+    @CacheEvict(value = "transmits", key = "#apiEntity.apiKey")
     public Boolean deleteById(ApiEntity apiEntity) {
         //去除权限缓存 和接口缓存
         redisTemplate.opsForHash().delete("apiMap", apiEntity.getApiKey());

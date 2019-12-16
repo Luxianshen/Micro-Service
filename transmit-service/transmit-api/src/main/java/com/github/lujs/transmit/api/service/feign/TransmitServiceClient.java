@@ -13,7 +13,7 @@ import java.util.List;
  * @Author lujs
  * @Date 2019/11/13 15:17
  */
-@FeignClient(name = "transmit-service",fallback = TransmitServiceHystrix.class)
+@FeignClient(name = "transmit-service", fallback = TransmitServiceHystrix.class)
 public interface TransmitServiceClient {
 
     /**

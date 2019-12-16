@@ -24,7 +24,7 @@ public class TransmitApplication {
     }
 
     @Bean
-    public RestTemplate getRestTemplate(){
+    public RestTemplate getRestTemplate() {
         return new RestTemplate();
     }
 

@@ -3,6 +3,7 @@ package com.github.lujs.gatewayservice.filter;
 import com.github.lujs.Exception.PermissionException;
 import com.github.lujs.Exception.status.PermissionStatusCode;
 import com.github.lujs.constant.CommonConstant;
+import com.github.lujs.gatewayservice.util.IpUtil;
 import com.github.lujs.utils.JwtUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
@@ -35,7 +36,7 @@ public class AuthFilter implements GlobalFilter, Ordered {
         HttpHeaders header = request.getHeaders();
 
         String token = header.getFirst(CommonConstant.HEADER_AUTH);
-        String reqHost = header.getFirst(CommonConstant.REQ_HOST);
+        String reqHost = IpUtil.getIpAddress(request);
 
         if(StringUtils.isEmpty(header.getFirst(CommonConstant.API_REQ))){
             userMap = JwtUtil.validateToken(token,true);

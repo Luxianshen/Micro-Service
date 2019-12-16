@@ -3,8 +3,8 @@
 <mapper namespace="com.github.lujs.transmit.apiimpl.mapper.RoleApiMapper">
 
     <select id="getRoleApiCodes" resultType="java.lang.String">
-      select api_id as apiId
-      from tb_role_api_rel
-      where role_id = #{roleId}
-   </select>
+        select api_id as apiId
+        from tb_role_api_rel
+        where role_id = #{roleId}
+    </select>
 </mapper>
