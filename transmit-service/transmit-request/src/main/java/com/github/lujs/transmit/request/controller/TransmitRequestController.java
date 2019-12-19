@@ -15,10 +15,7 @@ import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
@@ -50,7 +47,7 @@ public class TransmitRequestController extends BaseController {
         return successResponse(user);
     }
 
-    @RequestMapping("apiGet")
+    @GetMapping("apiGet")
     @Permission(action = Action.Skip)
     public Object apiGet(HttpServletRequest request) {
 
@@ -60,7 +57,7 @@ public class TransmitRequestController extends BaseController {
 
     }
 
-    @RequestMapping("apiPost")
+    @PostMapping(value = "apiPost")
     @Permission(action = Action.Skip)
     public Object apiPost(HttpServletRequest request, @RequestBody Object o) {
 

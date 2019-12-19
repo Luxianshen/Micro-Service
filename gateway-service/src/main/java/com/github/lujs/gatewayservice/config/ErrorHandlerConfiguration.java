@@ -1,8 +1,5 @@
 package com.github.lujs.gatewayservice.config;
 
-import java.util.Collections;
-import java.util.List;
-
 import com.github.lujs.gatewayservice.ExceptionHandler.JsonExceptionHandler;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.web.ResourceProperties;
@@ -17,6 +14,9 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.codec.ServerCodecConfigurer;
 import org.springframework.web.reactive.result.view.ViewResolver;
+
+import java.util.Collections;
+import java.util.List;
 
 /**
  * @Description:

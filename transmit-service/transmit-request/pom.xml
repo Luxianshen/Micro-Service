@@ -10,7 +10,6 @@
 
     <artifactId>transmit-request</artifactId>
     <name>transmit-request</name>
-    <description>Demo project for Spring Boot</description>
 
 
     <dependencies>
