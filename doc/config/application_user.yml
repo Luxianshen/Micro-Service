@@ -1,0 +1,45 @@
+#端口
+server:
+   port: 8077
+
+#服务名
+spring:
+  application:
+    name: user-service
+  #nacos
+  cloud:
+    nacos:
+      discovery:
+          server-addr: 127.0.0.1:8848
+  #数据库
+  datasource:
+    name: test
+    url: jdbc:mysql://127.0.0.1:3306/micro_service?serverTimezone=UTC&characterEncoding=utf-8
+    username: root
+    password: root
+    # 使用druid数据源
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  #redis
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    password: 123456
+
+# mybatis-plus
+mybatis-plus:
+  mapper-locations: classpath*:/mapper/*Mapper.xml
+  #实体扫描，多个package用逗号或者分号分隔\
+  type-aliases-package: cn.github.lujs.*.model.pojo
+  type-enums-package: cn.github.lujs.*.model.pojo.enums
+  global-config:
+    sql-parser-cache: true
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: false
+
+# 日志配置
+#logging:
+#  config:  classpath:log4j2.xml
+

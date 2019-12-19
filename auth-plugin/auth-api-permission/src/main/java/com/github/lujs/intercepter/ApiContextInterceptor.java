@@ -13,8 +13,7 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.PrintWriter;
-import java.util.*;
+import java.util.List;
 
 /**
  * @Describe: 用户权限拦截器
@@ -57,13 +56,13 @@ public class ApiContextInterceptor extends HandlerInterceptorAdapter {
     /**
      * 获取用户
      *
-     * @param id id
+     * @param id   id
      * @param name name
      * @return 用户信息
      */
     private List<String> getUserInfo(String id, String name) {
 
-        String tokenKey = CommonConstant.API_TOKEN_CODE+ name + id ;
+        String tokenKey = CommonConstant.API_TOKEN_CODE + name + id;
         return ((UserClientInfo) redisTemplate.opsForValue().get(tokenKey)).getApiList();
     }
 
@@ -78,10 +77,7 @@ public class ApiContextInterceptor extends HandlerInterceptorAdapter {
 
         //获取接口权限
         String tagPermission = (String) redisTemplate.opsForHash().get("apiMap", tagCode);
-        if (StringUtils.isNotEmpty(tagPermission) && apiPermissionList.contains(tagPermission)) {
-            return true;
-        }
-        return false;
+        return (StringUtils.isNotEmpty(tagPermission) && apiPermissionList.contains(tagPermission));
     }
 
 }

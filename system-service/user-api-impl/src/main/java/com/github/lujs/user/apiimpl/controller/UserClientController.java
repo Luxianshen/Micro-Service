@@ -98,6 +98,7 @@ public class UserClientController extends BaseController {
     public UserClient checkUserClient(@RequestBody UserClientInfo userClientInfo) {
 
         UserClient checkClient = userClientService.getClientByAgentId(userClientInfo.getAgentId());
+        //todo 比较随机串 防止多次相同
         if (null != checkClient) {
             //比较加密串
             String checkAuth = DigestUtils.md5Hex("agentId=" + checkClient.getAgentId() + "&agentAuth=" + userClientInfo.getAgentAuth() +

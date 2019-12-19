@@ -5,10 +5,16 @@ import com.github.lujs.intercepter.UserContextInterceptor;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+
+import java.nio.charset.Charset;
+import java.util.List;
 
 /**
  * @Describe: 拦截器配置
@@ -19,7 +25,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 
 @Configuration
 @EnableWebMvc
-public class CommonConfiguration extends WebMvcConfigurerAdapter {
+public class CommonConfiguration implements WebMvcConfigurer {
 
     /**
      * 添加拦截器
@@ -40,5 +46,18 @@ public class CommonConfiguration extends WebMvcConfigurerAdapter {
         restTemplate.getInterceptors().add(new RestTemplateUserContextInterceptor());
         return restTemplate;
     }
+
+    /**
+     * 设置返回格式
+     */
+    /*@Bean
+    public HttpMessageConverter<String> responseBodyConverter(){
+        return new StringHttpMessageConverter(Charset.forName("UTF-8"));
+    }
+
+    @Override
+    public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+        converters.add(responseBodyConverter());
+    }*/
 
 }

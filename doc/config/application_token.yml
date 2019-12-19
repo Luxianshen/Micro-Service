@@ -7,7 +7,7 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: 49.233.171.48:8848
+        server-addr: 127.0.0.1:8848
   #redis
   redis:
     host: 127.0.0.1
@@ -16,6 +16,10 @@ spring:
 
 #验证码开关
 valid:
-   tokenTime: 3600
-   vaildFlag: false
-   vaildTime: 60
+   tokenTime: 60
+   codeFlag: false
+   codeTime: 1
+
+# 日志配置
+#logging:
+#  config:  classpath:log4j2.xml

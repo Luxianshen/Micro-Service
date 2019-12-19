@@ -7,11 +7,11 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: 49.233.171.48:8848
+        server-addr: 127.0.0.1:8848
   #数据库
   datasource:
     name: test
-    url: jdbc:mysql://49.233.171.48:3306/micro_service?serverTimezone=UTC&characterEncoding=utf-8
+    url: jdbc:mysql://127.0.0.1:3306/micro_service?serverTimezone=UTC&characterEncoding=utf-8
     username: root
     password: root
     # 使用druid数据源

@@ -1,10 +1,17 @@
 package com.github.lujs.config;
 
 import com.github.lujs.intercepter.ApiContextInterceptor;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+
+import java.nio.charset.Charset;
+import java.util.List;
 
 /**
  * @Describe: 拦截器配置
@@ -15,7 +22,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 
 @Configuration
 @EnableWebMvc
-public class CommonConfiguration extends WebMvcConfigurerAdapter {
+public class CommonConfiguration implements WebMvcConfigurer {
 
     /**
      * 添加拦截器

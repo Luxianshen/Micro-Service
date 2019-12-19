@@ -201,7 +201,12 @@ public class TransmitController extends BaseController {
     @PostMapping("/grant")
     @Permission(action = Action.Skip)
     public BaseResponse clientGrant(@Valid @RequestBody BaseRequest<ClientApiEntity> request) {
-        return successResponse(clientApiService.save(request.getData()));
+        if(clientApiService.save(request.getData())){
+            redisTemplate.delete(CommonConstant.API_TOKEN_CODE + request.getData().getAgentId());
+            return successResponse(GlobalStatusCode.SUCCESS);
+        }else {
+            return failedResponse(GlobalStatusCode.FAILED);
+        }
     }
 
     /**
@@ -217,7 +222,6 @@ public class TransmitController extends BaseController {
         queryWrapper.eq("client_id", request.getData().getClientId());
         queryWrapper.eq("api_id", request.getData().getApiId());
         if (clientApiService.remove(queryWrapper)) {
-
             redisTemplate.delete(CommonConstant.API_TOKEN_CODE + request.getData().getAgentId());
             return successResponse(GlobalStatusCode.SUCCESS);
         } else {

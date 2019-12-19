@@ -6,7 +6,7 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: 49.233.171.48:8848
+        server-addr: 127.0.0.1:8848
     gateway:
       enabled: true
       discovery:
@@ -29,17 +29,21 @@ spring:
           uri: lb://transmit-service
           predicates:
             - Path=/transmit/**
+        - id: joysim_route
+          uri: lb://transmit-request
+          predicates:
+            - Path=/joysim/request/**
     sentinel:
       eager: true
       datasource:
         ds:
           nacos:
-            server-addr: 49.233.171.48:8848
+            server-addr: 127.0.0.1:8848
             data-id: transmit-flow
             group-id: DEFAULT_GROUP
             ruleType: gw-flow
       transport:
-        dashboard: 127.0.0.1:8080
+        dashboard: 127.0.0.1:8280
       filter:
         enabled: true
       scg.fallback:
@@ -63,3 +67,7 @@ management:
   security:
     basic:
       enabled: false
+
+# 日志配置
+#logging:
+#  config:  classpath:log4j2.xml
