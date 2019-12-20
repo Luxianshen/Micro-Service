@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import javax.validation.Valid;
 
 /**
- * @Description:
+ * @Description: 分页插件
  * @Author lujs
  * @Date 2019/11/25 14:55
  */

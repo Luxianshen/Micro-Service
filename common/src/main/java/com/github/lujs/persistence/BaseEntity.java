@@ -3,6 +3,7 @@ package com.github.lujs.persistence;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -12,6 +13,7 @@ import java.util.Date;
  * @Author lujs
  * @Date 2019/11/18 16:43
  */
+@Data
 public class BaseEntity implements Serializable {
 
     @TableId
@@ -29,38 +31,6 @@ public class BaseEntity implements Serializable {
     }
 
     public BaseEntity() {
-    }
-
-    public Long getId() {
-        return this.id;
-    }
-
-    public Date getCreateTime() {
-        return this.createTime;
-    }
-
-    public Date getUpdateTime() {
-        return this.updateTime;
-    }
-
-    public Integer getDeleted() {
-        return this.deleted;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
-
-    public void setDeleted(Integer deleted) {
-        this.deleted = deleted;
     }
 
     @Override

@@ -6,7 +6,7 @@ import java.io.Serializable;
 /**
  * 标准请求报文
  * @param <T>
- * @author binchao
+ * @author Lujs
  */
 public class BaseRequest<T> implements Serializable {
 

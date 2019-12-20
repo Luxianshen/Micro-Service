@@ -9,9 +9,9 @@ import org.springframework.data.redis.serializer.SerializationException;
 import java.nio.charset.Charset;
 
 /**
- * @author: binchao
+ * @author: Lujs
  * @date: 2019-01-30 15:41
- * @desc:
+ * @desc: 设置json序列化
  */
 public class FastJson2JsonRedisSerializer<T> implements RedisSerializer<T> {
 

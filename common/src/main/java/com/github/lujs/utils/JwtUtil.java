@@ -30,25 +30,25 @@ public class JwtUtil {
         JwtUtil.redisTemplate = redisTemplate;
     }
 
-    public static Map<String, String> validateToken(String token,boolean flag) {
+    public static Map<String, String> validateToken(String token, boolean flag) {
         //判断token是否为空
         if (StringUtils.isNotEmpty(token)) {
             HashMap<String, String> map = new HashMap<String, String>(2);
             String redisToken;
             //获取解析后的token body
             Map<String, Object> body;
-            try{
+            try {
                 body = Jwts.parser().setSigningKey(CommonConstant.SECRET)
                         .parseClaimsJws(token.replace(CommonConstant.TOKEN_PREFIX, "")).getBody();
-            }catch (Exception e){
+            } catch (Exception e) {
                 throw new PermissionException(PermissionStatusCode.TOKEN_ILLEGAL);
             }
-            String id = body.get("id").toString();
-            String userName = body.get("user").toString();
+            String id = body.get(CommonConstant.HEADER_PARAM_ID).toString();
+            String userName = body.get(CommonConstant.HEADER_PARAM_USER).toString();
             //从缓存获取
-            if(flag){
+            if (flag) {
                 redisToken = redisTemplate.opsForValue().get(CommonConstant.TOKEN_CODE + userName);
-            }else {
+            } else {
                 redisToken = redisTemplate.opsForValue().get(CommonConstant.API_TOKEN_CODE + userName);
             }
             //判断token是否合法
@@ -58,10 +58,10 @@ public class JwtUtil {
                 //验证是否过期和有效性
                 throw new PermissionException(PermissionStatusCode.TOKEN_OVERDUE);
             }
-            map.put("id", id);
-            map.put("user", userName);
+            map.put(CommonConstant.HEADER_PARAM_ID, id);
+            map.put(CommonConstant.HEADER_PARAM_USER, userName);
             //刷新缓存 默认续30分钟
-            redisTemplate.expire(CommonConstant.TOKEN_CODE + userName,3600L,TimeUnit.SECONDS);
+            redisTemplate.expire(CommonConstant.TOKEN_CODE + userName, 3600L, TimeUnit.SECONDS);
             redisTemplate.expire(CommonConstant.TOKEN_CODE + userName + id, 3600L, TimeUnit.SECONDS);
             return map;
         } else {
@@ -72,17 +72,18 @@ public class JwtUtil {
 
     /**
      * 去除token
+     *
      * @param token 用户token
      */
     public static void removeToken(String token) {
         //获取解析后的token body
         Map<String, Object> body = Jwts.parser().setSigningKey(CommonConstant.SECRET)
                 .parseClaimsJws(token.replace(CommonConstant.TOKEN_PREFIX, "")).getBody();
-        String id = String.valueOf(body.get("id"));
-        String userName = (String) body.get("user");
+        String id = String.valueOf(body.get(CommonConstant.HEADER_PARAM_ID));
+        String userName = (String) body.get(CommonConstant.HEADER_PARAM_USER);
         JwtUtil.redisTemplate.delete(CommonConstant.TOKEN_CODE + userName);
         JwtUtil.redisTemplate.delete(CommonConstant.TOKEN_CODE + userName + id);
-        JwtUtil.redisTemplate.delete(userName+"Menu");
+        JwtUtil.redisTemplate.delete(userName + "Menu");
     }
 
 }

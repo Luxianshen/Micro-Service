@@ -16,17 +16,14 @@ public class UserPermissionUtil {
     /**
      * 验证权限方法
      *
+     * @param userInfo 用户
+     * @pram tagCode 当前访问的权限标识
      * @return boolean
-     * @Param user 用户
-     * @Param tagCode 当前访问的权限标识
      */
     public static boolean validatePermission(UserInfo userInfo, String tagCode) {
 
         //todo 考虑白名单
         List<String> permissionCodeList = userInfo.getPermissionList();
-        if (permissionCodeList.contains(tagCode)) {
-            return true;
-        }
-        return false;
+        return permissionCodeList.contains(tagCode);
     }
 }

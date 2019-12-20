@@ -154,8 +154,8 @@ public class TokenServiceImpl implements TokenService {
      */
     private String generateToken(String random, String userName) {
         HashMap<String, Object> map = new HashMap<String, Object>();
-        map.put("id", random);
-        map.put("user", userName);
+        map.put(CommonConstant.HEADER_PARAM_ID, random);
+        map.put(CommonConstant.HEADER_PARAM_USER, userName);
 
         //生成jwt token
         String jwt = Jwts.builder().setSubject("user info").setClaims(map)

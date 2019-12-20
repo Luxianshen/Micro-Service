@@ -1,6 +1,7 @@
 package com.github.lujs.intercepter;
 
-import com.alibaba.fastjson.JSON;
+import com.github.lujs.Exception.PermissionException;
+import com.github.lujs.Exception.status.PermissionStatusCode;
 import com.github.lujs.annotation.Action;
 import com.github.lujs.annotation.Permission;
 import com.github.lujs.constant.CommonConstant;
@@ -52,13 +53,9 @@ public class UserContextInterceptor extends HandlerInterceptorAdapter {
                 UserInfo userInfo = getUserInfo(request);
                 //判断权限
                 if (null == userInfo || !UserPermissionUtil.validatePermission(userInfo, permission.value())) {
-                    //没有权限，直接输出json流 后期可改造为页面 todo
-                    response.setHeader("Content-Type", "application/json");
-                    String noPermissionMsg = JSON.toJSONString("no permission access service, please check!");
-                    response.getWriter().write(noPermissionMsg);
-                    response.getWriter().flush();
-                    response.getWriter().close();
-                    log.info("no permission access service, please check!");
+                    //没有权限，直接输出json流
+                    log.error("no permission access service, please check!");
+                    throw new PermissionException(PermissionStatusCode.NO_PERMISSION);
                 }
                 return true;
             }
@@ -69,7 +66,7 @@ public class UserContextInterceptor extends HandlerInterceptorAdapter {
     /**
      * 获取用户
      *
-     * @param request
+     * @param request gateway转发的请求
      * @return 用户信息
      */
     private UserInfo getUserInfo(HttpServletRequest request) {

@@ -1,6 +1,5 @@
 package com.github.lujs.gatewayservice.ExceptionHandler;
 
-import com.alibaba.csp.sentinel.slots.block.flow.FlowException;
 import org.springframework.boot.autoconfigure.web.ErrorProperties;
 import org.springframework.boot.autoconfigure.web.ResourceProperties;
 import org.springframework.boot.autoconfigure.web.reactive.error.DefaultErrorWebExceptionHandler;
@@ -9,12 +8,11 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.reactive.function.server.*;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * @Description:
+ * @Description: gateway异常返回处理
  * @Author lujs
  * @Date 2019/12/12 16:51
  */
@@ -81,11 +79,11 @@ public class JsonExceptionHandler extends DefaultErrorWebExceptionHandler {
      * @param errorMessage 异常信息
      * @return
      */
-    public static Map<String, Object> response(int status, String errorMessage) {
+    private static Map<String, Object> response(int status, String errorMessage) {
         Map<String, Object> map = new LinkedHashMap<>();
         map.put("code", status);
         map.put("message", errorMessage);
-        map.put("data", null);
+        map.put("data", "");
         return map;
     }
 

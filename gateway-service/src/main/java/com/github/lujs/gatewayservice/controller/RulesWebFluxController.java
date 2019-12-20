@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * @Description:
+ * @Description: sentinel查询规则接口
  * @Author lujs
  * @Date 2019/12/10 9:50
  */

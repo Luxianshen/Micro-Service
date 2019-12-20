@@ -19,7 +19,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * @Description:
+ * @Description: gateway全局异常配置
  * @Author lujs
  * @Date 2019/12/12 16:50
  */

@@ -5,7 +5,6 @@ import com.alibaba.nacos.api.NacosFactory;
 import com.alibaba.nacos.api.config.ConfigService;
 import com.alibaba.nacos.api.config.listener.Listener;
 import com.alibaba.nacos.api.exception.NacosException;
-import com.github.lujs.utils.Global;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.route.RouteDefinition;
 import org.springframework.stereotype.Component;
@@ -21,12 +20,16 @@ import java.util.concurrent.Executor;
 @Component
 public class DynamicRouteServiceImplByNacos {
 
+    private static final String DATA_ID = "test";
+    private static final String GROUP = "group";
+    private static final String URL = "127.0.0.1:8848";
+
     @Autowired
     private DynamicRouteServiceImpl dynamicRouteService;
 
     public DynamicRouteServiceImplByNacos() {
 
-        dynamicRouteByNacosListener(Global.getConfig("nacos.dataId"), Global.getConfig("nacos.group"));
+        dynamicRouteByNacosListener(DATA_ID, GROUP);
     }
 
     /**
@@ -38,7 +41,7 @@ public class DynamicRouteServiceImplByNacos {
     private void dynamicRouteByNacosListener(String dataId, String group) {
         try {
             //注册配置
-            ConfigService configService = NacosFactory.createConfigService(Global.getConfig("nacos.url"));
+            ConfigService configService = NacosFactory.createConfigService(URL);
             //设置监听事件
             configService.addListener(dataId, group, new Listener() {
                 @Override

@@ -22,6 +22,14 @@ public class CommonConstant {
     public static final String API_TOKEN_CODE = SYS_CODE + "-Api-Token";
 
     /**
+     * 请求转发头部id信息
+     */
+    public static final String HEADER_PARAM_ID = "id";
+    /**
+     * 请求转发头部user信息
+     */
+    public static final String HEADER_PARAM_USER = "user";
+    /**
      * 请求转发id地址
      */
     public static final String REQUEST_ID_HEADER = "x-user-id";
@@ -49,8 +57,4 @@ public class CommonConstant {
      * api请求key
      */
     public static final String API_REQ = "apiKey";
-    /**
-     * api请求key
-     */
-    public static final String REQ_HOST = "Host";
 }

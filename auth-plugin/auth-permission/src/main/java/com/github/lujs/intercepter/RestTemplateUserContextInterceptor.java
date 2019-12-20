@@ -1,6 +1,5 @@
 package com.github.lujs.intercepter;
 
-import com.github.lujs.user.api.model.User;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
@@ -19,6 +18,7 @@ public class RestTemplateUserContextInterceptor implements ClientHttpRequestInte
 
     /**
      * 拦截请求设置用户，请求地址
+     *
      * @param request
      * @param body
      * @param execution
@@ -29,10 +29,10 @@ public class RestTemplateUserContextInterceptor implements ClientHttpRequestInte
     public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution)
             throws IOException {
         //获取用户 todo
-        //User user = new User("1","lisi");
-//        request.getHeaders().add("x-user-id","1");
-//        request.getHeaders().add("x-user-name","lisi");
-//        request.getHeaders().add("x-user-serviceName",request.getURI().getHost());
+        /* User user = new User("1","lisi");
+        request.getHeaders().add("x-user-id","1");
+        request.getHeaders().add("x-user-name","lisi");
+        request.getHeaders().add("x-user-serviceName",request.getURI().getHost());*/
 
         return execution.execute(request, body);
     }

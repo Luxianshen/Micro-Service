@@ -10,14 +10,14 @@ public interface ValueEnum {
 
     /**
      * 状态码
-     * @return
+     * @return code
      */
     @JsonValue
     Integer code();
 
     /**
      * 状态值
-     * @return
+     * @return value
      */
     String text();
 }

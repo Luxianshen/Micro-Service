@@ -9,6 +9,9 @@ import com.github.lujs.model.enums.ValueEnum;
  */
 public enum GlobalStatusCode implements ValueEnum {
 
+    /**
+     * 系统状态码
+     */
     SUCCESS(0, "成功"),
 
     FAILED(1, "失败"),

@@ -45,7 +45,7 @@ public class ApiContextInterceptor extends HandlerInterceptorAdapter {
             List<String> apiPermissionList = getUserInfo(id, name);
             //判断权限
             if (null == apiPermissionList || !validatePermission(apiPermissionList, apiKey)) {
-                log.info("no permission access service, please check!");
+                log.error("no permission access service, please check!");
                 throw new PermissionException(PermissionStatusCode.NO_PERMISSION);
             }
             return true;

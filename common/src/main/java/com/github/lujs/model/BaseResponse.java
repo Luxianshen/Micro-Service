@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 /**
  * 标准响应报文
- * @author mobinchao
+ * @author Lujs
  */
 @JsonPropertyOrder({"code", "msg", "data"})
 public class BaseResponse<T> implements Serializable {

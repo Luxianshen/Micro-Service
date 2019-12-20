@@ -31,27 +31,27 @@ public class AuthFilter implements GlobalFilter, Ordered {
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
 
         //获取对应的url
-        Map<String,String> userMap;
+        Map<String, String> userMap;
         ServerHttpRequest request = (ServerHttpRequest) exchange.getRequest();
         HttpHeaders header = request.getHeaders();
 
         String token = header.getFirst(CommonConstant.HEADER_AUTH);
         String reqHost = IpUtil.getIpAddress(request);
 
-        if(StringUtils.isEmpty(header.getFirst(CommonConstant.API_REQ))){
-            userMap = JwtUtil.validateToken(token,true);
-        }else {
-            userMap = JwtUtil.validateToken(token,false);
+        if (StringUtils.isEmpty(header.getFirst(CommonConstant.API_REQ))) {
+            userMap = JwtUtil.validateToken(token, true);
+        } else {
+            userMap = JwtUtil.validateToken(token, false);
         }
 
         ServerHttpRequest.Builder mutate = request.mutate();
         //检验是否本系统用户
-        if(StringUtils.isNotEmpty(userMap.get("user"))){
+        if (StringUtils.isNotEmpty(userMap.get(CommonConstant.HEADER_PARAM_USER))) {
             //携带用户信息 访问信息
-            mutate.header(CommonConstant.REQUEST_ID_HEADER, userMap.get("id"));
-            mutate.header(CommonConstant.REQUEST_NAME_HEADER, userMap.get("user"));
+            mutate.header(CommonConstant.REQUEST_ID_HEADER, userMap.get(CommonConstant.HEADER_PARAM_ID));
+            mutate.header(CommonConstant.REQUEST_NAME_HEADER, userMap.get(CommonConstant.HEADER_PARAM_USER));
             mutate.header(CommonConstant.REQUEST_HOST_HEADER, reqHost);
-        }else{
+        } else {
             throw new PermissionException(PermissionStatusCode.TOKEN_ILLEGAL);
         }
         ServerHttpRequest buildRequest = mutate.build();

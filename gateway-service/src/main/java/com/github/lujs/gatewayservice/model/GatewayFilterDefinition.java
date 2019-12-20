@@ -22,6 +22,6 @@ public class GatewayFilterDefinition {
     /**
      * 储存路由规则
      */
-    private Map<String,String> args = new LinkedHashMap<>();
+    private Map<String, String> args = new LinkedHashMap<>();
 
 }
