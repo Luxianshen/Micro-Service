@@ -5,11 +5,12 @@
         <Property name="LOG_EXCEPTION_CONVERSION_WORD">%xwEx</Property>
         <Property name="LOG_LEVEL_PATTERN">%5p</Property>
         <Property name="LOG_DATE_FORMAT_PATTERN">yyyy-MM-dd HH:mm:ss.SSS</Property>
-        <Property name="LOG_PATTERN">%clr{${sys:PID}}{magenta} %clr{---}{faint} [@parent.artifactId@] %clr{%d{${LOG_DATE_FORMAT_PATTERN}}}{faint} %clr{${LOG_LEVEL_PATTERN}} %clr{[%15.15t]}{faint} %clr{%c}{cyan} %clr{:}{faint} %m%n${sys:LOG_EXCEPTION_CONVERSION_WORD}</Property>
+        <Property name="LOG_NAME">user-service</Property>
+        <Property name="LOG_PATTERN">%clr{${sys:PID}}{magenta} %clr{---}{faint} [${LOG_NAME}] %clr{%d{${LOG_DATE_FORMAT_PATTERN}}}{faint} %clr{${LOG_LEVEL_PATTERN}} %clr{[%15.15t]}{faint} %clr{%c}{cyan} %clr{:}{faint} %m%n${sys:LOG_EXCEPTION_CONVERSION_WORD}</Property>
     </Properties>
     <Appenders>
-        <RollingFile name="RollingFileInfo" fileName="${sys:user.home}/logs/@parent.artifactId@/info.log"
-                     filePattern="${sys:user.home}/logs/@parent.artifactId@/$${date:yyyy-MM}/info-%d{yyyy-MM-dd}-%i.log">
+        <RollingFile name="RollingFileInfo" fileName="${sys:user.home}/logs/${LOG_NAME}/info.log"
+                     filePattern="${sys:user.home}/logs/${LOG_NAME}/$${date:yyyy-MM}/info-%d{yyyy-MM-dd}-%i.log">
             <!--控制台只输出level及以上级别的信息（onMatch），其他的直接拒绝（onMismatch）-->
             <ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="NEUTRAL"/>
             <PatternLayout pattern="[%d{HH:mm:ss:SSS}] [%p] - %l - %m%n"/>
@@ -19,8 +20,8 @@
             </Policies>
             <DefaultRolloverStrategy max="20"/>
         </RollingFile>
-        <RollingFile name="RollingFileWarn" fileName="${sys:user.home}/logs/@parent.artifactId@/warn.log"
-                     filePattern="${sys:user.home}/logs/@parent.artifactId@/$${date:yyyy-MM}/warn-%d{yyyy-MM-dd}-%i.log">
+        <RollingFile name="RollingFileWarn" fileName="${sys:user.home}/logs/${LOG_NAME}/warn.log"
+                     filePattern="${sys:user.home}/logs/${LOG_NAME}/$${date:yyyy-MM}/warn-%d{yyyy-MM-dd}-%i.log">
             <ThresholdFilter level="warn" onMatch="ACCEPT" onMismatch="DENY"/>
             <PatternLayout pattern="[%d{HH:mm:ss:SSS}] [%p] - %l - %m%n"/>
             <Policies>
@@ -30,8 +31,8 @@
             <!-- DefaultRolloverStrategy属性如不设置，则默认为最多同一文件夹下7个文件，这里设置了20 -->
             <DefaultRolloverStrategy max="20"/>
         </RollingFile>
-        <RollingFile name="RollingFileError" fileName="${sys:user.home}/logs/@parent.artifactId@/error.log"
-                                   filePattern="${sys:user.home}/logs/@parent.artifactId@/$${date:yyyy-MM}/error-%d{yyyy-MM-dd}-%i.log">
+        <RollingFile name="RollingFileError" fileName="${sys:user.home}/logs/${LOG_NAME}/error.log"
+                                   filePattern="${sys:user.home}/logs/${LOG_NAME}/$${date:yyyy-MM}/error-%d{yyyy-MM-dd}-%i.log">
             <ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"/>
             <PatternLayout pattern="[%d{HH:mm:ss:SSS}] [%p] - %l - %m%n"/>
             <Policies>
@@ -42,7 +43,7 @@
         </RollingFile>
     </Appenders>
     <Loggers>
-        <Logger name="com.github.lujs" level="debug" additivity="true" />
+        <Logger name="cn.joysim" level="debug" additivity="true" />
         <Root level="info">
             <AppenderRef ref="RollingFileInfo"/>
             <AppenderRef ref="RollingFileWarn"/>
