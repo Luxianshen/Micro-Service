@@ -43,7 +43,10 @@
         </RollingFile>
     </Appenders>
     <Loggers>
-        <Logger name="cn.joysim" level="debug" additivity="true" />
+        <!--log4j2 自带过滤日志-->
+        <Logger name="com.alibaba.nacos" level="fatal" />
+        <Logger name="com.netflix" level="error" />
+        <Logger name="com.github.lujs" level="info" />
         <Root level="info">
             <AppenderRef ref="RollingFileInfo"/>
             <AppenderRef ref="RollingFileWarn"/>

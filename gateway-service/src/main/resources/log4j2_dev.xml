@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration status="OFF">
+    <appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern=" %clr{[%15.15t]}{faint} %clr{%c}{cyan} %clr{:}{faint} %m%n"/>
+        </Console>
+    </appenders>
+    <loggers>
+        <Logger name="com.alibaba.nacos" level="fatal" />
+        <root level="info">
+            <appender-ref ref="Console"/>
+        </root>
+    </loggers>
+</configuration>

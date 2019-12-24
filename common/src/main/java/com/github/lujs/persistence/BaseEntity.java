@@ -1,6 +1,7 @@
 package com.github.lujs.persistence;
 
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
@@ -21,7 +22,9 @@ public class BaseEntity implements Serializable {
             using = ToStringSerializer.class
     )
     private Long id;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
     private Integer deleted;
 
