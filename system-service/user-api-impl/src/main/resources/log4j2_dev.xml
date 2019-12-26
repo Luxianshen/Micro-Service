@@ -2,11 +2,12 @@
 <configuration status="OFF">
     <appenders>
         <Console name="Console" target="SYSTEM_OUT">
-            <PatternLayout pattern=" %clr{[%15.15t]}{faint} %clr{%c}{cyan} %clr{:}{faint} %m%n"/>
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"/>
         </Console>
     </appenders>
     <loggers>
-        <Logger name="com.alibaba.nacos" level="error" />
+        <Logger name="com.alibaba.nacos" level="fatal" />
+        <Logger name="com.netflix" level="error" />
         <root level="info">
             <appender-ref ref="Console"/>
         </root>

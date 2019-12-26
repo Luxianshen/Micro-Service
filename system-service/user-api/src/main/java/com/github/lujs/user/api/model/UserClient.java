@@ -3,6 +3,7 @@ package com.github.lujs.user.api.model;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.github.lujs.persistence.BaseEntity;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.validation.constraints.NotNull;
 
@@ -11,6 +12,7 @@ import javax.validation.constraints.NotNull;
  * @Author lujs
  * @Date 2019/12/2 9:22
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 @TableName("tb_client")
 public class UserClient extends BaseEntity {

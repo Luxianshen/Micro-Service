@@ -44,7 +44,8 @@ public class UserClientController extends BaseController {
     @Permission(action = Action.Skip)
     public BaseResponse page() {
         IPage<UserClient> page = new Page<>();
-        return successResponse(userClientService.page(page));
+        page = userClientService.page(page);
+        return successResponse(page);
     }
 
     /**

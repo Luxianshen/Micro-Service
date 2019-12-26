@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.github.lujs.persistence.BaseEntity;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.List;
 
@@ -15,6 +16,7 @@ import java.util.List;
  * @Data: 2019/5/18 9:47
  * @version: 1.0.0
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 @TableName("tb_menu")
 public class Menu extends BaseEntity {

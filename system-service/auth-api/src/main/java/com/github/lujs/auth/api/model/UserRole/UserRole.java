@@ -3,6 +3,7 @@ package com.github.lujs.auth.api.model.UserRole;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.github.lujs.persistence.BaseEntity;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.validation.constraints.NotNull;
 
@@ -12,6 +13,7 @@ import javax.validation.constraints.NotNull;
  * @Data: 2019/5/18 18:25
  * @version: 1.0.0
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 @TableName("tb_user_role_rel")
 public class UserRole extends BaseEntity {

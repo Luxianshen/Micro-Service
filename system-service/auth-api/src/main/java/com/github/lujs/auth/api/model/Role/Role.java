@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.github.lujs.persistence.BaseEntity;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * @Description: 角色实体
@@ -12,6 +13,7 @@ import lombok.Data;
  * @Data: 2019/5/18 9:46
  * @version: 1.0.0
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 @TableName("tb_role")
 public class Role extends BaseEntity {

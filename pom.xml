@@ -27,6 +27,28 @@
         <javadoc.version>3.0.0</javadoc.version>
         <spring-boot.version>2.1.1.RELEASE</spring-boot.version>
         <spring-cloud.version>Greenwich.SR1</spring-cloud.version>
+        <nacos-discovery>0.2.2.RELEASE</nacos-discovery>
+        <nacos-config>0.2.2.RELEASE</nacos-config>
+        <!--auth-plugin-->
+        <javax.servlet-api>4.0.1</javax.servlet-api>
+        <!--common-->
+        <command-lang3>3.4</command-lang3>
+        <jjwt>0.9.0</jjwt>
+        <hutool-all>4.6.7</hutool-all>
+        <bcprov-jdk15on>1.60</bcprov-jdk15on>
+        <mybatis-plus-extension>3.2.0</mybatis-plus-extension>
+        <fastjson>1.2.47</fastjson>
+        <kaptcha>0.0.9</kaptcha>
+        <commons-io>2.4</commons-io>
+        <!--config-->
+        <mybatis-plus-boot-starter>3.1.0</mybatis-plus-boot-starter>
+        <mybatis>3.5.1</mybatis>
+        <druid>1.1.20</druid>
+        <!--gateway-->
+        <guava>27.0.1-jre</guava>
+        <alibaba-sentinel>2.1.1.RELEASE</alibaba-sentinel>
+        <sentinel-gateway>2.1.1.RELEASE</sentinel-gateway>
+        <sentinel-datasource-nacos>1.7.0</sentinel-datasource-nacos>
     </properties>
 
     <dependencyManagement>

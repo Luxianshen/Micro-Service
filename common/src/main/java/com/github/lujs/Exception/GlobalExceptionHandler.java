@@ -33,7 +33,7 @@ public class GlobalExceptionHandler {
             errorMap.put("message", e.getStatus().text());
         }catch (Exception e){
             errorMap.put("status", "500");
-            errorMap.put("message", e.getMessage());
+            errorMap.put("message", exception.getMessage());
         }
         return errorMap;
     }

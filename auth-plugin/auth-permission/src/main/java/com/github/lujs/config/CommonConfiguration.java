@@ -49,31 +49,4 @@ public class CommonConfiguration implements WebMvcConfigurer {
         return restTemplate;
     }
 
-    /**
-     * 配置消息转换器--fastjson
-     * 解决返回json数据乱码的问题
-     * @param converters 转换器
-     */
-    @Override
-    public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
-        //1.需要定义一个convert转换消息的对象;
-        FastJsonHttpMessageConverter fastJsonHttpMessageConverter = new FastJsonHttpMessageConverter();
-        //2.添加fastJson的配置信息，比如：是否要格式化返回的json数据;
-        FastJsonConfig fastJsonConfig = new FastJsonConfig();
-        fastJsonConfig.setSerializerFeatures(SerializerFeature.PrettyFormat,
-                SerializerFeature.WriteMapNullValue,
-                SerializerFeature.WriteNullStringAsEmpty,
-                SerializerFeature.DisableCircularReferenceDetect,
-                SerializerFeature.WriteNullListAsEmpty,
-                SerializerFeature.WriteDateUseDateFormat);
-        //3处理中文乱码问题
-        List<MediaType> fastMediaTypes = new ArrayList<>();
-        fastMediaTypes.add(MediaType.APPLICATION_JSON_UTF8);
-        //4.在convert中添加配置信息.
-        fastJsonHttpMessageConverter.setSupportedMediaTypes(fastMediaTypes);
-        fastJsonHttpMessageConverter.setFastJsonConfig(fastJsonConfig);
-        //5.将convert添加到converters当中.
-        converters.add(fastJsonHttpMessageConverter);
-    }
-
 }

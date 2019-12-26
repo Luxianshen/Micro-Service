@@ -44,7 +44,7 @@
     </Appenders>
     <Loggers>
         <!--log4j2 自带过滤日志-->
-        <Logger name="com.alibaba.nacos" level="error" />
+        <Logger name="com.alibaba.nacos" level="fatal" />
         <Logger name="com.netflix" level="error" />
         <Logger name="com.github.lujs" level="info" />
         <Root level="info">
