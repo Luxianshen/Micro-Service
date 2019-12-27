@@ -12,17 +12,16 @@ import com.github.lujs.constant.CommonConstant;
 import com.github.lujs.constant.GlobalStatusCode;
 import com.github.lujs.model.BaseRequest;
 import com.github.lujs.model.BaseResponse;
+import com.github.lujs.model.request.PageQuery;
 import com.github.lujs.model.request.PrimaryKeyRequest;
-import com.github.lujs.transmit.api.model.ApiEntity;
-import com.github.lujs.transmit.api.model.ApiEntityDto;
-import com.github.lujs.transmit.api.model.ClientApiEntity;
-import com.github.lujs.transmit.api.model.RoleApiEntity;
+import com.github.lujs.transmit.api.model.*;
 import com.github.lujs.transmit.api.service.ClientApiService;
 import com.github.lujs.transmit.api.service.RoleApiService;
 import com.github.lujs.transmit.api.service.TransmitService;
 import com.github.lujs.user.api.feign.UserServiceClient;
 import com.github.lujs.web.BaseController;
 import lombok.AllArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -62,9 +61,16 @@ public class TransmitController extends BaseController {
      */
     @RequestMapping(value = "/page")
     @Permission(action = Action.Skip)
-    public BaseResponse page() {
-        IPage<ApiEntity> page = new Page<>();
-        return successResponse(transmitService.page(page));
+    public BaseResponse page(@RequestBody BaseRequest<PageQuery<ApiEntity, ApiEntityQuery>> request) {
+        IPage<ApiEntity> page = request.getData();
+        ApiEntityQuery params = request.getData().getParams();
+        QueryWrapper<ApiEntity> queryWrapper = new QueryWrapper<>();
+        if(StringUtils.isNotEmpty(params.getName())){
+            queryWrapper.like("name",params.getName());
+        }if(StringUtils.isNotEmpty(params.getApiKey())){
+            queryWrapper.like("api_key",params.getApiKey());
+        }
+        return successResponse(transmitService.page(page,queryWrapper));
     }
 
     /**

@@ -5,10 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.lujs.annotation.Action;
 import com.github.lujs.annotation.Permission;
-import com.github.lujs.auth.api.model.Role.Role;
-import com.github.lujs.auth.api.model.Role.RoleDto;
-import com.github.lujs.auth.api.model.Role.RolePermissionQuery;
-import com.github.lujs.auth.api.model.Role.VOrgTree;
+import com.github.lujs.auth.api.model.Role.*;
 import com.github.lujs.auth.api.model.RoleMenu.RoleMenu;
 import com.github.lujs.auth.api.model.UserRole.UserRole;
 import com.github.lujs.auth.api.service.MenuService;
@@ -21,6 +18,7 @@ import com.github.lujs.model.request.PageQuery;
 import com.github.lujs.model.request.PrimaryKeyRequest;
 import com.github.lujs.web.BaseController;
 import lombok.AllArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
@@ -78,11 +76,16 @@ public class RoleController extends BaseController {
      */
     @PostMapping("/page")
     @Permission(action = Action.Skip)
-    public BaseResponse rolePage() {
-        IPage<Role> page = new Page<>();
-        QueryWrapper<Role> roleQueryWrapper = new QueryWrapper<>();
-        roleService.page(page, roleQueryWrapper);
-        return successResponse(page);
+    public BaseResponse rolePage(@RequestBody BaseRequest<PageQuery<Role, RoleQuery>> request) {
+        IPage<Role> page = request.getData();
+        RoleQuery params = request.getData().getParams();
+        QueryWrapper<Role> queryWrapper = new QueryWrapper<>();
+        if(StringUtils.isNotEmpty(params.getRoleName())){
+            queryWrapper.like("role_name",params.getRoleName());
+        }if(StringUtils.isNotEmpty(params.getRoleCode())){
+            queryWrapper.like("role_code",params.getRoleCode());
+        }
+        return successResponse(roleService.page(page, queryWrapper));
     }
 
     /**

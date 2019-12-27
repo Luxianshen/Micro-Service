@@ -12,6 +12,16 @@ import java.util.List;
 @Data
 public class RoleQuery {
 
+    /**
+     * 搜索用 start
+     */
+    private String roleName;
+
+    private String roleCode;
+    /**
+     * 搜索用 end
+     */
+
     private String agentId;
 
     private List<String> roles;

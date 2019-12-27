@@ -1,18 +1,22 @@
 package com.github.lujs.user.apiimpl.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.lujs.annotation.Action;
 import com.github.lujs.annotation.Permission;
 import com.github.lujs.model.BaseRequest;
 import com.github.lujs.model.BaseResponse;
+import com.github.lujs.model.request.PageQuery;
 import com.github.lujs.model.request.PrimaryKeyRequest;
 import com.github.lujs.user.api.model.UserClient;
 import com.github.lujs.user.api.model.UserClientInfo;
+import com.github.lujs.user.api.model.UserClientQuery;
 import com.github.lujs.user.api.service.UserClientService;
 import com.github.lujs.web.BaseController;
 import lombok.AllArgsConstructor;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -42,10 +46,16 @@ public class UserClientController extends BaseController {
      */
     @RequestMapping(value = "/page")
     @Permission(action = Action.Skip)
-    public BaseResponse page() {
-        IPage<UserClient> page = new Page<>();
-        page = userClientService.page(page);
-        return successResponse(page);
+    public BaseResponse page(@RequestBody BaseRequest<PageQuery<UserClient, UserClientQuery>> request) {
+        IPage<UserClient> page = request.getData();
+        UserClientQuery params = request.getData().getParams();
+        QueryWrapper<UserClient> queryWrapper = new QueryWrapper<>();
+        if(StringUtils.isNotEmpty(params.getAgentId())){
+            queryWrapper.like("agent_id",params.getAgentId());
+        }if(null != params.getState()){
+            queryWrapper.eq("state",params.getState());
+        }
+        return successResponse(userClientService.page(page,queryWrapper));
     }
 
     /**

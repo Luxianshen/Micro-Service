@@ -1,10 +1,12 @@
 package com.github.lujs.auth.apiimpl.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.lujs.annotation.Action;
 import com.github.lujs.annotation.Permission;
 import com.github.lujs.auth.api.model.Menu.Menu;
+import com.github.lujs.auth.api.model.Menu.MenuQuery;
 import com.github.lujs.auth.api.model.Role.RoleQuery;
 import com.github.lujs.auth.api.service.MenuService;
 import com.github.lujs.auth.api.service.RoleMenuService;
@@ -14,6 +16,7 @@ import com.github.lujs.constant.CommonConstant;
 import com.github.lujs.constant.GlobalStatusCode;
 import com.github.lujs.model.BaseRequest;
 import com.github.lujs.model.BaseResponse;
+import com.github.lujs.model.request.PageQuery;
 import com.github.lujs.model.request.PrimaryKeyRequest;
 import com.github.lujs.web.BaseController;
 import lombok.AllArgsConstructor;
@@ -78,9 +81,15 @@ public class MenuController extends BaseController {
      */
     @PostMapping("/page")
     @Permission(action = Action.Skip)
-    public BaseResponse menuPage() {
+    public BaseResponse menuPage(@RequestBody BaseRequest<PageQuery<Menu, MenuQuery>> request) {
+        IPage<Menu> page = request.getData();
+        MenuQuery params = request.getData().getParams();
         QueryWrapper<Menu> queryWrapper = new QueryWrapper<>();
-        Page<Menu> page = new Page<>();
+        if(StringUtils.isNotEmpty(params.getName())){
+            queryWrapper.like("name",params.getName());
+        }if(StringUtils.isNotEmpty(params.getPermissionCode())){
+            queryWrapper.like("permission_code",params.getPermissionCode());
+        }
         return successResponse(menuService.page(page, queryWrapper));
     }
 

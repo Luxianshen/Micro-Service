@@ -1,5 +1,6 @@
 package com.github.lujs.transmit.api.model;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
@@ -58,5 +59,4 @@ public class ApiEntity extends BaseEntity {
      * 接口描述
      */
     private String apiDesc;
-
 }

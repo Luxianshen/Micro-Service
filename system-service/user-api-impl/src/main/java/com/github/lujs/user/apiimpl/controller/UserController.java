@@ -9,8 +9,10 @@ import com.github.lujs.annotation.Permission;
 import com.github.lujs.constant.CommonConstant;
 import com.github.lujs.model.BaseRequest;
 import com.github.lujs.model.BaseResponse;
+import com.github.lujs.model.request.PageQuery;
 import com.github.lujs.model.request.PrimaryKeyRequest;
 import com.github.lujs.user.api.model.User;
+import com.github.lujs.user.api.model.UserQuery;
 import com.github.lujs.user.api.service.UserService;
 import com.github.lujs.web.BaseController;
 import lombok.AllArgsConstructor;
@@ -63,9 +65,20 @@ public class UserController extends BaseController {
      */
     @RequestMapping(value = "/page")
     @Permission(action = Action.Skip)
-    public BaseResponse page() {
-        IPage<User> page = new Page<>();
-        return successResponse(userService.page(page));
+    public BaseResponse page(@RequestBody BaseRequest<PageQuery<User, UserQuery>> request) {
+        IPage<User> page = request.getData();
+        UserQuery params = request.getData().getParams();
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        if(StringUtils.isNotEmpty(params.getName())){
+            queryWrapper.like("name",params.getName());
+        }if(null != params.getState()){
+            queryWrapper.eq("state",params.getState());
+        }if(StringUtils.isNotEmpty(params.getAgentId())){
+            queryWrapper.like("agent_id",params.getAgentId());
+        }if(StringUtils.isNotEmpty(params.getPhoneNo())){
+            queryWrapper.like("phone_no",params.getPhoneNo());
+        }
+        return successResponse(userService.page(page, queryWrapper));
     }
 
     /**
