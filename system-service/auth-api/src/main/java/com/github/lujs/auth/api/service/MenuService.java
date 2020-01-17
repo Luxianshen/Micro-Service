@@ -2,6 +2,9 @@ package com.github.lujs.auth.api.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.github.lujs.auth.api.model.Menu.Menu;
+import com.github.lujs.auth.api.model.Role.VOrgTree;
+
+import java.util.List;
 
 /**
  * @Description: 菜单服务
@@ -11,4 +14,5 @@ import com.github.lujs.auth.api.model.Menu.Menu;
  */
 public interface MenuService extends IService<Menu> {
 
+    List<VOrgTree> trees(Long sysId);
 }

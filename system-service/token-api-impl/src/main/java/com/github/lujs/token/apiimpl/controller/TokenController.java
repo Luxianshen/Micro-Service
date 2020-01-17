@@ -56,26 +56,25 @@ public class TokenController extends BaseController {
     @PostMapping("/login")
     @Permission(action = Action.Skip)
     @ResponseBody
-    public Object login(LoginInfo loginInfo) {
-        BaseResponse baseResponse = new BaseResponse();
+    public BaseResponse login(LoginInfo loginInfo) {
+
         //密码加密传输 todo
         if (StringUtils.isAllEmpty(loginInfo.getUserName(), loginInfo.getPassWord())) {
             //返回参数不全 提示
             throw new BaseException(GlobalStatusCode.INVALID_PARAMETER);
         }
         String token = targetService.login(loginInfo);
-        Map<String, Object> re = new HashMap<>();
+        Map<String, Object> re = new HashMap<>(5);
         re.put("access_token", token);
         re.put("expires_in", tokenProperties.getTokenTime());
         re.put("refresh_token", token);
         re.put("scope", "read");
         re.put("token_type", "bearer");
-        baseResponse.setData(re);
-        return re;
+        return successResponse(re);
     }
 
     /**
-     * 系统推出方法
+     * 系统退出方法
      */
     @PostMapping("/removeToken")
     @Permission(action = Action.Skip)
@@ -118,8 +117,7 @@ public class TokenController extends BaseController {
         UserClient userClient = userServiceClient.checkUserClient(userClientInfo);
         if (null != userClient) {
             //生成客户端token
-            String token = targetService.generateClientToken(userClient);
-            return successResponse(token);
+            return successResponse(targetService.generateClientToken(userClient));
         }else {
             return failedResponse(GlobalStatusCode.INVALID_PARAMETER);
         }

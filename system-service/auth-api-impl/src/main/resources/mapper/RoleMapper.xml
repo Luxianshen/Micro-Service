@@ -28,7 +28,19 @@
 	    ) a
     WHERE
 	   1 = 1
-   </select>
+		<if test="param.agentId != null">
+			and agent_id like concat(#{param.agentId}, '%')
+		</if>
+		<if test="param.name != null">
+			and `name` like concat(#{param.name}, '%')
+		</if>
+		<if test="param.state != null">
+			and state = #{param.state}
+		</if>
+		<if test="param.checked != null">
+			and checked = #{param.checked}
+		</if>
+	</select>
 
 	<select id="findMenuPermissionTree" resultType="com.github.lujs.auth.api.model.Role.VOrgTree">
 		select

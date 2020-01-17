@@ -80,10 +80,11 @@ public class RoleController extends BaseController {
         IPage<Role> page = request.getData();
         RoleQuery params = request.getData().getParams();
         QueryWrapper<Role> queryWrapper = new QueryWrapper<>();
-        if(StringUtils.isNotEmpty(params.getRoleName())){
-            queryWrapper.like("role_name",params.getRoleName());
-        }if(StringUtils.isNotEmpty(params.getRoleCode())){
-            queryWrapper.like("role_code",params.getRoleCode());
+        if (StringUtils.isNotEmpty(params.getRoleName())) {
+            queryWrapper.like("role_name", params.getRoleName());
+        }
+        if (StringUtils.isNotEmpty(params.getRoleCode())) {
+            queryWrapper.like("role_code", params.getRoleCode());
         }
         return successResponse(roleService.page(page, queryWrapper));
     }

@@ -8,6 +8,7 @@ import com.github.lujs.annotation.Permission;
 import com.github.lujs.auth.api.model.Menu.Menu;
 import com.github.lujs.auth.api.model.Menu.MenuQuery;
 import com.github.lujs.auth.api.model.Role.RoleQuery;
+import com.github.lujs.auth.api.model.Role.VOrgTree;
 import com.github.lujs.auth.api.service.MenuService;
 import com.github.lujs.auth.api.service.RoleMenuService;
 import com.github.lujs.auth.api.service.RoleService;
@@ -132,6 +133,18 @@ public class MenuController extends BaseController {
     @Permission(action = Action.Skip)
     public BaseResponse menuDelete(@Valid @RequestBody BaseRequest<PrimaryKeyRequest> request) {
         return successResponse(menuService.removeById(request.getData()));
+    }
+
+    /**
+     * 获取权限树
+     * @param request
+     * @return
+     */
+    @PostMapping("/trees")
+    @Permission(value = "api:admin:permission:trees")
+    public BaseResponse trees(@Valid @RequestBody BaseRequest<Menu> request) {
+        List<VOrgTree> trees = menuService.trees(request.getData().getSysId());
+        return successResponse(trees);
     }
 
 }

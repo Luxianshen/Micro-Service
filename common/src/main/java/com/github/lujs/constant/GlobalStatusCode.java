@@ -25,6 +25,8 @@ public enum GlobalStatusCode implements ValueEnum {
 
     SERVER_ERROR(500, "服务器异常"),
 
+    VALIDCODE_ERROR(90002, "验证码不正确"),
+
     INVALID_PARAMETER(90003, "参数不合法"),
 
     INVALID_PARAMETER_TYPE(90004, "参数类型不匹配"),

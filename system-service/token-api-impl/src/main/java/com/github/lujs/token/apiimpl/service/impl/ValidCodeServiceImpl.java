@@ -28,10 +28,8 @@ public class ValidCodeServiceImpl implements ValidCodeService {
     public Boolean checkValidCode(String random, String validCode) {
         if (StringUtils.isNotEmpty(validCode)) {
             String code = redisTemplate.opsForValue().get(CommonConstant.SYS_CODE + random);
-            if (StringUtils.isNotEmpty(code) && code.equals(validCode)) {
-                redisTemplate.delete(CommonConstant.SYS_CODE + random);
-                return true;
-            }
+            redisTemplate.delete(CommonConstant.SYS_CODE + random);
+            return  (StringUtils.isNotEmpty(code) && code.equals(validCode));
         }
         return false;
     }
